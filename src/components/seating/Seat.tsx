@@ -26,7 +26,7 @@ export default function Seat({
           : isSelected
           ? "bg-purple-500"
           : occupant.length > 0 ? 'border-2 border-[#FF5797]'
-          : "border-white border"
+          : "border-[#E7E4ED] border"
       }`}
     >
       {occupant}

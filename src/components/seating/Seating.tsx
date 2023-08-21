@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Seat from "./Seat"; // Assuming you have a Seat component
 import { SeatType } from "./types"; // Assuming you have defined the SeatType
 import Sidebar from "../sidebar/Sidebar";
+import Legend from "../legend/Legend";
 
 const numCols = 8;
 
@@ -31,7 +32,7 @@ export default function Seating() {
 
   // Function to update the occupant of a specific seat by id
   const updateSeatOccupant = (idToUpdate: number, newOccupant: string) => {
-    const updatedSeats = seatList.map(seat => {
+    const updatedSeats = seatList.map((seat) => {
       if (seat.id === idToUpdate) {
         return {
           ...seat,
@@ -68,27 +69,28 @@ export default function Seating() {
   };
 
   return (
-    <div className="flex items-center gap-32">
-    <div className="flex flex-col gap-20">
-      {Array.from({ length: Math.ceil(seatList.length / (numCols * 2)) }).map(
-        (_, groupIndex) => (
-          <div key={groupIndex} className="grid grid-cols-8 gap-2">
-            {seatList
-              .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
-              .map((seat) => (
-                <Seat
-                  occupant={seat.occupant}
-                  highlight={seat.id === highlightedSeat}
-                  id={seat.id}
-                  selectSeat={() => toggleSeatSelection(seat.id)} // Pass the seat ID to the toggle function
-                  key={seat.id}
-                  isSelected={seatsChecked.includes(seat.id)}
-                />
-              ))}
-          </div>
-        )
-      )}
-    </div>
+    <div className="flex items-start justify-center gap-16">
+      <Legend />
+      <div className="flex flex-col gap-20">
+        {Array.from({ length: Math.ceil(seatList.length / (numCols * 2)) }).map(
+          (_, groupIndex) => (
+            <div key={groupIndex} className="grid grid-cols-8 gap-2">
+              {seatList
+                .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
+                .map((seat) => (
+                  <Seat
+                    occupant={seat.occupant}
+                    highlight={seat.id === highlightedSeat}
+                    id={seat.id}
+                    selectSeat={() => toggleSeatSelection(seat.id)} // Pass the seat ID to the toggle function
+                    key={seat.id}
+                    isSelected={seatsChecked.includes(seat.id)}
+                  />
+                ))}
+            </div>
+          )
+        )}
+      </div>
       <Sidebar
         setHighlight={sethighlightedSeat}
         seatsSelected={seatsChecked}

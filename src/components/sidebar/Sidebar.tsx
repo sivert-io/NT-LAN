@@ -15,18 +15,22 @@ type InputBoxType = {
 export default function Sidebar({ seatsSelected, setHighlight, updateSeat }: SidebarProps) {
     const [inputBoxes, setInputBoxes] = useState<InputBoxType>({});
     const [textBoxesSelected, setTextBoxesSelected] = useState<number[]>([])
-    const [isExploding, setIsExploding] = useState(false);
+  const [isExploding, setIsExploding] = useState(false);
+  
     const confettiProps = {
       force: 0.2,
       duration: 2200,
       particleCount: 30,
       width: 600,
+      colors: ['#FF5797', '#AFE560', '#E7E4ED', '#A855F7']
     }
 
     useEffect(() => {
         if (textBoxesSelected.length === 0)
-            setHighlight(-1);
-    }, [setHighlight, textBoxesSelected])
+          setHighlight(-1);
+      
+      setIsExploding(false);
+    }, [setHighlight, textBoxesSelected, seatsSelected])
 
   const handleInputChange = (id: number, newValue: string) => {
     setInputBoxes((prevInputBoxes) => ({
@@ -59,10 +63,9 @@ export default function Sidebar({ seatsSelected, setHighlight, updateSeat }: Sid
         />
       ))}
           {seatsSelected.length > 0 && <button
-              onClick={() => { setIsExploding(true) }}
-              onMouseUp={() => { setIsExploding(false) }}
-              className='py-2 px-4 bg-[#FF5797] rounded-lg font-medium text-white active:scale-95 transition-all duration-[50ms]'>Oppdater</button>}
-          {isExploding && <ConfettiExplosion colors={['#FF5797', '#AFE560', '#E7E4ED', '#A855F7']} className='absolute bottom-12' {...confettiProps} />}
+              onMouseUp={() => { setIsExploding(true) }}
+              onMouseDown={() => { setIsExploding(false) }}
+              className='py-2 px-4 bg-[#FF5797] relative rounded-lg font-medium text-white active:scale-95 transition-all duration-[50ms]'>Oppdater {isExploding && <ConfettiExplosion className='absolute left-[50%] right-[50%] top-[50%] bottom-[50%]' {...confettiProps} />}</button>}
     </div>
   );
 }
