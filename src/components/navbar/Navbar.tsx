@@ -12,7 +12,7 @@ export default function Navbar() {
     width: 400,
   }
   return (
-      <nav className='fixed top-0 left-0 right-0 flex flex-col justify-center items-center p-4 bg-zinc-900'>
+      <nav className='fixed top-0 left-0 right-0 flex flex-col justify-center items-center p-4'>
       <button onClick={() => { setIsExploding(true) }} onMouseUp={() => { setIsExploding(false) }} className='font-extrabold text-xl hover:scale-105 active:scale-100 transition-all'>NT LAN</button>
       {isExploding && <ConfettiExplosion className='absolute' {...confettiProps} />}
     </nav>
