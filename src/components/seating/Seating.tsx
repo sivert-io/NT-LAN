@@ -63,8 +63,8 @@ export default function Seating() {
       if (seat.id === idToUpdate) {
         return {
           ...seat,
-          occupant: newOccupant || seat.occupant,
-          isOnHold: isOnHold || seat.isOnHold,
+          occupant: newOccupant !== undefined ? newOccupant : seat.occupant,
+          isOnHold: isOnHold !== undefined ? isOnHold : seat.isOnHold,
         };
       }
       return seat;
