@@ -42,7 +42,7 @@ export default function Seating() {
       console.log("Connected to socket");
     });
 
-    socket.on("userHoldSeats", (seats: number[]) => {
+    socket.on("userHoldSeats", (seats: {[id: string]: number[]}) => {
       console.log("New user-selected seats incoming!", seats);
       updateSeatsSocket(seats);
     });
