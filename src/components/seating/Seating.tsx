@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import Seat from "./Seat"; // Assuming you have a Seat component
 import { SeatType } from "./types"; // Assuming you have defined the SeatType
 import Sidebar from "../sidebar/Sidebar";
+import { socket } from "../../utils/socket";
 import Legend from "../legend/Legend";
-import ConfettiExplosion from 'react-confetti-explosion';
-import { confettiProps } from '@/utils/confetti';
+import ConfettiExplosion from "react-confetti-explosion";
+import { confettiProps } from "@/utils/confetti";
 import { generateSeats } from "@/utils/seats";
 
 const numCols = 6;
@@ -15,13 +16,46 @@ export default function Seating() {
   const [seatList, setseatList] = useState<SeatType[]>(generateSeats(numCols));
   const [isExploding, setIsExploding] = useState(false);
 
+  function updateSeatsSocket(seats: number[]) {
+    const updatedSeats = seatList.map((seat) => {
+      const isSeatOnHold = seats.findIndex((value) => value === seat.id) !== -1;
+
+      return {
+        ...seat,
+        isOnHold: isSeatOnHold,
+      };
+    });
+
+    setseatList(updatedSeats);
+  }
+
+  function successUpdated() {
+    setSeatsChecked([]);
+  }
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to socket");
+    });
+
+    socket.on("userHoldSeats", (seats: number[]) => {
+      console.log("New user-selected seats incoming!", seats);
+      updateSeatsSocket(seats);
+    });
+  }, []);
+
   // Function to update the occupant of a specific seat by id
-  const updateSeatOccupant = (idToUpdate: number, newOccupant: string) => {
+  const updateSeat = (
+    idToUpdate: number,
+    newOccupant?: string,
+    isOnHold?: boolean
+  ) => {
     const updatedSeats = seatList.map((seat) => {
       if (seat.id === idToUpdate) {
         return {
           ...seat,
-          occupant: newOccupant,
+          occupant: newOccupant || seat.occupant,
+          isOnHold: isOnHold || seat.isOnHold,
         };
       }
       return seat;
@@ -51,6 +85,11 @@ export default function Seating() {
   }, []);
 
   useEffect(() => {
+    // Tell socket we are holding new seats
+    socket.emit("HoldingNewSeats", seatsChecked);
+  }, [seatsChecked]);
+
+  useEffect(() => {
     if (
       seatsChecked.length === 0 ||
       seatsChecked.findIndex((seat) => seat === highlightedSeat) === -1
@@ -72,20 +111,20 @@ export default function Seating() {
   return (
     <div className="flex flex-col gap-10">
       <div className="flex relative justify-start gap-12 mr-[364px]">
-      <button
-        className="font-extrabold text-3xl text-center active:scale-95 transition-all relative"
-        onClick={() => {
-          setIsExploding(true);
-        }}
-        onMouseUp={() => {
-          setIsExploding(false);
-        }}
+        <button
+          className="font-extrabold text-3xl text-center active:scale-95 transition-all relative"
+          onClick={() => {
+            setIsExploding(true);
+          }}
+          onMouseUp={() => {
+            setIsExploding(false);
+          }}
         >
-        NT LAN 2023
-        {isExploding && <ConfettiExplosion {...confettiProps} />}
+          NT LAN 2023
+          {isExploding && <ConfettiExplosion {...confettiProps} />}
         </button>
-      <Legend />
-        </div>
+        <Legend />
+      </div>
       <div className="flex gap-16">
         <div className="flex flex-col gap-20">
           {Array.from({
@@ -96,6 +135,7 @@ export default function Seating() {
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
                 .map((seat) => (
                   <Seat
+                    onHold={seat.isOnHold}
                     occupant={seat.occupant}
                     highlight={seat.id === highlightedSeat}
                     id={seat.id}
@@ -111,7 +151,8 @@ export default function Seating() {
           seats={seatList}
           setHighlight={sethighlightedSeat}
           seatsSelected={seatsChecked}
-          updateSeat={updateSeatOccupant}
+          updateSeat={updateSeat}
+          successFunction={successUpdated}
         />
       </div>
     </div>

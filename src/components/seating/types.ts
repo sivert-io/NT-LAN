@@ -3,4 +3,5 @@ export type SeatType = {
     col: number,
     id: number,
     occupant: string | 'open',
+    isOnHold: boolean,
 }

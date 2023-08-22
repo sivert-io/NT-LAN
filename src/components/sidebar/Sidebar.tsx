@@ -7,11 +7,13 @@ export default function Sidebar({
   seatsSelected,
   setHighlight,
   updateSeat,
-  seats
+  seats,
+  successFunction,
 }: SidebarProps) {
   const [inputBoxes, setInputBoxes] = useState<InputBoxType>({});
   const [textBoxesSelected, setTextBoxesSelected] = useState<number[]>([]);
   const [isExploding, setIsExploding] = useState(false);
+  const [submitEnabled, setSubmitEnabled] = useState(true);
 
   useEffect(() => {
     if (textBoxesSelected.length === 0) setHighlight(-1);
@@ -23,13 +25,12 @@ export default function Sidebar({
     const seatOccupantValues: InputBoxType = {};
 
     seatsSelected.forEach((value) => {
-      const seatIndex = seats.findIndex((seat) => seat.id === value)
-      seatOccupantValues[value] = seats[seatIndex].occupant
-    })
+      const seatIndex = seats.findIndex((seat) => seat.id === value);
+      seatOccupantValues[value] = seats[seatIndex].occupant;
+    });
 
     setInputBoxes(seatOccupantValues);
-  }, [seats, seatsSelected])
-  
+  }, [seats, seatsSelected]);
 
   const handleInputChange = (id: number, newValue: string) => {
     setInputBoxes((prevInputBoxes) => ({
@@ -45,51 +46,60 @@ export default function Sidebar({
   return (
     <div className="bg-zinc-700 max-w-[300px] h-[792px] relative transition-all shadow rounded-2xl py-12 px-8 flex flex-col justify-start items-center gap-6 right-6">
       <h2 className="font-medium">
-        {seatsSelected.length === 0
-          ? <span>Ingen plasser valgt.
+        {seatsSelected.length === 0 ? (
+          <span>
+            Ingen plasser valgt.
             <br />
-            <br />  
+            <br />
             Trykk på ønsket plass for å komme i gang :)
           </span>
-          : "Hvem sitter på plassen?"}
+        ) : (
+          "Hvem sitter på plassen?"
+        )}
       </h2>
       <div className="flex flex-col gap-6 overflow-auto">
-      {selected.map((id) => (
-        <div key={id} className="flex flex-col gap-1 w-[236px]">
-          <label htmlFor={`input_${id}`}>Plass {id + 1}:</label>
-          <input
-            name={`input_${id}`}
-            maxLength={12}
-            className="w-full capitalize rounded bg-zinc-800 p-2 border-2 focus:border-[#91FFC3] border-transparent outline-none"
-            value={inputBoxes[id] || ""}
-            onChange={(event) => handleInputChange(id, event.target.value)}
-            onFocus={() => {
-              setHighlight(id);
-              setTextBoxesSelected((old) => [...old, id]);
-            }}
-            onBlur={() => {
-              setTextBoxesSelected((old) => old.filter((oldId) => oldId !== id));
-            }}
+        {selected.map((id) => (
+          <div key={id} className="flex flex-col gap-1 w-[236px]">
+            <label htmlFor={`input_${id}`}>Plass {id + 1}:</label>
+            <input
+          disabled={!submitEnabled}
+          name={`input_${id}`}
+              maxLength={12}
+              className="w-full capitalize rounded bg-zinc-800 p-2 border-2 focus:border-[#91FFC3] border-transparent outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+              value={inputBoxes[id] || ""}
+              onChange={(event) => handleInputChange(id, event.target.value)}
+              onFocus={() => {
+                setHighlight(id);
+                setTextBoxesSelected((old) => [...old, id]);
+              }}
+              onBlur={() => {
+                setTextBoxesSelected((old) =>
+                  old.filter((oldId) => oldId !== id)
+                );
+              }}
             />
           </div>
-      ))}
+        ))}
       </div>
       {seatsSelected.length > 0 && (
         <button
-          onMouseUp={() => {
+          disabled={!submitEnabled}
+          onClick={() => {
             setIsExploding(true);
+            setSubmitEnabled(false);
+
+            setTimeout(() => {
+              successFunction();
+              setSubmitEnabled(true);
+            }, 3000);
           }}
           onMouseDown={() => {
             setIsExploding(false);
           }}
-          className="py-3 px-5 flex content-center items-center bg-[#91FFC3] relative rounded-3xl font-medium text-gray-900 active:scale-95 transition-all duration-[50ms]"
+          className="py-3 px-5 flex content-center items-center bg-[#91FFC3] relative rounded-3xl font-medium text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Oppdater
-          {isExploding && (
-            <ConfettiExplosion
-              {...confettiProps}
-            />
-          )}
+          {isExploding && <ConfettiExplosion {...confettiProps} />}
         </button>
       )}
     </div>

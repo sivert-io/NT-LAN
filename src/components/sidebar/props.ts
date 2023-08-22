@@ -4,7 +4,8 @@ export type SidebarProps = {
     seatsSelected: number[];
     setHighlight: (id: number) => void;
     updateSeat: (id: number, name: string) => void;
-    seats: SeatType[];
+  seats: SeatType[];
+  successFunction: () => void;
   };
   
 export type InputBoxType = {
