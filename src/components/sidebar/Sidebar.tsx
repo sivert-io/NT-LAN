@@ -91,7 +91,7 @@ export default function Sidebar({
             setTimeout(() => {
               successFunction();
               setSubmitEnabled(true);
-            }, 3000);
+            }, 2000);
           }}
           onMouseDown={() => {
             setIsExploding(false);

@@ -11,14 +11,14 @@ const io = new Server(3005, {
 io.on("connection", (socket) => {
   console.log(`User(${socket.id.substring(0, 4)}) connected!`);
 
+  // Emit the updated list of held seats to all users
+  socket.emit("userHoldSeats", heldSeats);
+
   socket.on("disconnect", () => {
     delete heldSeats[socket.id];
-
-    // Extract all held seats from the updated heldSeats object
-    const allHeldSeats = Object.values(heldSeats).flat();
   
     // Emit the updated list of held seats to all users
-    socket.broadcast.emit("userHoldSeats", allHeldSeats);
+    socket.broadcast.emit("userHoldSeats", heldSeats);
   });
 
   socket.on("HoldingNewSeats", (seats) => {
@@ -28,14 +28,9 @@ io.on("connection", (socket) => {
   
     // Store the held seats for the current user
     heldSeats[socket.id] = seats;
-  
-    // Extract all held seats from the heldSeats object
-    const allHeldSeats = Object.values(heldSeats).flat();
 
-    console.log(allHeldSeats);
-  
     // Emit the list of held seats to all users
-    socket.broadcast.emit("userHoldSeats", allHeldSeats);
+    socket.broadcast.emit("userHoldSeats", heldSeats);
   });
 });
 

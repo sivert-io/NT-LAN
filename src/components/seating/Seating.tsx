@@ -16,24 +16,28 @@ export default function Seating() {
   const [seatList, setseatList] = useState<SeatType[]>(generateSeats(numCols));
   const [isExploding, setIsExploding] = useState(false);
 
-  function updateSeatsSocket(seats: number[]) {
-    const updatedSeats = seatList.map((seat) => {
-      const isSeatOnHold = seats.findIndex((value) => value === seat.id) !== -1;
-
-      return {
-        ...seat,
-        isOnHold: isSeatOnHold,
-      };
-    });
-
-    setseatList(updatedSeats);
-  }
-
   function successUpdated() {
     setSeatsChecked([]);
   }
 
   useEffect(() => {
+    function updateSeatsSocket(seats: {[id: string]: number[]}) {
+          // Extract all held seats from the heldSeats object
+      const _seats = seats;
+      delete _seats[socket.id];
+      const allHeldSeats = Object.values(_seats).flat();
+      const updatedSeats = seatList.map((seat) => {
+        const isSeatOnHold = allHeldSeats.findIndex((value) => value === seat.id) !== -1;
+  
+        return {
+          ...seat,
+          isOnHold: isSeatOnHold,
+        };
+      });
+  
+      setseatList(updatedSeats);
+    }
+
     socket.on("connect", () => {
       console.log("Connected to socket");
     });
@@ -42,7 +46,12 @@ export default function Seating() {
       console.log("New user-selected seats incoming!", seats);
       updateSeatsSocket(seats);
     });
-  }, []);
+
+    return () => {
+      socket.off("connect");
+      socket.off("userHoldSeats")
+    }
+  }, [seatList, setseatList]);
 
   // Function to update the occupant of a specific seat by id
   const updateSeat = (
