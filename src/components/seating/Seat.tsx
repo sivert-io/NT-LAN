@@ -21,7 +21,7 @@ export default function Seat({
       onClick={() => {
         selectSeat(id);
       }}
-      className={`relative truncate whitespace-nowrap text-lg font-medium rounded-lg w-[140px] h-[63px] active:scale-95 transition-all duration-[100ms] 
+      className={`relative capitalize truncate whitespace-nowrap text-lg font-medium rounded-lg w-[140px] h-[63px] active:scale-95 transition-all duration-[100ms] 
       ${highlight
           ? "animate-scale bg-[#91FFC3] text-gray-900"
           : isSelected

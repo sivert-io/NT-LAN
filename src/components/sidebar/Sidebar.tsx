@@ -60,7 +60,7 @@ export default function Sidebar({
           <input
             name={`input_${id}`}
             maxLength={12}
-            className="w-full rounded bg-zinc-800 p-2 border-2 focus:border-[#91FFC3] border-transparent outline-none"
+            className="w-full capitalize rounded bg-zinc-800 p-2 border-2 focus:border-[#91FFC3] border-transparent outline-none"
             value={inputBoxes[id] || ""}
             onChange={(event) => handleInputChange(id, event.target.value)}
             onFocus={() => {
