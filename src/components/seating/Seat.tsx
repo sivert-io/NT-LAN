@@ -15,7 +15,7 @@ export default function Seat({
   highlight,
   occupant,
 }: SeatProps) {
-  const seatNumber = "absolute bottom-0 right-0 px-2 py-1 font-extralight";
+  const seatNumberClassName = "absolute text-sm bottom-0 right-0 px-2 py-1 font-extralight";
   return (
     <button
       onClick={() => {
@@ -31,7 +31,7 @@ export default function Seat({
       }`}
     >
       {occupant}
-      <p className={`${seatNumber} ${isSelected ? 'opacity-100' : 'opacity-25'}`}>{id + 1}</p>
+      <p className={`${seatNumberClassName} ${isSelected ? 'opacity-100' : 'opacity-30'}`}>{id + 1}</p>
     </button>
   );
 }

@@ -1,20 +1,7 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
-import { SeatType } from "../seating/types";
 import { confettiProps } from "@/utils/confetti";
-import Legend from "@/components/legend/Legend";
-
-type SidebarProps = {
-  seatsSelected: number[];
-  setHighlight: (id: number) => void;
-  updateSeat: (id: number, name: string) => void;
-  seats: SeatType[];
-};
-
-type InputBoxType = {
-  [seatId: number]: string;
-};
+import { InputBoxType, SidebarProps } from "./props";
 
 export default function Sidebar({
   seatsSelected,
@@ -57,7 +44,6 @@ export default function Sidebar({
 
   return (
     <div className="bg-zinc-700 max-w-[300px] relative transition-all shadow rounded-2xl py-12 px-8 flex flex-col justify-start items-center gap-6 right-6">
-      <Legend />
       <h2 className="font-medium">
         {seatsSelected.length === 0
           ? <span>Ingen plasser valgt.
@@ -69,7 +55,7 @@ export default function Sidebar({
       </h2>
       {selected.map((id) => (
         <div key={id} className="flex flex-col gap-1 w-[236px]">
-          <label htmlFor={`input_${id}`}>Plass {id + 1}</label>
+          <label htmlFor={`input_${id}`}>Plass {id + 1}:</label>
           <input
             name={`input_${id}`}
             maxLength={12}
