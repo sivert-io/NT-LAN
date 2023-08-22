@@ -4,6 +4,8 @@ import Seat from "./Seat"; // Assuming you have a Seat component
 import { SeatType } from "./types"; // Assuming you have defined the SeatType
 import Sidebar from "../sidebar/Sidebar";
 import Legend from "../legend/Legend";
+import ConfettiExplosion from 'react-confetti-explosion';
+import { confettiProps } from '@/utils/confetti';
 
 const numCols = 8;
 
@@ -12,7 +14,7 @@ function generateSeats() {
   let row = 0;
   let col = 0;
 
-  for (let index = 0; index < 40; index++) {
+  for (let index = 0; index < 48; index++) {
     if (col >= numCols) {
       col = 0;
       row++;
@@ -28,7 +30,8 @@ function generateSeats() {
 export default function Seating() {
   const [seatsChecked, setSeatsChecked] = useState<number[]>([]);
   const [highlightedSeat, sethighlightedSeat] = useState<number>(-1);
-  const [seatList, setseatList] = useState<SeatType[]>([]);
+  const [seatList, setseatList] = useState<SeatType[]>(generateSeats());
+  const [isExploding, setIsExploding] = useState(false);
 
   // Function to update the occupant of a specific seat by id
   const updateSeatOccupant = (idToUpdate: number, newOccupant: string) => {
@@ -46,7 +49,23 @@ export default function Seating() {
   };
 
   useEffect(() => {
-    setseatList(generateSeats());
+    const updatedSeats = seatList.map((seat) => {
+      if (seat.id === 4) {
+        return {
+          ...seat,
+          occupant: "Sivert",
+        };
+      }
+      if (seat.id === 5) {
+        return {
+          ...seat,
+          occupant: "Ronja",
+        };
+      }
+      return seat;
+    });
+
+    setseatList(updatedSeats);
   }, []);
 
   useEffect(() => {
@@ -69,11 +88,24 @@ export default function Seating() {
   };
 
   return (
-    <div className="flex items-start justify-center gap-16">
-      <Legend />
-      <div className="flex flex-col gap-20">
-        {Array.from({ length: Math.ceil(seatList.length / (numCols * 2)) }).map(
-          (_, groupIndex) => (
+    <div className="flex flex-col items-center gap-12">
+      <button
+        className="font-extrabold text-3xl text-center active:scale-95 transition-all relative"
+        onClick={() => {
+          setIsExploding(true);
+        }}
+        onMouseUp={() => {
+          setIsExploding(false);
+        }}
+      >
+        NT LAN 2023
+        {isExploding && <ConfettiExplosion {...confettiProps} />}
+      </button>
+      <div className="flex gap-16">
+        <div className="flex flex-col gap-20">
+          {Array.from({
+            length: Math.ceil(seatList.length / (numCols * 2)),
+          }).map((_, groupIndex) => (
             <div key={groupIndex} className="grid grid-cols-8 gap-2">
               {seatList
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
@@ -88,14 +120,15 @@ export default function Seating() {
                   />
                 ))}
             </div>
-          )
-        )}
+          ))}
+        </div>
+        <Sidebar
+          seats={seatList}
+          setHighlight={sethighlightedSeat}
+          seatsSelected={seatsChecked}
+          updateSeat={updateSeatOccupant}
+        />
       </div>
-      <Sidebar
-        setHighlight={sethighlightedSeat}
-        seatsSelected={seatsChecked}
-        updateSeat={updateSeatOccupant}
-      />
     </div>
   );
 }
