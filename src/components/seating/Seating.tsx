@@ -17,6 +17,14 @@ export default function Seating() {
   const [isExploding, setIsExploding] = useState(false);
 
   function successUpdated() {
+    const seatsToUpdate: {[id: string]: string} = {}
+    seatList.map((seat) => {
+      const hasSeatChanged = seatsChecked.findIndex((value) => value === seat.id) !== -1;
+
+      if (hasSeatChanged)
+        seatsToUpdate[seat.id] = seat.occupant
+    })
+    socket.emit('submitSeats', seatsToUpdate);
     setSeatsChecked([]);
   }
 
