@@ -9,7 +9,7 @@ export default function Seat({
   occupant,
   onHold
 }: SeatProps) {
-  const seatNumberClassName = "absolute text-sm bottom-0 right-0 px-2 py-1 font-extralight";
+  const seatNumberClassName = "absolute text-sm top-0 right-0 px-2 py-1 font-extralight";
   return (
     <button
       disabled={onHold}
