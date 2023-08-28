@@ -7,6 +7,7 @@ import Legend from "../legend/Legend";
 import ConfettiExplosion from "react-confetti-explosion";
 import { confettiProps } from "@/utils/confetti";
 import { generateSeats } from "@/utils/seats";
+import Title from "../title/Title";
 
 const numCols = 6;
 
@@ -14,7 +15,6 @@ export default function Seating() {
   const [seatsChecked, setSeatsChecked] = useState<number[]>([]);
   const [highlightedSeat, sethighlightedSeat] = useState<number>(-1);
   const [seatList, setseatList] = useState<SeatType[]>(generateSeats(numCols));
-  const [isExploding, setIsExploding] = useState(false);
 
   function successUpdated() {
     const seatsToUpdate: {[id: string]: string} = {}
@@ -128,18 +128,7 @@ export default function Seating() {
   return (
     <div className="flex flex-col gap-10">
       <div className="flex relative justify-start gap-12 mr-[364px]">
-        <button
-          className="font-extrabold text-3xl text-center active:scale-95 transition-all relative"
-          onClick={() => {
-            setIsExploding(true);
-          }}
-          onMouseUp={() => {
-            setIsExploding(false);
-          }}
-        >
-          NT LAN 2023
-          {isExploding && <ConfettiExplosion {...confettiProps} />}
-        </button>
+        <Title />
         <Legend />
       </div>
       <div className="flex gap-16">

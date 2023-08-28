@@ -1,7 +1,7 @@
 const { Server } = require('socket.io');
 
 const heldSeats = {};
-const serverPort = 3005;
+const serverPort = 3004;
 
 const io = new Server(serverPort, {
   cors: {
