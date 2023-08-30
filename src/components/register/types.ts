@@ -1,1 +1,5 @@
-export type RegisterFieldsType = { firstName: string; lastName: string; aNumber: string; isNT: boolean, [key: string]: any };
+export type RegisterFieldsType = {
+  firstName: string;
+  lastName: string;
+  seatNumber: number;
+};

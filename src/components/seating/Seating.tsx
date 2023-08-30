@@ -1,48 +1,52 @@
 import React, { useEffect, useState } from "react";
 import Seat from "./Seat"; // Assuming you have a Seat component
 import { SeatType } from "./types"; // Assuming you have defined the SeatType
-import Sidebar from "../sidebar/Sidebar";
 import { socket } from "../../utils/socket";
 import Legend from "../legend/Legend";
-import ConfettiExplosion from "react-confetti-explosion";
-import { confettiProps } from "@/utils/confetti";
 import { generateSeats } from "@/utils/seats";
 import Title from "../title/Title";
+import { RegisterFieldsType } from "../register/types";
+import Sidebarv3 from "../sidebar/SidebarV3";
 
 const numCols = 6;
 
-export default function Seating() {
+export default function Seating({
+  registeredPeople,
+}: {
+  registeredPeople?: RegisterFieldsType[];
+}) {
   const [seatsChecked, setSeatsChecked] = useState<number[]>([]);
   const [highlightedSeat, sethighlightedSeat] = useState<number>(-1);
   const [seatList, setseatList] = useState<SeatType[]>(generateSeats(numCols));
 
   function successUpdated() {
-    const seatsToUpdate: {[id: string]: string} = {}
+    const seatsToUpdate: { [id: string]: string } = {};
     seatList.map((seat) => {
-      const hasSeatChanged = seatsChecked.findIndex((value) => value === seat.id) !== -1;
+      const hasSeatChanged =
+        seatsChecked.findIndex((value) => value === seat.id) !== -1;
 
-      if (hasSeatChanged)
-        seatsToUpdate[seat.id] = seat.occupant
-    })
-    socket.emit('submitSeats', seatsToUpdate);
+      if (hasSeatChanged) seatsToUpdate[seat.id] = seat.occupant;
+    });
+    socket.emit("submitSeats", seatsToUpdate);
     setSeatsChecked([]);
   }
 
   useEffect(() => {
-    function updateSeatsSocket(seats: {[id: string]: number[]}) {
-          // Extract all held seats from the heldSeats object
+    function updateSeatsSocket(seats: { [id: string]: number[] }) {
+      // Extract all held seats from the heldSeats object
       const _seats = seats;
       delete _seats[socket.id];
       const allHeldSeats = Object.values(_seats).flat();
       const updatedSeats = seatList.map((seat) => {
-        const isSeatOnHold = allHeldSeats.findIndex((value) => value === seat.id) !== -1;
-  
+        const isSeatOnHold =
+          allHeldSeats.findIndex((value) => value === seat.id) !== -1;
+
         return {
           ...seat,
           isOnHold: isSeatOnHold,
         };
       });
-  
+
       setseatList(updatedSeats);
     }
 
@@ -50,15 +54,15 @@ export default function Seating() {
       console.log("Connected to socket");
     });
 
-    socket.on("userHoldSeats", (seats: {[id: string]: number[]}) => {
+    socket.on("userHoldSeats", (seats: { [id: string]: number[] }) => {
       console.log("New user-selected seats incoming!", seats);
       updateSeatsSocket(seats);
     });
 
     return () => {
       socket.off("connect");
-      socket.off("userHoldSeats")
-    }
+      socket.off("userHoldSeats");
+    };
   }, [seatList, setseatList]);
 
   // Function to update the occupant of a specific seat by id
@@ -153,13 +157,7 @@ export default function Seating() {
             </div>
           ))}
         </div>
-        <Sidebar
-          seats={seatList}
-          setHighlight={sethighlightedSeat}
-          seatsSelected={seatsChecked}
-          updateSeat={updateSeat}
-          successFunction={successUpdated}
-        />
+        <Sidebarv3 selectedSeat={seatsChecked[0]}/>
       </div>
     </div>
   );

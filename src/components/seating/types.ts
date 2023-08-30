@@ -2,6 +2,8 @@ export type SeatType = {
     row: number,
     col: number,
     id: number,
-    occupant: string | 'open',
+    firstName?: string,
+    lastName?: string,
     isOnHold: boolean,
+    isYours: boolean,
 }

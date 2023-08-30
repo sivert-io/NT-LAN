@@ -11,7 +11,7 @@ export function generateSeats(numCols: number) {
         row++;
       }
   
-      seatsList.push({ id: index, col, row, occupant: "", isOnHold: true });
+      seatsList.push({ id: index, col, row, firstName: '', lastName: '', isOnHold: false, isYours: false });
       col++;
     }
   

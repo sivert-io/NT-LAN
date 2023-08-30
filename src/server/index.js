@@ -1,46 +1,54 @@
-const { Server } = require('socket.io');
+const { Server } = require("socket.io");
 
 const heldSeats = {};
+const registeredSeats = {};
 const serverPort = 3004;
+const idList = {};
 
 const io = new Server(serverPort, {
   cors: {
-    origin: '*',
+    origin: "*",
   },
 });
 
-io.on('connection', (socket) => {
+io.on("connection", (socket) => {
   console.log(`User(${socket.id.substring(0, 4)}) connected!`);
 
-  // Emit the updated list of held seats to all users
-  socket.emit('userHoldSeats', heldSeats);
+  idList[socket.id] = "";
 
-  socket.on('disconnect', () => {
-    delete heldSeats[socket.id];
+  socket.on("disconnect", () => {
+    if (idList[socket.id] && heldSeats[idList[socket.id]]) {
+      delete heldSeats[idList[socket.id]];
+      delete idList[socket.id];
+    }
 
     console.log(`User(${socket.id.substring(0, 4)}) disconnected!`);
-  
+
     // Emit the updated list of held seats to all users
-    socket.broadcast.emit('userHoldSeats', heldSeats);
+    io.emit("userHoldSeats", heldSeats);
   });
 
-  socket.on('HoldingNewSeats', (seats) => {
-    console.log(
-      `User(${socket.id.substring(0, 4)}) is holding: ${seats.length > 0 ? seats : 'no seats'}`
-    );
-    
-    // Store the held seats for the current user
-    heldSeats[socket.id] = seats;
-
-    // Emit the list of held seats to all users
-    socket.broadcast.emit('userHoldSeats', heldSeats);
+  socket.on("giveMeSeats", (aNumber) => {
+    // When user loads map
+    socket.emit("updateRegisteredSeats", registeredSeats);
+    socket.emit("userHoldSeats", heldSeats);
+    idList[socket.id] = aNumber;
   });
 
-  socket.on('submitSeats', (seatsToUpdate) => {
-    console.log(`User(${socket.id.substring(0, 4)}) updated: ${Object.keys(seatsToUpdate)}`);
+  socket.on("HoldingNewSeats", (aNumber, heldSeat) => {
+    // When user is holding new seat
+    heldSeats[aNumber] = heldSeat;
 
-    // Send updated seats to all users now
-  })
+    // Emit the updated list of held seats to all users
+    io.emit("userHoldSeats", heldSeats);
+  });
+
+  socket.on("updateRegisteredSeats", (aNumber, registeredPeople) => {
+    // A user has now changed their registered Seats, so lets broadcast it to everyone
+    console.log(aNumber, "has registered these", registeredPeople);
+    registeredSeats[aNumber] = registeredPeople;
+    io.emit("updateRegisteredSeats", registeredSeats);
+  });
 });
 
-console.log('Server running at port', serverPort);
+console.log("Server running at port", serverPort);

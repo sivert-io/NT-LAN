@@ -1,8 +1,8 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Poppins } from 'next/font/google'
+import { Open_Sans } from 'next/font/google'
 
-const inter = Poppins({ subsets: ['latin'], weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'] })
+const inter = Open_Sans({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700', '800'] })
 
 export const metadata: Metadata = {
   title: 'NT LAN',
@@ -15,6 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html className='text-white bg-[#1A171F]'>
+      <head>
+        <link rel='icon' href='NT.svg' />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   )

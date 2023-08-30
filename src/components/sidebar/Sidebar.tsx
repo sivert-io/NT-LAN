@@ -7,19 +7,13 @@ import logo from "../../app/logo.svg";
 
 export default function Sidebar({
   seatsSelected,
-  setHighlight,
   updateSeat,
   seats,
   successFunction,
 }: SidebarProps) {
   const [inputBoxes, setInputBoxes] = useState<InputBoxType>({});
-  const [textBoxesSelected, setTextBoxesSelected] = useState<number[]>([]);
   const [submitEnabled, setSubmitEnabled] = useState(true);
   const [isFinished, setisFinished] = useState(false);
-
-  useEffect(() => {
-    if (textBoxesSelected.length === 0) setHighlight(-1);
-  }, [setHighlight, textBoxesSelected, seatsSelected]);
 
   useEffect(() => {
     const seatOccupantValues: InputBoxType = {};
