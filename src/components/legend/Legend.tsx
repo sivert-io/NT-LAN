@@ -3,7 +3,7 @@ import LegendItem from "./LegendItem";
 
 export default function Legend({ seatAmnt }: { seatAmnt: number }) {
   return (
-    <div className="flex flex-col gap-2 absolute -right-12 bottom-0 w-0 overflow-visible">
+    <div className="flex select-none flex-col gap-2 absolute -right-12 bottom-0 w-0 overflow-visible">
       <LegendItem text="Ledig" classColor="text-[#E7E4ED] border-[#E7E4ED]" />
       <LegendItem text="Opptatt" classColor="text-[#FF5797] border-[#FF5797]" />
       {seatAmnt > 1 && (
