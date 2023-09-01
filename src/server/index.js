@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var socket_io_1 = require("socket.io"); // Import Server and Socket types
+var socket_io_1 = require("socket.io");
 var db_1 = require("./utils/db");
 var heldSeats = {};
 var registeredSeats = {};
@@ -50,38 +50,39 @@ var db = new db_1.default(databaseUrl, username, password);
 var options = {
     cors: {
         origin: "*",
-    }
+    },
 };
 // Initialize server
 var io = new socket_io_1.Server(serverPort, options);
 io.on("connection", function (socket) {
     var _a;
-    console.log("User(".concat((_a = socket.id) === null || _a === void 0 ? void 0 : _a.substring(0, 4), ") connected!"));
+    var shortSocketId = (_a = socket.id) === null || _a === void 0 ? void 0 : _a.substring(0, 4);
+    console.log("User(".concat(shortSocketId, ") connected!"));
     idList[socket.id] = "";
     socket.on("disconnect", function () {
-        var _a;
-        if (idList[socket.id] && heldSeats[idList[socket.id]]) {
-            delete heldSeats[idList[socket.id]];
-            delete idList[socket.id];
+        var socketId = socket.id;
+        if (idList[socketId] && heldSeats[idList[socketId]]) {
+            delete heldSeats[idList[socketId]];
+            delete idList[socketId];
         }
-        console.log("User(".concat((_a = socket.id) === null || _a === void 0 ? void 0 : _a.substring(0, 4), ") disconnected!"));
+        console.log("User(".concat(shortSocketId, ") disconnected!"));
         // Emit the updated list of held seats to all users
         io.emit("userHoldSeats", heldSeats);
     });
     socket.on("giveMeSeats", function (aNumber) {
-        // When user loads map
+        // When a user loads the map
         socket.emit("updateRegisteredSeats", registeredSeats);
         socket.emit("userHoldSeats", heldSeats);
         idList[socket.id] = aNumber;
     });
     socket.on("HoldingNewSeats", function (aNumber, heldSeat) {
-        // When user is holding new seat
+        // When a user is holding a new seat
         heldSeats[aNumber] = heldSeat;
         // Emit the updated list of held seats to all users
         io.emit("userHoldSeats", heldSeats);
     });
     socket.on("updateRegisteredSeats", function (aNumber, registeredPeople) {
-        // A user has now changed their registered Seats, so let's broadcast it to everyone
+        // A user has now changed their registered seats, so let's broadcast it to everyone
         console.log(aNumber, "has registered these", registeredPeople);
         registeredSeats[aNumber] = registeredPeople;
         io.emit("updateRegisteredSeats", registeredSeats);
