@@ -79,7 +79,7 @@ export default function Sidebarv3({
               setisEditing(false);
             }}
             disabled={firstName.length <= 3 || lastName.length <= 3}
-            className="py-3 px-5 flex justify-center items-center bg-[#FFCF3F] relative rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="py-3 px-5 flex justify-center items-center bg-[#FFCF3F] rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Lagre
           </button>
@@ -90,7 +90,7 @@ export default function Sidebarv3({
               setisEditing(false);
               setSelectedSeat(undefined);
             }}
-            className="py-3 px-5 flex justify-center items-center bg-gray-300 relative rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="underline text-gray-200"
           >
             Avbryt
           </button>

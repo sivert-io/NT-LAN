@@ -39,7 +39,6 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("giveMeSeats", (aNumber: string) => {
-    
 
     // When user loads map
     socket.emit("updateRegisteredSeats", registeredSeats);

@@ -167,7 +167,9 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
                     id={seat.id}
                     selectSeat={() => {
                       return setSeatChecked(
-                        seatChecked === seat.id ? undefined : seat.id
+                        seatChecked === seat.id && !isEditing
+                          ? undefined
+                          : seat.id
                       );
                     }} // Pass the seat ID to the toggle function
                     key={seat.id}
