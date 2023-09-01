@@ -1,6 +1,5 @@
 "use client";
 import ANumberModal from "@/components/modal/ANumberModal";
-import Seating from "@/components/seating/Seating";
 import SeatingV2 from "@/components/seating/SeatingV2";
 import { useState } from "react";
 

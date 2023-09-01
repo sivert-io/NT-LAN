@@ -1,24 +1,27 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Open_Sans } from 'next/font/google'
+import "./globals.css";
+import type { Metadata } from "next";
+import { Open_Sans } from "next/font/google";
 
-const inter = Open_Sans({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700', '800'] })
+const inter = Open_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+});
 
 export const metadata: Metadata = {
-  title: 'NT LAN',
-}
+  title: "N T L A N",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html className='text-white bg-[#1A171F]'>
+    <html className="text-white bg-[#1A171F]">
       <head>
-        <link rel='icon' href='NT.svg' />
+        <link rel="icon" href="NT.svg" />
       </head>
       <body className={inter.className}>{children}</body>
     </html>
-  )
+  );
 }

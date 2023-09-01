@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ConfettiExplosion from "react-confetti-explosion";
-import { confettiProps } from "@/utils/confetti";
 import { SidebarV3Props } from "./props";
 import Input from "../input/Input";
 import SeatListItem from "./SeatListItem";
