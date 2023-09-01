@@ -1,34 +1,46 @@
 import { Server, Socket } from "socket.io";
 import Database from "./utils/db";
 
+// Dictionary to hold seats that are currently held by users
 const heldSeats: Record<string, any> = {};
+
+// Dictionary to store registered seats and users
 const registeredSeats: Record<string, any> = {};
+
+// Dictionary to map socket IDs to user IDs
 const idList: Record<string, string> = {};
+
+// Port on which the server is running
 const serverPort = 3004;
 
-// Database
+// Database configuration
 const databaseUrl = "http://lan-party-seating.apps.ocpdq02.norsk-tipping.no"; // Replace with your actual database URL
 const username = "admin";
 const password = "IAMthecaptainnow100";
 const db = new Database(databaseUrl, username, password);
 
+// Server configuration options
 const options: any = {
   cors: {
     origin: "*",
   },
 };
 
-// Initialize server
+// Initialize the server
 const io = new Server(serverPort, options);
 
+// Event handler for when a user connects to the server
 io.on("connection", (socket: Socket) => {
   const shortSocketId = socket.id?.substring(0, 4);
   console.log(`User(${shortSocketId}) connected!`);
 
+  // Initialize the user ID for this socket
   idList[socket.id as string] = "";
 
+  // Event handler for when a user disconnects
   socket.on("disconnect", () => {
     const socketId = socket.id as string;
+    // Check if the user had held seats and remove them
     if (idList[socketId] && heldSeats[idList[socketId]]) {
       delete heldSeats[idList[socketId]];
       delete idList[socketId];
@@ -40,30 +52,35 @@ io.on("connection", (socket: Socket) => {
     io.emit("userHoldSeats", heldSeats);
   });
 
+  // Event handler for when a user requests seats
   socket.on("giveMeSeats", (aNumber: string) => {
-    // When a user loads the map
+    // When a user loads the map, provide them with seat information
     socket.emit("updateRegisteredSeats", registeredSeats);
     socket.emit("userHoldSeats", heldSeats);
     idList[socket.id as string] = aNumber;
   });
 
+  // Event handler for when a user holds new seats
   socket.on("HoldingNewSeats", (aNumber: string, heldSeat: any) => {
-    // When a user is holding a new seat
+    // When a user is holding new seats, update the heldSeats dictionary
     heldSeats[aNumber] = heldSeat;
 
     // Emit the updated list of held seats to all users
     io.emit("userHoldSeats", heldSeats);
   });
 
+  // Event handler for when a user updates their registered seats
   socket.on("updateRegisteredSeats", (aNumber: string, registeredPeople: any) => {
-    // A user has now changed their registered seats, so let's broadcast it to everyone
+    // A user has now changed their registered seats, broadcast it to everyone
     console.log(aNumber, "has registered these", registeredPeople);
     registeredSeats[aNumber] = registeredPeople;
     io.emit("updateRegisteredSeats", registeredSeats);
   });
 
+  // Event handler for when a user updates their profile
   socket.on("updateUser", async (userId: string, updatedUser: any) => {
     try {
+      // Update the user in the database (not implemented in this code)
       const user = await db.updateEmployee({});
       // Handle the updated user data as needed
       io.emit("userUpdated", user); // Emit an event to inform clients about the update
