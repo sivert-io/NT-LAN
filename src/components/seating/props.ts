@@ -3,6 +3,7 @@ export type SeatProps = {
   selectSeat: (id: number) => void;
   id: number;
   highlight: boolean;
+  isDisabled?: boolean;
   occupant: string;
   onHold: boolean;
 };

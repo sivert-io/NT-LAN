@@ -18,6 +18,8 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
   const [registeredPeople, setregisteredPeople] = useState<
     RegisterFieldsType[]
   >([]);
+  const [isEditing, setisEditing] = useState(false);
+  const [editingSeat, seteditingSeat] = useState<number | undefined>(undefined);
 
   function updateSeatsSocket(heldSeats: { [id: string]: number }) {
     // Extract all held seats from the heldSeats object
@@ -64,6 +66,10 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
 
     setseatList(updatedSeats);
   }
+
+  useEffect(() => {
+    seteditingSeat(seatChecked);
+  }, [isEditing]);
 
   useEffect(() => {
     socket.emit("giveMeSeats", aNumber);
@@ -140,7 +146,7 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
     <div className="flex flex-col gap-10">
       <div className="flex relative justify-start gap-12 mr-[364px]">
         <Title />
-        <Legend />
+        <Legend seatAmnt={registeredPeople.length} />
       </div>
       <div className="flex gap-16">
         <div className="flex flex-col gap-20">
@@ -152,6 +158,9 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
                 .map((seat) => (
                   <Seat
+                    isDisabled={
+                      seat.isYours && isEditing && seat.id !== editingSeat
+                    }
                     onHold={seat.isOnHold}
                     occupant={seat.firstName || ""}
                     highlight={seat.isYours}
@@ -169,9 +178,9 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
           ))}
         </div>
         <Sidebarv3
-          setSelectedSeat={(seatNumber: number) => {
-            setSeatChecked(seatNumber);
-          }}
+          setisEditing={setisEditing}
+          isEditing={isEditing}
+          setSelectedSeat={setSeatChecked}
           deletePerson={(seatNumber: number) => {
             const personIndex = registeredPeople.findIndex(
               (person) => person.seatNumber === seatNumber

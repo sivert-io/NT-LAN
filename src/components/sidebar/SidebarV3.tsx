@@ -13,9 +13,9 @@ export default function Sidebarv3({
   lastName,
   setLastName,
   deletePerson,
+  isEditing,
+  setisEditing,
 }: SidebarV3Props) {
-  const [isEditing, setisEditing] = useState(false);
-
   useEffect(() => {
     if (!isEditing) {
       const isRegistered = registeredPeople.findIndex(
@@ -82,6 +82,17 @@ export default function Sidebarv3({
             className="py-3 px-5 flex justify-center items-center bg-[#FFCF3F] relative rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Lagre
+          </button>
+          <button
+            onClick={() => {
+              setFirstName("");
+              setLastName("");
+              setisEditing(false);
+              setSelectedSeat(undefined);
+            }}
+            className="py-3 px-5 flex justify-center items-center bg-gray-300 relative rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Avbryt
           </button>
         </>
       ) : registeredPeople.length > 0 ? (

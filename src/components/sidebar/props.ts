@@ -18,11 +18,13 @@ export type SidebarV3Props = {
   updateRegisteredPeople: (person: RegisterFieldsType) => any;
   deletePerson: (seatNumber: number) => any;
   selectedSeat?: number;
-  setSelectedSeat: (seatNumber: number) => any;
+  setSelectedSeat: (seatNumber: number | undefined) => any;
   firstName: string;
   lastName: string;
   setFirstName: (newString: string) => any;
   setLastName: (newString: string) => any;
+  isEditing: boolean;
+  setisEditing: (yes: boolean) => any;
 };
 
 export type InputBoxType = {

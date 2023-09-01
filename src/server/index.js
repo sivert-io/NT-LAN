@@ -47,12 +47,13 @@ var databaseUrl = "http://lan-party-seating.apps.ocpdq02.norsk-tipping.no"; // R
 var username = "admin";
 var password = "IAMthecaptainnow100";
 var db = new db_1.default(databaseUrl, username, password);
-// Initialize server
-var io = new socket_io_1.Server(serverPort, {
+var options = {
     cors: {
         origin: "*",
-    },
-});
+    }
+};
+// Initialize server
+var io = new socket_io_1.Server(serverPort, options);
 io.on("connection", function (socket) {
     var _a;
     console.log("User(".concat((_a = socket.id) === null || _a === void 0 ? void 0 : _a.substring(0, 4), ") connected!"));
