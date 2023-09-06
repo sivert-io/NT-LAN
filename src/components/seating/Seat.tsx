@@ -20,7 +20,7 @@ export default function Seat({
         onClick={() => {
           selectSeat(id);
         }}
-        className={`select-none relative capitalize disabled:transition-none disabled:scale-100 disabled:cursor-not-allowed truncate whitespace-nowrap px-4 text-lg font-medium rounded-lg w-[140px] h-[63px]
+        className={`w-[140px] h-[63px] select-none relative capitalize disabled:transition-none disabled:scale-100 disabled:cursor-not-allowed truncate whitespace-nowrap px-4 text-lg font-medium rounded-lg
       ${
         onHold
           ? "border-2 border-[#FF5797] text-[#FF5797] hover:cursor-not-allowed"

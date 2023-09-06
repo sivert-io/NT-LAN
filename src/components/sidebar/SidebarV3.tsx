@@ -175,20 +175,36 @@ export default function Sidebarv3({
             />
           ))}
           <div className="h-full flex flex-col justify-end gap-2">
-            <p className="font-bold">Skal du ha med deg noen?</p>
-            <p>Trykk på kartet for å velge en plass til gjesten din ✨</p>
+            <p className="font-bold text-sm">Skal du ha med deg noen?</p>
+            <p className="text-sm font-medium">
+              Trykk på kartet for å velge en plass til gjesten din ✨
+            </p>
           </div>
         </>
       ) : (
-        <div>
-          <h2 className="font-bold text-xl flex justify-between items-center w-full">
-            Hvor vil du sitte?
-          </h2>
-          <br />
-          <p>Trykk på en plass for å komme i gang.</p>
-          <br />
-          <p>Om du skal ha med deg noen, velg din egen plass først ✨</p>
+        <div className="flex flex-col justify-between h-full">
+          <div>
+            <h2 className="font-bold text-2xl flex justify-between items-center w-full">
+              Hvor vil du sitte?
+            </h2>
+            <br />
+            <p className="font-medium">
+              Trykk på en plass for å komme i gang 😁
+            </p>
+          </div>
+          <div className="flex flex-col gap-1">
+            <h3 className="font-bold text-sm">Skal du ha med deg noen?</h3>
+            <p className="text-sm font-medium">
+              Velg din egen plass først, deretter kan du velge en plass til
+              gjesten din ✨
+            </p>
+          </div>
         </div>
+      )}
+      {timer && timer < 30 && (
+        <p className="absolute left-0 bottom-0 font-medium text-sm right-0 text-center p-4">
+          Du har vært inaktiv for lenge og mister snart valgt plass! {timer}s
+        </p>
       )}
     </div>
   );
