@@ -39,8 +39,10 @@ io.on("connection", (socket: Socket) => {
   // Event handler for when a user disconnects
   socket.on("disconnect", () => {
     const socketId = socket.id as string;
+    console.log(`${idList[socketId]} disconnected!`);
+    
     // Check if the user had held seats and remove them
-    if (idList[socketId] && heldSeats[idList[socketId]]) {
+    if (heldSeats[idList[socketId]]) {
       delete heldSeats[idList[socketId]];
       delete idList[socketId];
     }
