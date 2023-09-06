@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function Home() {
   const [aNumber, setaNumber] = useState("");
   return (
-    <main className="flex h-screen flex-col items-center justify-center gap-12">
+    <main className="flex h-screen w-screen flex-col items-center justify-center gap-12">
       {aNumber !== "" && (
         <>
           <div className="fixed top-0 left-12 p-6 grid items-center justify-center select-none">

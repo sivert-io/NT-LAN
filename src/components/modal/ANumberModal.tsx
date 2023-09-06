@@ -21,7 +21,7 @@ export default function ANumberModal({
 
   const handleEnterKeyPress = (event: any) => {
     if (event.key === "Enter") {
-      if (verifyRegex.test(tempANumber)) setaNumber(tempANumber);
+      if (verifyRegex.test(tempANumber)) setaNumber(tempANumber.toLowerCase());
     }
   };
 
@@ -51,7 +51,8 @@ export default function ANumberModal({
           <button
             disabled={!verifyRegex.test(tempANumber)}
             onClick={() => {
-              if (verifyRegex.test(tempANumber)) setaNumber(tempANumber);
+              if (verifyRegex.test(tempANumber))
+                setaNumber(tempANumber.toLowerCase());
             }}
             className="rounded-3xl px-5 py-3 bg-[#91FFC3] text-[#242127] active:scale-95 transition-all duration-[50ms] disabled:bg-[#D8D6DB] disabled:text-[#6D6973] disabled:cursor-not-allowed"
           >

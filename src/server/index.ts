@@ -40,13 +40,12 @@ io.on("connection", (socket: Socket) => {
   socket.on("disconnect", () => {
     const socketId = socket.id as string;
     console.log(`${idList[socketId]} disconnected!`);
-    
+
     // Check if the user had held seats and remove them
     if (heldSeats[idList[socketId]]) {
       delete heldSeats[idList[socketId]];
       delete idList[socketId];
     }
-
 
     // Emit the updated list of held seats to all users
     io.emit("userHoldSeats", heldSeats);
@@ -57,7 +56,9 @@ io.on("connection", (socket: Socket) => {
     console.log(`${aNumber} connected!`);
     // When a user loads the map, provide them with seat information
     socket.emit("updateRegisteredSeats", registeredSeats);
-    socket.emit("userHoldSeats", heldSeats);
+    setTimeout(() => {
+      socket.emit("userHoldSeats", heldSeats);
+    }, 1000);
     idList[socket.id as string] = aNumber;
   });
 
@@ -71,12 +72,15 @@ io.on("connection", (socket: Socket) => {
   });
 
   // Event handler for when a user updates their registered seats
-  socket.on("updateRegisteredSeats", (aNumber: string, registeredPeople: any) => {
-    // A user has now changed their registered seats, broadcast it to everyone
-    console.log(aNumber, "has registered these", registeredPeople);
-    registeredSeats[aNumber] = registeredPeople;
-    io.emit("updateRegisteredSeats", registeredSeats);
-  });
+  socket.on(
+    "updateRegisteredSeats",
+    (aNumber: string, registeredPeople: any) => {
+      // A user has now changed their registered seats, broadcast it to everyone
+      console.log(aNumber, "has registered these", registeredPeople);
+      registeredSeats[aNumber] = registeredPeople;
+      io.emit("updateRegisteredSeats", registeredSeats);
+    }
+  );
 });
 
 console.log("Server running at port", serverPort);

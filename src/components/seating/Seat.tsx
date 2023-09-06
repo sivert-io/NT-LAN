@@ -12,7 +12,6 @@ export default function Seat({
 }: SeatProps) {
   const seatNumberClassName =
     "absolute text-sm top-0 right-0 px-2 py-1 font-extralight";
-
   return (
     <>
       <button

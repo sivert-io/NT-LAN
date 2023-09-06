@@ -25,6 +25,21 @@ export default function SeatListItem({
         {firstName}
       </p>
       <button
+        onClick={() => {
+          // Edit seat
+          editSeat(seatNumber);
+        }}
+        className="p-2 bg-[#242127] shrink-0 rounded"
+      >
+        <Image
+          className="w-4 h-4"
+          src={Edit}
+          width={16}
+          height={16}
+          alt="rediger ikon"
+        />
+      </button>
+      <button
         disabled={delDisable}
         onClick={() => {
           // Delete seat
@@ -38,21 +53,6 @@ export default function SeatListItem({
           width={16}
           height={16}
           alt="Søppel ikon"
-        />
-      </button>
-      <button
-        onClick={() => {
-          // Edit seat
-          editSeat(seatNumber);
-        }}
-        className="p-2 bg-[#242127] shrink-0 rounded"
-      >
-        <Image
-          className="w-4 h-4"
-          src={Edit}
-          width={16}
-          height={16}
-          alt="rediger ikon"
         />
       </button>
     </div>

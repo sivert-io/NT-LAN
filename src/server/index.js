@@ -46,7 +46,9 @@ io.on("connection", function (socket) {
         console.log("".concat(aNumber, " connected!"));
         // When a user loads the map, provide them with seat information
         socket.emit("updateRegisteredSeats", registeredSeats);
-        socket.emit("userHoldSeats", heldSeats);
+        setTimeout(function () {
+            socket.emit("userHoldSeats", heldSeats);
+        }, 1000);
         idList[socket.id] = aNumber;
     });
     // Event handler for when a user holds new seats

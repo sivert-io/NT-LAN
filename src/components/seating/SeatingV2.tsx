@@ -7,6 +7,7 @@ import { generateSeats } from "@/utils/seats";
 import Title from "../title/Title";
 import { RegisterFieldsType } from "../register/types";
 import Sidebarv3 from "../sidebar/SidebarV3";
+import DaySelector from "../daySelector/DaySelector";
 
 const numCols = 8;
 
@@ -22,21 +23,20 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
   const [editingSeat, seteditingSeat] = useState<number | undefined>(undefined);
 
   function updateSeatsSocket(heldSeats: { [id: string]: number }) {
-    // Extract all held seats from the heldSeats object
     const _seats = heldSeats;
     delete _seats[aNumber];
     const allHeldSeats = Object.values(_seats).flat();
-    const updatedSeats = seatList.map((seat) => {
-      const isSeatOnHold =
-        allHeldSeats.findIndex((value) => value === seat.id) !== -1;
+    setseatList((prevSeatList) => {
+      return prevSeatList.map((seat) => {
+        const isSeatOnHold =
+          allHeldSeats.findIndex((value) => value === seat.id) !== -1;
 
-      return {
-        ...seat,
-        isOnHold: isSeatOnHold,
-      };
+        return {
+          ...seat,
+          isOnHold: isSeatOnHold,
+        };
+      });
     });
-
-    setseatList(updatedSeats);
   }
 
   function updateSeats(socketRegisters: {
@@ -73,9 +73,7 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
 
   useEffect(() => {
     socket.emit("giveMeSeats", aNumber);
-  }, []);
 
-  useEffect(() => {
     socket.on("userHoldSeats", (heldSeats: { [id: string]: number }) => {
       updateSeatsSocket(heldSeats);
     });
@@ -91,44 +89,20 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
       socket.off("updateRegisteredSeats");
       socket.off("userHoldSeats");
     };
-  }, [seatList, setseatList]);
-
-  useEffect(() => {
-    const updatedSeats = seatList.map((seat) => {
-      if (seat.id === 4) {
-        return {
-          ...seat,
-          occupant: "Sivert",
-        };
-      }
-      if (seat.id === 5) {
-        return {
-          ...seat,
-          occupant: "Ronja",
-        };
-      }
-      return seat;
-    });
-
-    setseatList(updatedSeats);
   }, []);
 
   useEffect(() => {
     // Tell socket we are holding new seats
     socket.emit("HoldingNewSeats", aNumber, seatChecked);
-
-    return () => {
-      socket.off("HoldingNewSeats");
-    };
   }, [seatChecked]);
 
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex relative justify-start gap-12 mr-[364px]">
+    <div className="flex flex-col gap-12">
+      <div className="flex justify-between gap-12">
         <Title />
-        <Legend seatAmnt={registeredPeople.length} />
+        <DaySelector />
       </div>
-      <div className="flex gap-16">
+      <div className="flex gap-12 relative">
         <div className="flex flex-col gap-20 px-4 overflow-auto max-h-[690px]">
           {Array.from({
             length: Math.ceil(seatList.length / (numCols * 2)),

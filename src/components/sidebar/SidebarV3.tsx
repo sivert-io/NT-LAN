@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SidebarV3Props } from "./props";
 import Input from "../input/Input";
 import SeatListItem from "./SeatListItem";
+import Legend from "../legend/Legend";
 
 export default function Sidebarv3({
   registeredPeople,
@@ -68,7 +69,7 @@ export default function Sidebarv3({
         setTimer(null);
       };
     }
-  }, [isEditing, selectedSeat, setTimer]);
+  }, [isEditing, selectedSeat, setTimer, firstName, lastName]);
 
   useEffect(() => {
     // When the timer goes off, set selectedSeat to undefined
@@ -79,7 +80,9 @@ export default function Sidebarv3({
   }, [timer, setSelectedSeat]);
 
   return (
-    <div className="bg-zinc-700 select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6 flex flex-col justify-start gap-8 right-6">
+    <div className="bg-zinc-700 select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6 flex flex-col justify-start gap-8">
+      <Legend seatAmnt={registeredPeople.length} />
+
       {selectedSeat !== undefined ? (
         <>
           <div className="flex justify-between items-center">
@@ -201,9 +204,9 @@ export default function Sidebarv3({
           </div>
         </div>
       )}
-      {timer && timer < 30 && (
+      {timer && timer <= 60 && (
         <p className="absolute left-0 bottom-0 font-medium text-sm right-0 text-center p-4">
-          Du har vært inaktiv for lenge og mister snart valgt plass! {timer}s
+          Du har vært inaktiv for lenge og mister snart plassen! {timer}s
         </p>
       )}
     </div>
