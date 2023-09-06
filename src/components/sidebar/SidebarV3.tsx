@@ -16,6 +16,27 @@ export default function Sidebarv3({
   isEditing,
   setisEditing,
 }: SidebarV3Props) {
+  const [timer, setTimer] = useState<number | null>(null);
+  const timerDuration = 120; // 2 minutes in seconds
+
+  const handleEnterKeyPress = (event: any) => {
+    if (event.key === "Enter") {
+      if (firstName.length >= 2 && lastName.length >= 2) savePerson();
+    }
+  };
+
+  function savePerson() {
+    if (selectedSeat)
+      updateRegisteredPeople({
+        firstName: firstName,
+        lastName: lastName,
+        seatNumber: selectedSeat,
+      });
+    setFirstName("");
+    setLastName("");
+    setisEditing(false);
+  }
+
   useEffect(() => {
     if (!isEditing) {
       const isRegistered = registeredPeople.findIndex(
@@ -32,6 +53,31 @@ export default function Sidebarv3({
     }
   }, [isEditing, registeredPeople, selectedSeat, setFirstName, setLastName]);
 
+  useEffect(() => {
+    // Start the timer when selectedSeat changes
+    if (selectedSeat !== undefined && !isEditing) {
+      setTimer(timerDuration);
+
+      const intervalId = setInterval(() => {
+        setTimer((prevTimer) => (prevTimer !== null ? prevTimer - 1 : null));
+      }, 1000);
+
+      return () => {
+        // Cleanup: Clear the timer when selectedSeat becomes undefined
+        clearInterval(intervalId);
+        setTimer(null);
+      };
+    }
+  }, [isEditing, selectedSeat, setTimer]);
+
+  useEffect(() => {
+    // When the timer goes off, set selectedSeat to undefined
+    if (timer === 0) {
+      setSelectedSeat(undefined);
+      console.log("Timer ran out!");
+    }
+  }, [timer, setSelectedSeat]);
+
   return (
     <div className="bg-zinc-700 select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6 flex flex-col justify-start gap-8 right-6">
       {selectedSeat !== undefined ? (
@@ -39,7 +85,9 @@ export default function Sidebarv3({
           <div className="flex justify-between items-center">
             <h2 className="font-bold flex justify-between items-center">
               {registeredPeople.length === 0 ||
-              registeredPeople[0].firstName === firstName ? (
+              (registeredPeople[0].firstName === firstName &&
+                registeredPeople[0].lastName === lastName) ||
+              (isEditing && registeredPeople.length === 1) ? (
                 <>Hvem er du?</>
               ) : (
                 <>Hvem er gjesten din?</>
@@ -56,6 +104,7 @@ export default function Sidebarv3({
               onChange={(event) => {
                 setFirstName(event.target.value);
               }}
+              onKeyDown={handleEnterKeyPress}
               value={firstName}
             />
             <Input
@@ -64,25 +113,33 @@ export default function Sidebarv3({
               onChange={(event) => {
                 setLastName(event.target.value);
               }}
+              onKeyDown={handleEnterKeyPress}
               value={lastName}
             />
           </div>
           <button
-            onClick={() => {
-              updateRegisteredPeople({
-                firstName: firstName,
-                lastName: lastName,
-                seatNumber: selectedSeat,
-              });
-              setFirstName("");
-              setLastName("");
-              setisEditing(false);
-            }}
-            disabled={firstName.length <= 3 || lastName.length <= 3}
+            onClick={savePerson}
+            disabled={firstName.length <= 2 || lastName.length <= 2}
             className="py-3 px-5 flex justify-center items-center bg-[#FFCF3F] rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Lagre
           </button>
+          {registeredPeople.findIndex(
+            (person) => person.seatNumber === selectedSeat
+          ) !== -1 && (
+            <button
+              onClick={() => {
+                deletePerson(selectedSeat);
+                setFirstName("");
+                setLastName("");
+                setisEditing(false);
+                setSelectedSeat(undefined);
+              }}
+              className="underline text-pink-400"
+            >
+              Slett plass
+            </button>
+          )}
           <button
             onClick={() => {
               setFirstName("");
@@ -107,7 +164,7 @@ export default function Sidebarv3({
                 index === 0 ? `Du (${person.firstName})` : person.firstName
               }
               seatNumber={person.seatNumber}
-              key={person.firstName}
+              key={`${person.firstName} ${person.lastName}`}
               editSeat={(seatNumber) => {
                 setSelectedSeat(seatNumber);
                 setFirstName(registeredPeople[index].firstName);

@@ -9,11 +9,11 @@ export default function Home() {
     <main className="flex h-screen flex-col items-center justify-center gap-12">
       {aNumber !== "" && (
         <>
-          <div className="fixed opacity-25 top-0 left-12 p-6 grid items-center justify-center select-none">
-            <p className="uppercase text-[32px]">Scene</p>
+          <div className="fixed top-0 left-12 p-6 grid items-center justify-center select-none">
+            <p className="uppercase text-[32px] text-[#D8D6DB]">Scene</p>
           </div>
-          <div className="fixed opacity-25 bottom-0 left-12 p-6 grid items-center justify-center select-none">
-            <p className="uppercase text-[32px]">Kantine</p>
+          <div className="fixed bottom-0 left-12 p-6 grid items-center justify-center select-none">
+            <p className="uppercase text-[32px] text-[#D8D6DB]">Kantine</p>
           </div>
           <SeatingV2 aNumber={aNumber} />
         </>

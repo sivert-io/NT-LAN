@@ -17,11 +17,11 @@ export default function SeatListItem({
   delDisable: boolean;
 }) {
   return (
-    <div className="flex gap-2 items-center justify-center font-bold">
+    <div className="flex gap-2 w-full items-center justify-center font-bold">
       <p className="p-2 text-xs w-16 shrink-0 text-center text-[#242127] whitespace-nowrap bg-[#D7AAFF] rounded">
         Plass {seatNumber + 1}
       </p>
-      <p className="p-2 text-xs text-[#242127] whitespace-nowrap w-full bg-[#D7AAFF] rounded">
+      <p className="p-2 text-xs text-[#242127] whitespace-nowrap truncate w-full bg-[#D7AAFF] rounded">
         {firstName}
       </p>
       <button

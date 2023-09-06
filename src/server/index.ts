@@ -32,7 +32,6 @@ const io = new Server(serverPort, options);
 // Event handler for when a user connects to the server
 io.on("connection", (socket: Socket) => {
   const shortSocketId = socket.id?.substring(0, 4);
-  console.log(`User(${shortSocketId}) connected!`);
 
   // Initialize the user ID for this socket
   idList[socket.id as string] = "";
@@ -46,7 +45,6 @@ io.on("connection", (socket: Socket) => {
       delete idList[socketId];
     }
 
-    console.log(`User(${shortSocketId}) disconnected!`);
 
     // Emit the updated list of held seats to all users
     io.emit("userHoldSeats", heldSeats);
@@ -54,6 +52,7 @@ io.on("connection", (socket: Socket) => {
 
   // Event handler for when a user requests seats
   socket.on("giveMeSeats", (aNumber: string) => {
+    console.log(`${aNumber} connected!`);
     // When a user loads the map, provide them with seat information
     socket.emit("updateRegisteredSeats", registeredSeats);
     socket.emit("userHoldSeats", heldSeats);

@@ -8,11 +8,11 @@ export default function ANumberModal({
   setaNumber: (newValue: string) => any;
 }) {
   const [tempANumber, settempANumber] = useState("");
-  const verifyRegex = /^\d{5}$/;
+  const verifyRegex = /^[aAkK]\d{5}$/;
 
   function onChange(event: any) {
     const input = event.target.value;
-    const regex = /^\d{0,5}$/;
+    const regex = /^[aAkK]\d{0,5}$/;
 
     if (input === "" || regex.test(input)) {
       settempANumber(input);
@@ -20,7 +20,7 @@ export default function ANumberModal({
   }
 
   const handleEnterKeyPress = (event: any) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       if (verifyRegex.test(tempANumber)) setaNumber(tempANumber);
     }
   };
@@ -29,17 +29,18 @@ export default function ANumberModal({
     <div className="flex flex-col gap-8 items-center justify-center">
       <Title />
       <div className="px-20 py-10 rounded-2xl bg-[#423E49] w-[562px] flex flex-col gap-6">
-        <label htmlFor="A-nummer" className="flex flex-col gap-1 font-bold">
-          A-nummer
+        <label htmlFor="A-nummer" className="flex flex-col gap-1 font-medium">
+          Hva er ansattnummeret ditt?
           <div className="flex gap-1 items-center justify-center">
-            <p className="p-3 rounded-lg bg-zinc-800">A</p>
-            <p>-</p>
+            {/* <p className="p-3 rounded-lg bg-zinc-800">A</p>
+            <p>-</p> */}
             <input
               id="aNumber"
               onKeyDown={handleEnterKeyPress}
               type="text"
               name="A-nummer"
-              maxLength={5}
+              placeholder="a00000"
+              maxLength={6}
               className="w-full rounded-lg bg-zinc-800 p-3 border-2 focus:border-[#91FFC3] border-transparent outline-none disabled:opacity-50 disabled:cursor-not-allowed"
               value={tempANumber}
               onChange={onChange}
@@ -52,7 +53,7 @@ export default function ANumberModal({
             onClick={() => {
               if (verifyRegex.test(tempANumber)) setaNumber(tempANumber);
             }}
-            className="rounded-3xl px-5 py-3 bg-[#91FFC3] text-[#242127] active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-3xl px-5 py-3 bg-[#91FFC3] text-[#242127] active:scale-95 transition-all duration-[50ms] disabled:bg-[#D8D6DB] disabled:text-[#6D6973] disabled:cursor-not-allowed"
           >
             Neste
           </button>

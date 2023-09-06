@@ -8,6 +8,7 @@ interface inputProps {
   type?: string;
   maxLength?: number;
   placeholder?: string;
+  onKeyDown?: (event: any) => void;
   id: string;
 }
 
@@ -20,6 +21,7 @@ export default function Input({
   type = "text",
   maxLength = 32,
   id,
+  onKeyDown,
 }: inputProps) {
   return (
     <label htmlFor={name} className="flex flex-col gap-1">
@@ -30,6 +32,7 @@ export default function Input({
         type={type}
         disabled={disabled}
         name={name}
+        onKeyDown={onKeyDown}
         maxLength={maxLength}
         className="w-full rounded-lg bg-[#242127] p-3 h-[40px] border-2 focus:border-[#E8E6EB] border-transparent outline-none disabled:opacity-50 disabled:cursor-not-allowed"
         value={value}

@@ -8,7 +8,7 @@ import Title from "../title/Title";
 import { RegisterFieldsType } from "../register/types";
 import Sidebarv3 from "../sidebar/SidebarV3";
 
-const numCols = 6;
+const numCols = 8;
 
 export default function SeatingV2({ aNumber }: { aNumber: string }) {
   const [seatChecked, setSeatChecked] = useState<number | undefined>(undefined);
@@ -88,30 +88,10 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
     });
 
     return () => {
-      socket.off("connect");
+      socket.off("updateRegisteredSeats");
       socket.off("userHoldSeats");
     };
   }, [seatList, setseatList]);
-
-  // Function to update the occupant of a specific seat by id
-  const updateSeat = (
-    idToUpdate: number,
-    newOccupant?: string,
-    isOnHold?: boolean
-  ) => {
-    const updatedSeats = seatList.map((seat) => {
-      if (seat.id === idToUpdate) {
-        return {
-          ...seat,
-          occupant: newOccupant !== undefined ? newOccupant : seat.firstName,
-          isOnHold: isOnHold !== undefined ? isOnHold : seat.isOnHold,
-        };
-      }
-      return seat;
-    });
-
-    setseatList(updatedSeats);
-  };
 
   useEffect(() => {
     const updatedSeats = seatList.map((seat) => {
@@ -149,17 +129,20 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
         <Legend seatAmnt={registeredPeople.length} />
       </div>
       <div className="flex gap-16">
-        <div className="flex flex-col gap-20">
+        <div className="flex flex-col gap-20 px-4 overflow-auto max-h-[690px]">
           {Array.from({
             length: Math.ceil(seatList.length / (numCols * 2)),
           }).map((_, groupIndex) => (
-            <div key={groupIndex} className="grid grid-cols-6 gap-3">
+            <div key={groupIndex} className="grid grid-cols-8 gap-3">
               {seatList
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
                 .map((seat) => (
                   <Seat
                     isDisabled={
-                      seat.isYours && isEditing && seat.id !== editingSeat
+                      (seat.isYours && isEditing && seat.id !== editingSeat) ||
+                      (seat.isYours &&
+                        isEditing &&
+                        registeredPeople.length === 1)
                     }
                     onHold={seat.isOnHold}
                     occupant={seat.firstName || ""}

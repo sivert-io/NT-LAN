@@ -20,12 +20,13 @@ export default function Seat({
         onClick={() => {
           selectSeat(id);
         }}
-        className={`select-none relative capitalize disabled:transition-none disabled:scale-100 disabled:cursor-not-allowed truncate whitespace-nowrap text-lg font-medium rounded-lg w-[140px] h-[63px]
+        className={`select-none relative capitalize disabled:transition-none disabled:scale-100 disabled:cursor-not-allowed truncate whitespace-nowrap px-4 text-lg font-medium rounded-lg w-[140px] h-[63px]
       ${
-        onHold || isDisabled
-          ? "opacity-30 border-[#E7E4ED] border hover:cursor-not-allowed"
+        onHold
+          ? "border-2 border-[#FF5797] text-[#FF5797] hover:cursor-not-allowed"
           : "active:scale-95 transition-all duration-[100ms]"
       } 
+      ${isDisabled && "cursor-not-allowed"}
       ${
         !onHold &&
         (isSelected
@@ -41,7 +42,7 @@ export default function Seat({
         {occupant}
         <p
           className={`${seatNumberClassName} ${
-            isSelected || highlight ? "opacity-100" : "opacity-30"
+            isSelected || highlight ? "opacity-100" : "opacity-75"
           }`}
         >
           {id + 1}
