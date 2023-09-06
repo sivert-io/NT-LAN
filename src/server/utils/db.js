@@ -60,27 +60,6 @@ var Database = /** @class */ (function () {
             },
         };
     }
-    Database.prototype.sendRequest = function (method, url, data) {
-        if (data === void 0) { data = null; }
-        return __awaiter(this, void 0, void 0, function () {
-            var response, error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, (0, axios_1.default)(__assign(__assign({ method: method, url: "".concat(this.databaseUrl).concat(url) }, this.defaultAxiosOptions), { data: data }))];
-                    case 1:
-                        response = _a.sent();
-                        return [2 /*return*/, response.data];
-                    case 2:
-                        error_1 = _a.sent();
-                        console.error("Error ".concat(method, " ").concat(url, ":"), error_1);
-                        throw error_1;
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
     Database.prototype.getReservedSeats = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -148,6 +127,27 @@ var Database = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, this.sendRequest("get", "/admin/feedback/ratings")];
+            });
+        });
+    };
+    Database.prototype.sendRequest = function (method, url, data) {
+        if (data === void 0) { data = null; }
+        return __awaiter(this, void 0, void 0, function () {
+            var response, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, (0, axios_1.default)(__assign(__assign({ method: method, url: "".concat(this.databaseUrl).concat(url) }, this.defaultAxiosOptions), { data: data }))];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/, response.data];
+                    case 2:
+                        error_1 = _a.sent();
+                        console.error("Error ".concat(method, " ").concat(url, ":"), error_1);
+                        throw error_1;
+                    case 3: return [2 /*return*/];
+                }
             });
         });
     };

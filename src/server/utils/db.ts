@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { Config, DeleteSeats, DeleteSeatsWithEmployeeId, Feedback, FeedbackOnly, RatingsWithAverageRating, ReserveSeats, ReservedSeat, UpdateEmployee } from "./types";
 
 class Database {
   private readonly databaseUrl: string;
@@ -22,6 +23,45 @@ class Database {
       },
     };
   }
+  async getReservedSeats(): Promise<ReservedSeat[]> {
+    return this.sendRequest<ReservedSeat[]>("get", "/internal/seating");
+  }
+
+  async reserveSeats(reserveData: ReserveSeats): Promise<void> {
+    return this.sendRequest<void>("post", "/internal/seating", reserveData);
+  }
+
+  async deleteReservedSeats(deleteData: DeleteSeatsWithEmployeeId): Promise<void> {
+    return this.sendRequest<void>("delete", "/internal/seating", deleteData);
+  }
+
+  async updateEmployee(employeeData: UpdateEmployee): Promise<void> {
+    return this.sendRequest<void>("put", "/internal/employee", employeeData);
+  }
+
+  async addFeedback(feedbackData: Feedback): Promise<void> {
+    return this.sendRequest<void>("post", "/internal/feedback", feedbackData);
+  }
+
+  async getLayoutConfig(): Promise<Config> {
+    return this.sendRequest<Config>("get", "/internal/config");
+  }
+
+  async deleteSeats(deleteData: DeleteSeats): Promise<void> {
+    return this.sendRequest<void>("delete", "/admin/seating", deleteData);
+  }
+
+  async updateConfig(configData: Config): Promise<void> {
+    return this.sendRequest<void>("post", "/admin/config", configData);
+  }
+
+  async getFeedbackOnly(feedbackIds: number[]): Promise<FeedbackOnly> {
+    return this.sendRequest<FeedbackOnly>("post", "/admin/feedback", { feedbackIds });
+  }
+
+  async getRatingsAndAverageRating(): Promise<RatingsWithAverageRating> {
+    return this.sendRequest<RatingsWithAverageRating>("get", "/admin/feedback/ratings");
+  }
 
   private async sendRequest<T>(method: string, url: string, data: any = null): Promise<T> {
     try {
@@ -36,46 +76,6 @@ class Database {
       console.error(`Error ${method} ${url}:`, error);
       throw error;
     }
-  }
-
-  async getReservedSeats(): Promise<any> {
-    return this.sendRequest<any>("get", "/internal/seating");
-  }
-
-  async reserveSeats(reserveData: any): Promise<any> {
-    return this.sendRequest<any>("post", "/internal/seating", reserveData);
-  }
-
-  async deleteReservedSeats(deleteData: any): Promise<any> {
-    return this.sendRequest<any>("delete", "/internal/seating", deleteData);
-  }
-
-  async updateEmployee(employeeData: any): Promise<any> {
-    return this.sendRequest<any>("put", "/internal/employee", employeeData);
-  }
-
-  async addFeedback(feedbackData: any): Promise<any> {
-    return this.sendRequest<any>("post", "/internal/feedback", feedbackData);
-  }
-
-  async getLayoutConfig(): Promise<any> {
-    return this.sendRequest<any>("get", "/internal/config");
-  }
-
-  async deleteSeats(deleteData: any): Promise<any> {
-    return this.sendRequest<any>("delete", "/admin/seating", deleteData);
-  }
-
-  async updateConfig(configData: any): Promise<any> {
-    return this.sendRequest<any>("post", "/admin/config", configData);
-  }
-
-  async getFeedbackOnly(feedbackIds: number[]): Promise<any> {
-    return this.sendRequest<any>("post", "/admin/feedback", { feedbackIds });
-  }
-
-  async getRatingsAndAverageRating(): Promise<any> {
-    return this.sendRequest<any>("get", "/admin/feedback/ratings");
   }
 }
 

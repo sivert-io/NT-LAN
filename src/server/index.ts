@@ -75,18 +75,6 @@ io.on("connection", (socket: Socket) => {
     registeredSeats[aNumber] = registeredPeople;
     io.emit("updateRegisteredSeats", registeredSeats);
   });
-
-  // Event handler for when a user updates their profile
-  socket.on("updateUser", async (userId: string, updatedUser: any) => {
-    try {
-      // Update the user in the database (not implemented in this code)
-      const user = await db.updateEmployee({});
-      // Handle the updated user data as needed
-      io.emit("userUpdated", user); // Emit an event to inform clients about the update
-    } catch (error) {
-      // Handle errors
-    }
-  });
 });
 
 console.log("Server running at port", serverPort);
