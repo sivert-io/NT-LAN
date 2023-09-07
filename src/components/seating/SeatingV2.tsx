@@ -97,17 +97,20 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
   }, [seatChecked]);
 
   return (
-    <div className="flex flex-col gap-12">
-      <div className="flex justify-between gap-12">
+    <div className="flex flex-col gap-16">
+      <div className="flex justify-between px-4 mr-[360px]">
         <Title />
         <DaySelector />
       </div>
       <div className="flex gap-12 relative">
-        <div className="flex flex-col gap-20 px-4 overflow-auto max-h-[690px]">
+        <div className="flex flex-col gap-16 px-4 overflow-auto max-h-[690px]">
           {Array.from({
             length: Math.ceil(seatList.length / (numCols * 2)),
           }).map((_, groupIndex) => (
-            <div key={groupIndex} className="grid grid-cols-8 gap-3">
+            <div
+              key={groupIndex}
+              className="grid grid-cols-8 gap-3 w-[50vw] max-w-[1200px] min-w-[600px]"
+            >
               {seatList
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
                 .map((seat) => (
