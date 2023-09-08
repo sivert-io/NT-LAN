@@ -5,10 +5,15 @@ interface Props extends React.ComponentPropsWithoutRef<"button"> {
   activeClass?: string;
 }
 
-export default function Button(props: Props) {
-  const buttonColor = props.isActive
-    ? props.activeClass
-      ? props.activeClass
+export default function Button({
+  isActive,
+  activeClass,
+  children,
+  ...rest
+}: Props) {
+  const buttonColor = isActive
+    ? activeClass
+      ? activeClass
       : "bg-[#91FFC3] text-[#1A171F]"
     : "bg-[#423E49] text-[#D7D3DE]";
 
@@ -19,9 +24,9 @@ export default function Button(props: Props) {
         disabled:cursor-not-allowed disabled:bg-[#D8D6DB] disabled:text-[#6D6973]
         active:scale-95 transition-all duration-75
         `}
-      {...props}
+      {...rest}
     >
-      {props.children}
+      {children}
     </button>
   );
 }

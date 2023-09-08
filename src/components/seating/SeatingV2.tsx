@@ -7,11 +7,12 @@ import { generateSeats } from "@/utils/seats";
 import Title from "../title/Title";
 import { RegisterFieldsType } from "../register/types";
 import Sidebarv3 from "../sidebar/SidebarV3";
-import DaySelector from "../daySelector/DaySelector";
+import DaySelector, { daySelect } from "../daySelector/DaySelector";
 
 const numCols = 5;
 
 export default function SeatingV2({ aNumber }: { aNumber: string }) {
+  const [daySelected, setdaySelected] = useState<daySelect>("hele");
   const [seatChecked, setSeatChecked] = useState<number | undefined>(undefined);
   const [seatList, setseatList] = useState<SeatType[]>(generateSeats(numCols));
   const [firstName, setFirstName] = useState("");
@@ -100,7 +101,10 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
     <div className="flex flex-col gap-16">
       <div className="flex justify-between px-4 mr-[360px]">
         <Title />
-        <DaySelector />
+        <DaySelector
+          daySelected={daySelected}
+          setdaySelected={setdaySelected}
+        />
       </div>
       <div className="flex gap-12 relative">
         <div className="flex flex-col gap-16 px-4 overflow-auto max-h-[690px]">
