@@ -5,7 +5,7 @@ export function generateSeats(numCols: number) {
     let row = 0;
     let col = 0;
   
-    for (let index = 0; index < 80; index++) {
+    for (let index = 0; index < 60; index++) {
       if (col >= numCols) {
         col = 0;
         row++;

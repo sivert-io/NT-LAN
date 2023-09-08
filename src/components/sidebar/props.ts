@@ -25,6 +25,7 @@ export type SidebarV3Props = {
   setLastName: (newString: string) => any;
   isEditing: boolean;
   setisEditing: (yes: boolean) => any;
+  seatEditing?: number;
 };
 
 export type InputBoxType = {

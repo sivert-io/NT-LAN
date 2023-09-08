@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"next dev\" \"yarn dev_s\"",
-    "build": "next build",
+    "build": "tsc src/server/index.ts && next build",
     "next": "next start",
     "start": "concurrently \"yarn next\" \"yarn server\"",
     "server": "node src/server/index.js",

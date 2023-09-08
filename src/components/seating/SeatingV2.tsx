@@ -9,7 +9,7 @@ import { RegisterFieldsType } from "../register/types";
 import Sidebarv3 from "../sidebar/SidebarV3";
 import DaySelector from "../daySelector/DaySelector";
 
-const numCols = 8;
+const numCols = 5;
 
 export default function SeatingV2({ aNumber }: { aNumber: string }) {
   const [seatChecked, setSeatChecked] = useState<number | undefined>(undefined);
@@ -20,7 +20,7 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
     RegisterFieldsType[]
   >([]);
   const [isEditing, setisEditing] = useState(false);
-  const [editingSeat, seteditingSeat] = useState<number | undefined>(undefined);
+  const [seatEditing, seteditingSeat] = useState<number | undefined>(undefined);
 
   function updateSeatsSocket(heldSeats: { [id: string]: number }) {
     const _seats = heldSeats;
@@ -109,14 +109,14 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
           }).map((_, groupIndex) => (
             <div
               key={groupIndex}
-              className="grid grid-cols-8 gap-3 w-[50vw] max-w-[1200px] min-w-[600px]"
+              className="grid grid-cols-5 gap-3 w-[50vw] max-w-[860px] min-w-[600px]"
             >
               {seatList
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
                 .map((seat) => (
                   <Seat
                     isDisabled={
-                      (seat.isYours && isEditing && seat.id !== editingSeat) ||
+                      (seat.isYours && isEditing && seat.id !== seatEditing) ||
                       (seat.isYours &&
                         isEditing &&
                         registeredPeople.length === 1)
@@ -140,6 +140,7 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
           ))}
         </div>
         <Sidebarv3
+          seatEditing={seatEditing}
           setisEditing={setisEditing}
           isEditing={isEditing}
           setSelectedSeat={setSeatChecked}

@@ -16,6 +16,7 @@ export default function Sidebarv3({
   deletePerson,
   isEditing,
   setisEditing,
+  seatEditing,
 }: SidebarV3Props) {
   const [timer, setTimer] = useState<number | null>(null);
   const timerDuration = 120; // 2 minutes in seconds
@@ -56,7 +57,13 @@ export default function Sidebarv3({
 
   useEffect(() => {
     // Start the timer when selectedSeat changes
-    if (selectedSeat !== undefined && !isEditing) {
+    if (
+      selectedSeat !== undefined &&
+      !isEditing &&
+      registeredPeople.findIndex(
+        (person) => person.seatNumber === selectedSeat
+      ) === -1
+    ) {
       setTimer(timerDuration);
 
       const intervalId = setInterval(() => {
@@ -69,7 +76,14 @@ export default function Sidebarv3({
         setTimer(null);
       };
     }
-  }, [isEditing, selectedSeat, setTimer, firstName, lastName]);
+  }, [
+    isEditing,
+    selectedSeat,
+    setTimer,
+    firstName,
+    lastName,
+    registeredPeople,
+  ]);
 
   useEffect(() => {
     // When the timer goes off, set selectedSeat to undefined
@@ -125,7 +139,11 @@ export default function Sidebarv3({
             disabled={firstName.length <= 2 || lastName.length <= 2}
             className="py-3 px-5 flex justify-center items-center bg-[#FFCF3F] rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Lagre
+            {isEditing && seatEditing !== selectedSeat ? (
+              <>Flytt</>
+            ) : (
+              <>Lagre</>
+            )}
           </button>
           {registeredPeople.findIndex(
             (person) => person.seatNumber === selectedSeat

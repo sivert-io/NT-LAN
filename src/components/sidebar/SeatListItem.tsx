@@ -21,7 +21,7 @@ export default function SeatListItem({
       <p className="p-2 text-xs w-16 shrink-0 text-center text-[#242127] whitespace-nowrap bg-[#D7AAFF] rounded">
         Plass {seatNumber + 1}
       </p>
-      <p className="p-2 text-xs text-[#242127] whitespace-nowrap truncate w-full bg-[#D7AAFF] rounded">
+      <p className="p-2 text-xs text-[#242127] whitespace-nowrap truncate w-full bg-[#D7AAFF] rounded capitalize">
         {firstName}
       </p>
       <button
