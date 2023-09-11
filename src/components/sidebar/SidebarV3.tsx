@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { SidebarV3Props } from "./props";
 import Input from "../input/Input";
 import SeatListItem from "./SeatListItem";
-import Legend from "../legend/Legend";
 
 export default function Sidebarv3({
   registeredPeople,
@@ -95,8 +94,6 @@ export default function Sidebarv3({
 
   return (
     <div className="bg-zinc-700 select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6 flex flex-col justify-start gap-8">
-      <Legend seatAmnt={registeredPeople.length} />
-
       {selectedSeat !== undefined ? (
         <>
           <div className="flex justify-between items-center">

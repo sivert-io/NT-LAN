@@ -20,7 +20,7 @@ export default function Button({
   return (
     <button
       className={`${buttonColor}
-        py-2 px-4 rounded-full font-medium text-sm
+        py-2 px-4 rounded-full font-medium text-sm whitespace-nowrap
         disabled:cursor-not-allowed disabled:bg-[#D8D6DB] disabled:text-[#6D6973]
         active:scale-95 transition-all duration-75
         `}

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import Seat from "./Seat"; // Assuming you have a Seat component
 import { SeatType } from "./types"; // Assuming you have defined the SeatType
 import { socket } from "../../utils/socket";
-import Legend from "../legend/Legend";
 import { generateSeats } from "@/utils/seats";
 import Title from "../title/Title";
 import { RegisterFieldsType } from "../register/types";
 import Sidebarv3 from "../sidebar/SidebarV3";
 import DaySelector, { daySelect } from "../daySelector/DaySelector";
+import Legend from "../legend/Legend";
 
 const numCols = 5;
 
@@ -98,8 +98,8 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
   }, [seatChecked]);
 
   return (
-    <div className="flex flex-col gap-16">
-      <div className="flex justify-between px-4 mr-[360px]">
+    <div className="flex flex-col gap-12">
+      <div className="flex items-end justify-between px-4 w-[50vw] max-w-[890px] min-w-[634px]">
         <Title />
         <DaySelector
           daySelected={daySelected}
@@ -189,6 +189,7 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
           setFirstName={setFirstName}
           setLastName={setLastName}
         />
+        <Legend seatAmnt={registeredPeople.length} />
       </div>
     </div>
   );
