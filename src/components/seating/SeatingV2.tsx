@@ -8,6 +8,7 @@ import { RegisterFieldsType } from "../register/types";
 import Sidebarv3 from "../sidebar/SidebarV3";
 import DaySelector, { daySelect } from "../daySelector/DaySelector";
 import Legend from "../legend/Legend";
+import SeatV2 from "./SeatV2";
 
 const numCols = 5;
 
@@ -118,7 +119,7 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
               {seatList
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
                 .map((seat) => (
-                  <Seat
+                  <SeatV2
                     isDisabled={
                       (seat.isYours && isEditing && seat.id !== seatEditing) ||
                       (seat.isYours &&
@@ -127,15 +128,18 @@ export default function SeatingV2({ aNumber }: { aNumber: string }) {
                     }
                     onHold={seat.isOnHold}
                     occupant={seat.firstName || ""}
-                    highlight={seat.isYours}
+                    isYours={seat.isYours}
                     id={seat.id}
+                    deselectAllSeats={() => {
+                      setSeatChecked(undefined);
+                    }}
                     selectSeat={() => {
                       return setSeatChecked(
                         seatChecked === seat.id && !isEditing
                           ? undefined
                           : seat.id
                       );
-                    }} // Pass the seat ID to the toggle function
+                    }}
                     key={seat.id}
                     isSelected={seatChecked === seat.id}
                   />

@@ -1,13 +1,14 @@
-import React, { startTransition, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SeatProps } from "./props";
 import { mousePosition, useMousePosition } from "@/utils/useMousePosition";
 import { useMouseButtonDown } from "@/utils/useMouseButtonDown";
 
-export default function Seat({
+export default function SeatV2({
   isSelected,
   selectSeat,
+  deselectAllSeats,
   id,
-  highlight,
+  isYours,
   occupant,
   isDisabled,
   onHold,
@@ -27,9 +28,17 @@ export default function Seat({
   const seatNumberClassName =
     "absolute text-sm top-0 right-0 px-2 py-1 font-extralight";
 
+  function clearDrag() {
+    setstartPosition({ x: null, y: null });
+    setOffset({ x: null, y: null });
+    setboxSize({ x: null, y: null });
+    setisDragging(false);
+  }
+
   useEffect(() => {
     if (
       mouseButtonDown &&
+      !isDragging &&
       startPosition.x &&
       startPosition.y &&
       mousePosition.x &&
@@ -40,16 +49,20 @@ export default function Seat({
         Math.abs(startPosition.y - mousePosition.y) > 6
       ) {
         setisDragging(true);
+        deselectAllSeats();
       }
     }
 
     if (!mouseButtonDown && isDragging) {
-      setstartPosition({ x: null, y: null });
-      setOffset({ x: null, y: null });
-      setisDragging(false);
-      setboxSize({ x: null, y: null });
+      clearDrag();
     }
-  }, [isDragging, mouseButtonDown, mousePosition, startPosition]);
+  }, [
+    deselectAllSeats,
+    isDragging,
+    mouseButtonDown,
+    mousePosition,
+    startPosition,
+  ]);
 
   return (
     <>
@@ -66,29 +79,14 @@ export default function Seat({
               top: mousePosition.y - offset.y + "px",
               cursor: "grabbing",
             }}
-            className={`fixed z-10 opacity-70 flex items-center justify-center select-none capitalize truncate whitespace-nowrap 2xl:px-4 text-sm 2xl:text-lg font-medium rounded-lg
-      ${
-        onHold
-          ? "border-2 border-[#FF5797] text-[#FF5797] hover:cursor-not-allowed"
-          : ""
-      } 
-      ${isDisabled && "cursor-not-allowed"}
-      ${
-        !onHold &&
-        (isSelected
-          ? "bg-[#91FFC3] text-gray-900"
-          : highlight
-          ? "bg-[#D7AAFF] text-gray-900"
-          : occupant.length > 0
-          ? "border-2 border-[#FF5797] cursor-grab text-[#FF5797]"
-          : "border-[#E7E4ED] border")
-      }
+            className={`fixed z-10 flex items-center justify-center select-none capitalize truncate whitespace-nowrap 2xl:px-4 text-sm 2xl:text-lg font-medium rounded-lg
+            bg-[#91FFC3] text-gray-900
           `}
           >
             {occupant}
             <p
               className={`${seatNumberClassName} ${
-                isSelected || highlight ? "opacity-100" : "opacity-75"
+                isSelected || isYours ? "opacity-100" : "opacity-75"
               }`}
             >
               {id + 1}
@@ -97,16 +95,13 @@ export default function Seat({
         )}
 
       <button
-        disabled={onHold || (!highlight && occupant !== "") || isDisabled}
+        disabled={onHold || (!isYours && occupant !== "") || isDisabled}
         onClick={() => {
           selectSeat(id);
-          setstartPosition({ x: null, y: null });
-          setOffset({ x: null, y: null });
-          setboxSize({ x: null, y: null });
-          setisDragging(false);
+          clearDrag();
         }}
         onMouseDown={(event: any) => {
-          if (highlight) {
+          if (isYours) {
             const rect = event.target.getBoundingClientRect();
             setboxSize({
               x: event.target.offsetWidth,
@@ -125,14 +120,14 @@ export default function Seat({
       ${
         onHold
           ? "border-2 border-[#FF5797] text-[#FF5797] hover:cursor-not-allowed"
-          : "active:scale-95 transition-all duration-[100ms]"
+          : !isDragging && "active:scale-95 transition-all duration-[100ms]"
       } 
       ${isDisabled && "cursor-not-allowed"}
       ${
         !onHold &&
         (isSelected
           ? "bg-[#91FFC3] text-gray-900"
-          : highlight
+          : isYours
           ? "bg-[#D7AAFF] text-gray-900"
           : occupant.length > 0
           ? "border-2 border-[#FF5797] cursor-grab text-[#FF5797]"
@@ -143,7 +138,7 @@ export default function Seat({
         {occupant}
         <p
           className={`${seatNumberClassName} ${
-            isSelected || highlight ? "opacity-100" : "opacity-75"
+            isSelected || isYours ? "opacity-100" : "opacity-75"
           }`}
         >
           {id + 1}
