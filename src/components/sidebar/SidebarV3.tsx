@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { SidebarV3Props } from "./props";
+import { SidebarV3Props, days } from "./props";
 import Input from "../input/Input";
 import SeatListItem from "./SeatListItem";
+import Button from "../button/Button";
 
 export default function Sidebarv3({
   registeredPeople,
@@ -19,10 +20,16 @@ export default function Sidebarv3({
 }: SidebarV3Props) {
   const [timer, setTimer] = useState<number | null>(null);
   const timerDuration = 120; // 2 minutes in seconds
+  const [daysAttending, setDaysAttending] = useState<days[]>([]);
 
   const handleEnterKeyPress = (event: any) => {
     if (event.key === "Enter") {
-      if (firstName.length >= 2 && lastName.length >= 2) savePerson();
+      if (
+        firstName.length >= 2 &&
+        lastName.length >= 2 &&
+        daysAttending.length > 0
+      )
+        savePerson();
     }
   };
 
@@ -32,9 +39,11 @@ export default function Sidebarv3({
         firstName: firstName,
         lastName: lastName,
         seatNumber: selectedSeat,
+        daysAttending: daysAttending,
       });
     setFirstName("");
     setLastName("");
+    setDaysAttending([]);
     setisEditing(false);
   }
 
@@ -47,9 +56,11 @@ export default function Sidebarv3({
       if (isRegistered !== -1) {
         setFirstName(registeredPeople[isRegistered].firstName);
         setLastName(registeredPeople[isRegistered].lastName);
+        setDaysAttending(registeredPeople[isRegistered].daysAttending);
       } else {
         setFirstName("");
         setLastName("");
+        setDaysAttending([]);
       }
     }
   }, [isEditing, registeredPeople, selectedSeat, setFirstName, setLastName]);
@@ -93,10 +104,10 @@ export default function Sidebarv3({
   }, [timer, setSelectedSeat]);
 
   return (
-    <div className="bg-zinc-700 select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6 flex flex-col justify-start gap-8">
+    <div className="bg-zinc-700 select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6 flex flex-col items-center justify-start gap-8">
       {selectedSeat !== undefined ? (
         <>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center w-full">
             <h2 className="font-bold flex justify-between items-center">
               {registeredPeople.length === 0 ||
               (registeredPeople[0].firstName === firstName &&
@@ -111,7 +122,7 @@ export default function Sidebarv3({
               Plass {selectedSeat + 1}
             </p>
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-full">
             <Input
               name="Fornavn"
               id="firstName"
@@ -131,9 +142,32 @@ export default function Sidebarv3({
               value={lastName}
             />
           </div>
+          <div className="flex flex-col w-full gap-4">
+            <p className="text-sm font-bold">Hvilken dag skal du delta?</p>
+            <div className="flex flex-col gap-2">
+              <Button inActiveClass="bg-[#242127] text-[#D7D3DE]">
+                Hele helgen
+              </Button>
+              <div className="flex gap-2">
+                <Button inActiveClass="bg-[#242127] text-[#D7D3DE]">
+                  Fredag
+                </Button>
+                <Button inActiveClass="bg-[#242127] text-[#D7D3DE]">
+                  Lørdag
+                </Button>
+                <Button inActiveClass="bg-[#242127] text-[#D7D3DE]">
+                  Søndag
+                </Button>
+              </div>
+            </div>
+          </div>
           <button
             onClick={savePerson}
-            disabled={firstName.length <= 2 || lastName.length <= 2}
+            disabled={
+              firstName.length <= 2 ||
+              lastName.length <= 2 ||
+              daysAttending.length === 0
+            }
             className="py-3 px-5 flex justify-center items-center bg-[#FFCF3F] rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isEditing && seatEditing !== selectedSeat ? (
@@ -150,6 +184,7 @@ export default function Sidebarv3({
                 deletePerson(selectedSeat);
                 setFirstName("");
                 setLastName("");
+                setDaysAttending([]);
                 setisEditing(false);
                 setSelectedSeat(undefined);
               }}
@@ -162,6 +197,7 @@ export default function Sidebarv3({
             onClick={() => {
               setFirstName("");
               setLastName("");
+              setDaysAttending([]);
               setisEditing(false);
               setSelectedSeat(undefined);
             }}
@@ -187,6 +223,7 @@ export default function Sidebarv3({
                 setSelectedSeat(seatNumber);
                 setFirstName(registeredPeople[index].firstName);
                 setLastName(registeredPeople[index].lastName);
+                setDaysAttending(registeredPeople[index].daysAttending);
                 setisEditing(true);
               }}
               deleteSeat={deletePerson}

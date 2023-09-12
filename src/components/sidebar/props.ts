@@ -13,6 +13,8 @@ export type SidebarV2Props = {
   registeredPeople?: RegisterFieldsType[];
 };
 
+export type days = 'fredag' | 'lordag' | 'sondag';
+
 export type SidebarV3Props = {
   registeredPeople: RegisterFieldsType[];
   updateRegisteredPeople: (person: RegisterFieldsType) => any;

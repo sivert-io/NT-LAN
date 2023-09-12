@@ -15,8 +15,25 @@ const serverPort = 3004;
 
 // Database configuration
 const databaseUrl = "http://lan-party-seating.apps.ocpdq02.norsk-tipping.no"; // Replace with your actual database URL
-const username = "admin";
-const password = "IAMthecaptainnow100";
+const username = process.env.LAN_USERNAME;
+const password = process.env.LAN_PASSWORD;
+
+if (!username || !password) {
+  const errorMessage = 'Missing username or password ENV!!! (LAN_USERNAME or LAN_PASSWORD)';
+  const boxWidth = errorMessage.length + 4;
+
+  console.log('\x1b[31m%s\x1b[0m', 'ERROR'.padStart(boxWidth, '━'));
+  for (let i = 0; i < 3; i++) {
+    console.log('\x1b[31m%s\x1b[0m', `┃ ${errorMessage} ┃`);
+    if (i < 2) {
+      console.log('\x1b[31m%s\x1b[0m', '┃'.padStart(boxWidth - 1, ' ') + '┃');
+    }
+  }
+  console.log('\x1b[31m%s\x1b[0m', '━'.repeat(boxWidth));
+
+  process.exit(1);
+}
+
 const db = new Database(databaseUrl, username, password);
 
 // Server configuration options

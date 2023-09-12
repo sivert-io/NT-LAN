@@ -1,3 +1,5 @@
+import { days } from "../sidebar/props"
+
 export type SeatType = {
     row: number,
     col: number,
@@ -6,4 +8,5 @@ export type SeatType = {
     lastName?: string,
     isOnHold: boolean,
     isYours: boolean,
+    daysAttending: days[];
 }
