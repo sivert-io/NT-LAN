@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"yarn dev_s\"",
+    "dev": "concurrently \"next dev\" \"npm run dev_s\"",
     "build": "tsc src/server/index.ts && next build",
     "next": "next start",
-    "start": "concurrently \"yarn next\" \"yarn server\"",
+    "start": "concurrently \"npm run next\" \"npm run server\"",
     "server": "node src/server/index.js",
     "dev_s": "tsc src/server/index.ts && nodemon src/server/index.js",
+    "openapi": "npx @openapitools/openapi-generator-cli generate -i http://lan-party-seating.apps.ocpdq02.norsk-tipping.no/swagger/openapi.yaml -g typescript-axios -o src/server/api-client",
     "lint": "next lint"
   },
   "dependencies": {
