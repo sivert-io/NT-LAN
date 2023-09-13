@@ -66,6 +66,8 @@ npm run next
 
 ## Utvikling
 
+### Starte dev server
+
 ```yarn
 yarn dev
 ```
@@ -74,4 +76,16 @@ eller
 
 ```npm
 npm run dev
+```
+
+### Generere API-typedefinisjoner fra Swagger (krever JRE 11)
+
+```yarn
+yarn openapi
+```
+
+eller
+
+```npm
+npm run openapi
 ```
