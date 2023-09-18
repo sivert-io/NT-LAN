@@ -185,7 +185,7 @@ io.on("connection", (socket: Socket) => {
   function flatHeldSeats() {
     let l: (number | undefined)[] = [];
     Object.keys(heldSeats).forEach((key) => {
-      if (heldSeats[key] !== undefined) l.push(heldSeats[key]);
+      if (heldSeats[key] && heldSeats[key] !== undefined) l.push(heldSeats[key]);
     });
     return l;
   }

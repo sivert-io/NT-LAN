@@ -80,7 +80,8 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         seats.findIndex((v) => v === seatSelected),
         1
       );
-      // console.log("Server sent us all held seats:", s);
+      console.log("Server sent us all held seats:", s);
+
       setseatsThatAreHeld(s);
     });
 
@@ -222,6 +223,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           ))}
         </div>
         <Sidebarv4
+          seatsMappedBySeatId={seatsMappedBySeatId}
           filteredDays={daySelected}
           setFilteredDays={setdaySelected}
           sidebar_daysAttending={sidebar_daysAttending}

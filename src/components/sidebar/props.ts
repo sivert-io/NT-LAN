@@ -1,4 +1,4 @@
-import { RegisterFieldsType } from "../register/types";
+import { RegisterFieldsType, mappedSeats } from "../register/types";
 import { SeatType } from "../seating/types";
 
 export type SidebarProps = {
@@ -37,6 +37,7 @@ export type SidebarV3Props = {
   sidebar_updateDay: (day: days, newValue: boolean) => void;
   setFilteredDays: (newDays: string[]) => void;
   filteredDays: string[];
+  seatsMappedBySeatId: mappedSeats;
 };
 
 export type InputBoxType = {

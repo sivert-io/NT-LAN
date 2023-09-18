@@ -24,6 +24,7 @@ export default function Sidebarv4({
   sidebar_updateDay: updateDay,
   setFilteredDays,
   filteredDays,
+  seatsMappedBySeatId,
 }: SidebarV3Props) {
   const [timer, setTimer] = useState<number | null>(null);
   const timerDuration = 120; // 2 minutes in seconds
@@ -205,11 +206,36 @@ export default function Sidebarv4({
             />
           </div>
           <div className="flex flex-col w-full gap-4">
-            <p className="text-sm font-bold">Hvilke dager skal du delta?</p>
+            <p className="text-sm font-bold">
+              Hvilke dager skal{" "}
+              {sidebarPeople.length === 0 ||
+              (sidebarPeople[0].firstName === firstName &&
+                sidebarPeople[0].lastName === lastName) ||
+              (isEditing && sidebarPeople.length === 1) ? (
+                <>du</>
+              ) : (
+                <>de</>
+              )}{" "}
+              delta?
+            </p>
             <div className="flex flex-col gap-2">
               <div className="flex gap-2">
                 <Button
-                  disabled={false}
+                  disabled={
+                    seatsMappedBySeatId[selectedSeat] !== undefined &&
+                    seatsMappedBySeatId[selectedSeat].some((seat) => {
+                      return (
+                        seat.reservationDate === LAN_DATES[0] &&
+                        !registeredPeople.some(
+                          (p) =>
+                            p.firstName === seat.firstName &&
+                            p.lastName === seat.lastName &&
+                            p.reservationDate === seat.reservationDate &&
+                            p.seatNumber === seat.seatNumber
+                        )
+                      );
+                    })
+                  }
                   onClick={() => {
                     updateDay("fredag", !daysAttending.fredag);
                   }}
@@ -219,7 +245,21 @@ export default function Sidebarv4({
                   Fredag
                 </Button>
                 <Button
-                  disabled={false}
+                  disabled={
+                    seatsMappedBySeatId[selectedSeat] !== undefined &&
+                    seatsMappedBySeatId[selectedSeat].some((seat) => {
+                      return (
+                        seat.reservationDate === LAN_DATES[1] &&
+                        !registeredPeople.some(
+                          (p) =>
+                            p.firstName === seat.firstName &&
+                            p.lastName === seat.lastName &&
+                            p.reservationDate === seat.reservationDate &&
+                            p.seatNumber === seat.seatNumber
+                        )
+                      );
+                    })
+                  }
                   onClick={() => {
                     updateDay("lordag", !daysAttending.lordag);
                   }}
@@ -229,7 +269,21 @@ export default function Sidebarv4({
                   Lørdag
                 </Button>
                 <Button
-                  disabled={false}
+                  disabled={
+                    seatsMappedBySeatId[selectedSeat] !== undefined &&
+                    seatsMappedBySeatId[selectedSeat].some((seat) => {
+                      return (
+                        seat.reservationDate === LAN_DATES[2] &&
+                        !registeredPeople.some(
+                          (p) =>
+                            p.firstName === seat.firstName &&
+                            p.lastName === seat.lastName &&
+                            p.reservationDate === seat.reservationDate &&
+                            p.seatNumber === seat.seatNumber
+                        )
+                      );
+                    })
+                  }
                   onClick={() => {
                     updateDay("sondag", !daysAttending.sondag);
                   }}
@@ -240,7 +294,22 @@ export default function Sidebarv4({
                 </Button>
               </div>
               <button
-                className="text-right px-4 text-[#C7D7FF] text-xs font-medium"
+                disabled={
+                  seatsMappedBySeatId[selectedSeat] !== undefined &&
+                  seatsMappedBySeatId[selectedSeat].some((seat) => {
+                    return (
+                      LAN_DATES.includes(seat.reservationDate) &&
+                      !registeredPeople.some(
+                        (p) =>
+                          p.firstName === seat.firstName &&
+                          p.lastName === seat.lastName &&
+                          p.reservationDate === seat.reservationDate &&
+                          p.seatNumber === seat.seatNumber
+                      )
+                    );
+                  })
+                }
+                className="text-right px-4 text-[#C7D7FF] text-xs font-medium disabled:opacity-25 disabled:cursor-not-allowed"
                 onClick={() => {
                   setDaysAttending({
                     fredag: true,
