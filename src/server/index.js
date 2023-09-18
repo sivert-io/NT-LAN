@@ -159,7 +159,7 @@ io.on("connection", function (socket) {
     // When user connects
     socket.on("iHaveArrived", function (aNumber) {
         idList[socket.id] = aNumber.toUpperCase();
-        console.log("".concat(aNumber, " connected!"));
+        console.log("".concat(idList[socket.id], " connected!"));
         // Send connected user seat-data
         socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber.toUpperCase()]);
         socket.emit("hereAreAllRegisteredSeats", seatsMappedBySeatId);

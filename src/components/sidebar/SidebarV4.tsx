@@ -167,251 +167,262 @@ export default function Sidebarv4({
   }, [timer, setSelectedSeat]);
 
   return (
-    <div className="bg-zinc-700 select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6 flex flex-col items-center justify-start gap-8">
+    <div className="bg-zinc-700 select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6">
       {selectedSeat !== undefined ? (
-        <>
-          <div className="flex justify-between items-center w-full">
-            <h2 className="font-bold flex justify-between items-center">
-              {sidebarPeople.length === 0 ||
-              (sidebarPeople[0].firstName === firstName &&
-                sidebarPeople[0].lastName === lastName) ||
-              (isEditing && sidebarPeople.length === 1) ? (
-                <>Hvem er du?</>
-              ) : (
-                <>Hvem er gjesten din?</>
-              )}
-            </h2>
-            <p className="px-2 py-1 text-xs flex items-center justify-center h-6 whitespace-nowrap font-bold rounded-sm bg-[#91FFC3] text-black">
-              Plass {selectedSeat + 1}
-            </p>
-          </div>
-          <div className="flex flex-col gap-4 w-full">
-            <Input
-              name="Fornavn"
-              id="firstName"
-              onChange={(event) => {
-                setFirstName(event.target.value);
-              }}
-              onKeyDown={handleEnterKeyPress}
-              value={firstName}
-            />
-            <Input
-              name="Etternavn"
-              id="lastName"
-              onChange={(event) => {
-                setLastName(event.target.value);
-              }}
-              onKeyDown={handleEnterKeyPress}
-              value={lastName}
-            />
-          </div>
-          <div className="flex flex-col w-full gap-4">
-            <p className="text-sm font-bold">
-              Hvilke dager skal{" "}
-              {sidebarPeople.length === 0 ||
-              (sidebarPeople[0].firstName === firstName &&
-                sidebarPeople[0].lastName === lastName) ||
-              (isEditing && sidebarPeople.length === 1) ? (
-                <>du</>
-              ) : (
-                <>de</>
-              )}{" "}
-              delta?
-            </p>
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2">
-                <Button
-                  disabled={
-                    seatsMappedBySeatId[selectedSeat] !== undefined &&
-                    seatsMappedBySeatId[selectedSeat].some((seat) => {
-                      return (
-                        seat.reservationDate === LAN_DATES[0] &&
-                        !registeredPeople.some(
-                          (p) =>
-                            p.firstName === seat.firstName &&
-                            p.lastName === seat.lastName &&
-                            p.reservationDate === seat.reservationDate &&
-                            p.seatNumber === seat.seatNumber
-                        )
-                      );
-                    })
-                  }
-                  onClick={() => {
-                    updateDay("fredag", !daysAttending.fredag);
-                  }}
-                  inActiveClass="bg-[#242127] text-[#D7D3DE]"
-                  isActive={daysAttending.fredag}
-                >
-                  Fredag
-                </Button>
-                <Button
-                  disabled={
-                    seatsMappedBySeatId[selectedSeat] !== undefined &&
-                    seatsMappedBySeatId[selectedSeat].some((seat) => {
-                      return (
-                        seat.reservationDate === LAN_DATES[1] &&
-                        !registeredPeople.some(
-                          (p) =>
-                            p.firstName === seat.firstName &&
-                            p.lastName === seat.lastName &&
-                            p.reservationDate === seat.reservationDate &&
-                            p.seatNumber === seat.seatNumber
-                        )
-                      );
-                    })
-                  }
-                  onClick={() => {
-                    updateDay("lordag", !daysAttending.lordag);
-                  }}
-                  inActiveClass="bg-[#242127] text-[#D7D3DE]"
-                  isActive={daysAttending.lordag}
-                >
-                  Lørdag
-                </Button>
-                <Button
-                  disabled={
-                    seatsMappedBySeatId[selectedSeat] !== undefined &&
-                    seatsMappedBySeatId[selectedSeat].some((seat) => {
-                      return (
-                        seat.reservationDate === LAN_DATES[2] &&
-                        !registeredPeople.some(
-                          (p) =>
-                            p.firstName === seat.firstName &&
-                            p.lastName === seat.lastName &&
-                            p.reservationDate === seat.reservationDate &&
-                            p.seatNumber === seat.seatNumber
-                        )
-                      );
-                    })
-                  }
-                  onClick={() => {
-                    updateDay("sondag", !daysAttending.sondag);
-                  }}
-                  inActiveClass="bg-[#242127] text-[#D7D3DE]"
-                  isActive={daysAttending.sondag}
-                >
-                  Søndag
-                </Button>
-              </div>
-              <button
-                disabled={
-                  seatsMappedBySeatId[selectedSeat] !== undefined &&
-                  seatsMappedBySeatId[selectedSeat].some((seat) => {
-                    return (
-                      LAN_DATES.includes(seat.reservationDate) &&
-                      !registeredPeople.some(
-                        (p) =>
-                          p.firstName === seat.firstName &&
-                          p.lastName === seat.lastName &&
-                          p.reservationDate === seat.reservationDate &&
-                          p.seatNumber === seat.seatNumber
-                      )
-                    );
-                  })
-                }
-                className="text-right px-4 text-[#C7D7FF] text-xs font-medium disabled:opacity-25 disabled:cursor-not-allowed"
-                onClick={() => {
-                  setDaysAttending({
-                    fredag: true,
-                    lordag: true,
-                    sondag: true,
-                  });
+        <div className="flex flex-col items-center justify-between h-full w-full">
+          <div className="flex flex-col items-center gap-8">
+            <div className="flex justify-between items-center w-full">
+              <h2 className="font-bold flex justify-between items-center">
+                {sidebarPeople.length === 0 ||
+                (sidebarPeople[0].firstName === firstName &&
+                  sidebarPeople[0].lastName === lastName) ||
+                (isEditing && sidebarPeople.length === 1) ? (
+                  <>Hvem er du?</>
+                ) : (
+                  <>Hvem er gjesten din?</>
+                )}
+              </h2>
+              <p className="px-2 py-1 text-xs flex items-center justify-center h-6 whitespace-nowrap font-bold rounded-sm bg-[#91FFC3] text-black">
+                Plass {selectedSeat + 1}
+              </p>
+            </div>
+            <div className="flex flex-col gap-4 w-full">
+              <Input
+                name="Fornavn"
+                id="firstName"
+                onChange={(event) => {
+                  setFirstName(event.target.value);
                 }}
-              >
-                Velg alle
-              </button>
+                onKeyDown={handleEnterKeyPress}
+                value={firstName}
+              />
+              <Input
+                name="Etternavn"
+                id="lastName"
+                onChange={(event) => {
+                  setLastName(event.target.value);
+                }}
+                onKeyDown={handleEnterKeyPress}
+                value={lastName}
+              />
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col w-full gap-4">
+                <p className="text-sm font-bold">
+                  Hvilke dager skal{" "}
+                  {sidebarPeople.length === 0 ||
+                  (sidebarPeople[0].firstName === firstName &&
+                    sidebarPeople[0].lastName === lastName) ||
+                  (isEditing && sidebarPeople.length === 1) ? (
+                    <>du</>
+                  ) : (
+                    <>de</>
+                  )}{" "}
+                  delta?
+                </p>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
+                  <Button
+                    disabled={
+                      seatsMappedBySeatId[selectedSeat] !== undefined &&
+                      seatsMappedBySeatId[selectedSeat].some((seat) => {
+                        return (
+                          seat.reservationDate === LAN_DATES[0] &&
+                          !registeredPeople.some(
+                            (p) =>
+                              p.firstName === seat.firstName &&
+                              p.lastName === seat.lastName &&
+                              p.reservationDate === seat.reservationDate &&
+                              p.seatNumber === seat.seatNumber
+                          )
+                        );
+                      })
+                    }
+                    onClick={() => {
+                      updateDay("fredag", !daysAttending.fredag);
+                    }}
+                    inActiveClass="bg-[#242127] text-[#D7D3DE]"
+                    isActive={daysAttending.fredag}
+                  >
+                    Fredag
+                  </Button>
+                  <Button
+                    disabled={
+                      seatsMappedBySeatId[selectedSeat] !== undefined &&
+                      seatsMappedBySeatId[selectedSeat].some((seat) => {
+                        return (
+                          seat.reservationDate === LAN_DATES[1] &&
+                          !registeredPeople.some(
+                            (p) =>
+                              p.firstName === seat.firstName &&
+                              p.lastName === seat.lastName &&
+                              p.reservationDate === seat.reservationDate &&
+                              p.seatNumber === seat.seatNumber
+                          )
+                        );
+                      })
+                    }
+                    onClick={() => {
+                      updateDay("lordag", !daysAttending.lordag);
+                    }}
+                    inActiveClass="bg-[#242127] text-[#D7D3DE]"
+                    isActive={daysAttending.lordag}
+                  >
+                    Lørdag
+                  </Button>
+                  <Button
+                    disabled={
+                      seatsMappedBySeatId[selectedSeat] !== undefined &&
+                      seatsMappedBySeatId[selectedSeat].some((seat) => {
+                        return (
+                          seat.reservationDate === LAN_DATES[2] &&
+                          !registeredPeople.some(
+                            (p) =>
+                              p.firstName === seat.firstName &&
+                              p.lastName === seat.lastName &&
+                              p.reservationDate === seat.reservationDate &&
+                              p.seatNumber === seat.seatNumber
+                          )
+                        );
+                      })
+                    }
+                    onClick={() => {
+                      updateDay("sondag", !daysAttending.sondag);
+                    }}
+                    inActiveClass="bg-[#242127] text-[#D7D3DE]"
+                    isActive={daysAttending.sondag}
+                  >
+                    Søndag
+                  </Button>
+                </div>
+                <button
+                  disabled={
+                    seatsMappedBySeatId[selectedSeat] !== undefined &&
+                    seatsMappedBySeatId[selectedSeat].some((seat) => {
+                      return (
+                        LAN_DATES.includes(seat.reservationDate) &&
+                        !registeredPeople.some(
+                          (p) =>
+                            p.firstName === seat.firstName &&
+                            p.lastName === seat.lastName &&
+                            p.reservationDate === seat.reservationDate &&
+                            p.seatNumber === seat.seatNumber
+                        )
+                      );
+                    })
+                  }
+                  className="text-right px-4 text-[#C7D7FF] text-xs font-medium disabled:opacity-25 disabled:cursor-not-allowed"
+                  onClick={() => {
+                    setDaysAttending({
+                      fredag: true,
+                      lordag: true,
+                      sondag: true,
+                    });
+                  }}
+                >
+                  Velg alle
+                </button>
+              </div>
             </div>
           </div>
-          <button
-            onClick={savePerson}
-            disabled={
-              firstName.length <= 2 ||
-              lastName.length <= 2 ||
-              !atLeastOneDay(daysAttending)
-            }
-            className="py-3 px-5 flex justify-center items-center bg-[#FFCF3F] rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isEditing && seatEditing !== selectedSeat ? (
-              <>Flytt</>
-            ) : (
-              <>Lagre</>
-            )}
-          </button>
-          {sidebarPeople.some(
-            (p) => p.seatNumber === selectedSeat && p.firstName === firstName
-          ) &&
-          ((sidebarPeople.length > 0 &&
-            sidebarPeople[0].firstName !== firstName) ||
-            sidebarPeople.length === 1) ? (
+          <div className="flex flex-col gap-4">
+            <button
+              onClick={savePerson}
+              disabled={
+                firstName.length <= 2 ||
+                lastName.length <= 2 ||
+                !atLeastOneDay(daysAttending)
+              }
+              className="py-3 px-5 flex justify-center items-center bg-[#FFCF3F] rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isEditing && seatEditing !== selectedSeat ? (
+                <>Flytt</>
+              ) : (
+                <>Lagre</>
+              )}
+            </button>
+            {sidebarPeople.some(
+              (p) => p.seatNumber === selectedSeat && p.firstName === firstName
+            ) &&
+            ((sidebarPeople.length > 0 &&
+              sidebarPeople[0].firstName !== firstName) ||
+              sidebarPeople.length === 1) ? (
+              <button
+                onClick={() => {
+                  deletePerson(
+                    selectedSeat,
+                    sidebarPeople[
+                      sidebarPeople.findIndex(
+                        (p) =>
+                          p.seatNumber === selectedSeat &&
+                          p.firstName === firstName &&
+                          p.lastName === lastName
+                      )
+                    ].firstName
+                  );
+                  resetSidebar();
+                  setSelectedSeat(undefined);
+                }}
+                className="underline text-[#FF5797] decoration-[#FF5797] decoration-2 underline-offset-4"
+              >
+                Slett person
+              </button>
+            ) : null}
             <button
               onClick={() => {
-                deletePerson(
-                  selectedSeat,
-                  sidebarPeople[
-                    sidebarPeople.findIndex(
-                      (p) =>
-                        p.seatNumber === selectedSeat &&
-                        p.firstName === firstName &&
-                        p.lastName === lastName
-                    )
-                  ].firstName
-                );
                 resetSidebar();
                 setSelectedSeat(undefined);
               }}
-              className="underline text-pink-400"
+              className="underline text-white decoration-white decoration-2 underline-offset-8"
             >
-              Slett plass
+              Avbryt
             </button>
-          ) : null}
-          <button
-            onClick={() => {
-              resetSidebar();
-              setSelectedSeat(undefined);
-            }}
-            className="underline text-gray-200"
-          >
-            Avbryt
-          </button>
-        </>
+          </div>
+        </div>
       ) : sidebarPeople.length > 0 ? (
-        <>
-          <h2 className="font-bold text-xl flex justify-between items-center">
-            {sidebarPeople.length === 1 ? <>Din plass</> : <>Dine plasser</>}
-          </h2>
-          {sidebarPeople.map((person, index) => (
-            <SeatListItem
-              delDisable={index === 0 && sidebarPeople.length > 1}
-              firstName={
-                index === 0 ? `Du (${person.firstName})` : person.firstName
-              }
-              seatNumber={person.seatNumber}
-              key={`${person.firstName} ${person.lastName} ${person.reservationDate}`}
-              editSeat={(seatNumber) => {
-                const dates: string[] = [];
-                registeredPeople.forEach((seatRegisteredByUs) => {
-                  if (
-                    seatRegisteredByUs.seatNumber === seatNumber &&
-                    seatRegisteredByUs.firstName === person.firstName
-                  ) {
-                    dates.push(seatRegisteredByUs.reservationDate);
-                  }
-                });
-                setFilteredDays(dates);
-                setSelectedSeat(seatNumber);
-              }}
-              deleteSeat={() => {
-                deletePerson(person.seatNumber, sidebarPeople[index].firstName);
-              }}
-            />
-          ))}
-          <div className="h-full flex flex-col justify-end gap-2">
+        <div className="flex flex-col justify-between h-full">
+          <div className="flex flex-col gap-6">
+            <h2 className="font-bold text-xl flex justify-between items-center">
+              {sidebarPeople.length === 1 ? <>Din plass</> : <>Dine plasser</>}
+            </h2>
+            {sidebarPeople.map((person, index) => (
+              <SeatListItem
+                delDisable={index === 0 && sidebarPeople.length > 1}
+                firstName={
+                  index === 0 ? `Du (${person.firstName})` : person.firstName
+                }
+                seatNumber={person.seatNumber}
+                key={`${person.firstName} ${person.lastName} ${person.reservationDate}`}
+                editSeat={(seatNumber) => {
+                  const dates: string[] = [];
+                  registeredPeople.forEach((seatRegisteredByUs) => {
+                    if (
+                      seatRegisteredByUs.seatNumber === seatNumber &&
+                      seatRegisteredByUs.firstName === person.firstName
+                    ) {
+                      dates.push(seatRegisteredByUs.reservationDate);
+                    }
+                  });
+                  setFilteredDays(dates);
+                  setSelectedSeat(seatNumber);
+                }}
+                deleteSeat={() => {
+                  deletePerson(
+                    person.seatNumber,
+                    sidebarPeople[index].firstName
+                  );
+                }}
+              />
+            ))}
+          </div>
+          <div className="flex flex-col justify-end gap-2">
             <p className="font-bold text-sm">Skal du ha med deg noen?</p>
             <p className="text-sm font-medium">
               Trykk på kartet for å velge en plass til gjesten din ✨
             </p>
           </div>
-        </>
+        </div>
       ) : (
         <div className="flex flex-col justify-between h-full">
           <div>

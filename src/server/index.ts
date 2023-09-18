@@ -204,7 +204,7 @@ io.on("connection", (socket: Socket) => {
   // When user connects
   socket.on("iHaveArrived", (aNumber: string) => {
     idList[socket.id as string] = aNumber.toUpperCase();
-    console.log(`${aNumber} connected!`);
+    console.log(`${idList[socket.id]} connected!`);
 
     // Send connected user seat-data
     socket.emit(
