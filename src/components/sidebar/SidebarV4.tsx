@@ -337,9 +337,12 @@ export default function Sidebarv4({
               <>Lagre</>
             )}
           </button>
-          {(sidebarPeople.length > 0 &&
+          {sidebarPeople.some(
+            (p) => p.seatNumber === selectedSeat && p.firstName === firstName
+          ) &&
+          ((sidebarPeople.length > 0 &&
             sidebarPeople[0].firstName !== firstName) ||
-          sidebarPeople.length === 1 ? (
+            sidebarPeople.length === 1) ? (
             <button
               onClick={() => {
                 deletePerson(
