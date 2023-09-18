@@ -344,6 +344,12 @@ export interface ReservedSeat {
      * @memberof ReservedSeat
      */
     'personName'?: PersonName;
+    /**
+     * 
+     * @type {string}
+     * @memberof ReservedSeat
+     */
+    'reservationDate'?: string;
 }
 /**
  * 
@@ -353,10 +359,10 @@ export interface ReservedSeat {
 export interface ReservedSeats {
     /**
      * 
-     * @type {Array<ReservedSeat & ReserveSeat>}
+     * @type {Array<ReservedSeat>}
      * @memberof ReservedSeats
      */
-    'reservedSeats'?: Array<ReservedSeat & ReserveSeat>;
+    'reservedSeats'?: Array<ReservedSeat>;
 }
 /**
  * 

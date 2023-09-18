@@ -12,7 +12,7 @@ export default function SeatListItem({
 }: {
   seatNumber: number;
   firstName: string;
-  deleteSeat: (seatNumber: number) => any;
+  deleteSeat: () => any;
   editSeat: (seatNumber: number) => any;
   delDisable: boolean;
 }) {
@@ -43,7 +43,7 @@ export default function SeatListItem({
         disabled={delDisable}
         onClick={() => {
           // Delete seat
-          deleteSeat(seatNumber);
+          deleteSeat();
         }}
         className="p-2 bg-[#242127] shrink-0 rounded disabled:bg-[#6D6973] disabled:cursor-not-allowed"
       >

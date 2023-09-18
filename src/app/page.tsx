@@ -1,6 +1,7 @@
 "use client";
 import ANumberModal from "@/components/modal/ANumberModal";
 import SeatingV2 from "@/components/seating/SeatingV2";
+import SeatingV3 from "@/components/seating/SeatingV3";
 import { socket } from "@/utils/socket";
 import { useEffect, useState } from "react";
 
@@ -43,7 +44,7 @@ export default function Home() {
           <div className="fixed bottom-0 left-12 p-6 grid items-center justify-center select-none">
             <p className="uppercase text-[32px] text-[#D8D6DB]">Kantine</p>
           </div>
-          <SeatingV2 aNumber={aNumber} />
+          <SeatingV3 aNumber={aNumber} />
         </>
       )}
 

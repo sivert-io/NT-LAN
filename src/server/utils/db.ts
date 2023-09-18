@@ -1,79 +1,96 @@
-import axios, { AxiosResponse } from "axios";
-import { Config, DeleteSeats, DeleteSeatsWithEmployeeId, Feedback, FeedbackOnly, RatingsWithAverageRating, ReserveSeats, ReservedSeat, UpdateEmployee } from "./types";
+import {
+  Configuration,
+  GetSeatsApi,
+  DeleteSeatReservationsApi,
+  ReserveSeatsApi,
+  ReserveSeats,
+} from "../api-client";
+import { LAN_DATES } from "../config";
+import { ReservationData } from "./types";
 
 class Database {
-  private readonly databaseUrl: string;
-  private readonly username: string;
-  private readonly password: string;
-  private readonly defaultAxiosOptions: {
-    auth: {
-      username: string;
-      password: string;
-    };
-  };
+  GetSeatsApi: GetSeatsApi;
+  DeleteSeatReservationsApi: DeleteSeatReservationsApi;
+  ReserveSeatsApi: ReserveSeatsApi;
+  config: any;
 
   constructor(databaseUrl: string, username: string, password: string) {
-    this.databaseUrl = databaseUrl;
-    this.username = username;
-    this.password = password;
-    this.defaultAxiosOptions = {
-      auth: {
-        username: this.username,
-        password: this.password,
-      },
-    };
-  }
-  async getReservedSeats(): Promise<ReservedSeat[]> {
-    return this.sendRequest<ReservedSeat[]>("get", "/internal/seating");
+    this.config = new Configuration({
+      basePath: databaseUrl,
+      username: username,
+      password: password,
+    });
+    this.GetSeatsApi = new GetSeatsApi(this.config);
+    this.DeleteSeatReservationsApi = new DeleteSeatReservationsApi(this.config);
+    this.ReserveSeatsApi = new ReserveSeatsApi(this.config);
   }
 
-  async reserveSeats(reserveData: ReserveSeats): Promise<void> {
-    return this.sendRequest<void>("post", "/internal/seating", reserveData);
-  }
-
-  async deleteReservedSeats(deleteData: DeleteSeatsWithEmployeeId): Promise<void> {
-    return this.sendRequest<void>("delete", "/internal/seating", deleteData);
-  }
-
-  async updateEmployee(employeeData: UpdateEmployee): Promise<void> {
-    return this.sendRequest<void>("put", "/internal/employee", employeeData);
-  }
-
-  async addFeedback(feedbackData: Feedback): Promise<void> {
-    return this.sendRequest<void>("post", "/internal/feedback", feedbackData);
-  }
-
-  async getLayoutConfig(): Promise<Config> {
-    return this.sendRequest<Config>("get", "/internal/config");
-  }
-
-  async deleteSeats(deleteData: DeleteSeats): Promise<void> {
-    return this.sendRequest<void>("delete", "/admin/seating", deleteData);
-  }
-
-  async updateConfig(configData: Config): Promise<void> {
-    return this.sendRequest<void>("post", "/admin/config", configData);
-  }
-
-  async getFeedbackOnly(feedbackIds: number[]): Promise<FeedbackOnly> {
-    return this.sendRequest<FeedbackOnly>("post", "/admin/feedback", { feedbackIds });
-  }
-
-  async getRatingsAndAverageRating(): Promise<RatingsWithAverageRating> {
-    return this.sendRequest<RatingsWithAverageRating>("get", "/admin/feedback/ratings");
-  }
-
-  private async sendRequest<T>(method: string, url: string, data: any = null): Promise<T> {
+  async getReservedSeats() {
     try {
-      const response: AxiosResponse<T> = await axios({
-        method,
-        url: `${this.databaseUrl}${url}`,
-        ...this.defaultAxiosOptions,
-        data,
-      });
-      return response.data;
+      // Make an API request to get reserved seats
+      const { data } = await this.GetSeatsApi.getReservesSeats();
+      return data as ReservationData;
     } catch (error) {
-      console.error(`Error ${method} ${url}:`, error);
+      // Handle any errors here
+      console.error("Error fetching reserved seats:", error);
+      throw error;
+    }
+  }
+
+  async deleteReservedSeat(
+    aNumber: string,
+    seatsToDelete: { id: number; reservationDate: string }[]
+  ) {
+    try {
+      console.log({
+        employeeId: aNumber,
+        seatReservations: seatsToDelete,
+      });
+      // Make an API request to delete reserved seat
+      const { data } = await this.DeleteSeatReservationsApi.deleteSeats({
+        employeeId: aNumber,
+        seatReservations: seatsToDelete,
+      });
+      return data;
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error deleting reserved seat:", error);
+      throw error;
+    }
+  }
+
+  async reserveSeats(aNumber: string, reserveSeats: ReserveSeats) {
+    try {
+      const allSeats = await this.getReservedSeats();
+      const seatsToDelete: { id: number; reservationDate: string }[] = [];
+      reserveSeats.reserveSeats?.forEach((seat) => {
+        if (seat.id) {
+          allSeats.reservedSeats.forEach((dbSeat) => {
+            if (
+              dbSeat.id === seat.id &&
+              dbSeat.personName.firstName === seat.personName?.firstName &&
+              dbSeat.personName.lastName === seat.personName.lastName
+            )
+              seatsToDelete.push({
+                id: dbSeat.id || -1,
+                reservationDate: dbSeat.reservationDate,
+              });
+          });
+          seat.reservationDates?.forEach((date) => {
+            const s = { id: seat.id || -1, reservationDate: date };
+            seatsToDelete.push(s);
+          });
+        }
+      });
+
+      await this.deleteReservedSeat(aNumber, seatsToDelete);
+
+      // Make an API request to reserve seats
+      const { data } = await this.ReserveSeatsApi.reserveSeats(reserveSeats);
+      return data;
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error reserving seats:", error);
       throw error;
     }
   }
