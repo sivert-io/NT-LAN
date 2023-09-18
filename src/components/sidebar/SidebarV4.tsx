@@ -221,7 +221,7 @@ export default function Sidebarv4({
                   delta?
                 </p>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 items-end">
                 <div className="flex gap-2">
                   <Button
                     disabled={
@@ -296,7 +296,7 @@ export default function Sidebarv4({
                     Søndag
                   </Button>
                 </div>
-                <button
+                <Button
                   disabled={
                     seatsMappedBySeatId[selectedSeat] !== undefined &&
                     seatsMappedBySeatId[selectedSeat].some((seat) => {
@@ -312,7 +312,8 @@ export default function Sidebarv4({
                       );
                     })
                   }
-                  className="text-right px-4 text-[#C7D7FF] text-xs font-medium disabled:opacity-25 disabled:cursor-not-allowed"
+                  isActive
+                  activeClass="text-right w-fit px-4 text-[#C7D7FF] text-xs font-medium disabled:opacity-25 disabled:cursor-not-allowed"
                   onClick={() => {
                     setDaysAttending({
                       fredag: true,
@@ -322,7 +323,7 @@ export default function Sidebarv4({
                   }}
                 >
                   Velg alle
-                </button>
+                </Button>
               </div>
             </div>
           </div>

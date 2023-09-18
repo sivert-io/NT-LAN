@@ -53,14 +53,15 @@ export default function DaySelector({
         >
           Søndag
         </Button>
-        <button
-          className="text-right px-4 text-[#C7D7FF] text-xs font-medium"
+        <Button
+          isActive
+          activeClass="text-right px-4 text-[#C7D7FF] text-xs font-medium"
           onClick={() => {
             enableAll();
           }}
         >
           Velg alle
-        </button>
+        </Button>
       </div>
     </div>
   );
