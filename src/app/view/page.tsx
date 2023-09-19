@@ -1,6 +1,7 @@
 "use client";
 import { ConnecitonError } from "@/components/connectionError/connecitonError";
 import ANumberModal from "@/components/modal/ANumberModal";
+import Title from "@/components/title/Title";
 import { ADMINS, LAN_DATES } from "@/server/config";
 import { ReservationData } from "@/server/utils/types";
 import { dayMap } from "@/utils/sidebar";
@@ -183,6 +184,7 @@ export default function Home() {
       )}
       {ADMINS.includes(aNumber.toLowerCase() as any) && (
         <div className="w-[80vw] h-[80vh] overflow-auto flex items-start justify-start flex-col gap-4">
+          <Title />
           <div className="flex gap-4 items-center">
             <p>Velg dag:</p>
             <select
