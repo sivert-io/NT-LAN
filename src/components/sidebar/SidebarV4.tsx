@@ -114,53 +114,51 @@ export default function Sidebarv4({
   }, [daysAttending, selectedSeat]);
 
   useEffect(() => {
-    if (!isEditing) {
-      const isRegistered = registeredPeople.findIndex(
-        (person) =>
-          person.seatNumber === selectedSeat &&
-          filteredDays.includes(person.reservationDate)
-      );
+    const isRegistered = registeredPeople.findIndex(
+      (person) =>
+        person.seatNumber === selectedSeat &&
+        filteredDays.includes(person.reservationDate)
+    );
 
-      if (isRegistered !== -1) {
-        registeredPeople[isRegistered].firstName !== "" &&
-          setFirstName(registeredPeople[isRegistered].firstName);
-        registeredPeople[isRegistered].lastName !== "" &&
-          setLastName(registeredPeople[isRegistered].lastName);
-        const l = daysAttending;
-        const dates: string[] = [];
-        registeredPeople.forEach((seatRegisteredByUs) => {
-          if (
-            seatRegisteredByUs.seatNumber === selectedSeat &&
-            registeredPeople[isRegistered].firstName ===
-              seatRegisteredByUs.firstName
-          ) {
-            {
-              dates.push(seatRegisteredByUs.reservationDate);
-              const index = LAN_DATES.findIndex(
-                (d) => seatRegisteredByUs.reservationDate === d
-              );
-              if (index !== -1) {
-                switch (index) {
-                  case 0:
-                    l["fredag"] = true;
-                    break;
-                  case 1:
-                    l["lordag"] = true;
-                    break;
-                  case 2:
-                    l["sondag"] = true;
-                    break;
-                }
+    if (isRegistered !== -1) {
+      registeredPeople[isRegistered].firstName !== "" &&
+        setFirstName(registeredPeople[isRegistered].firstName);
+      registeredPeople[isRegistered].lastName !== "" &&
+        setLastName(registeredPeople[isRegistered].lastName);
+      const l = daysAttending;
+      const dates: string[] = [];
+      registeredPeople.forEach((seatRegisteredByUs) => {
+        if (
+          seatRegisteredByUs.seatNumber === selectedSeat &&
+          registeredPeople[isRegistered].firstName ===
+            seatRegisteredByUs.firstName
+        ) {
+          {
+            dates.push(seatRegisteredByUs.reservationDate);
+            const index = LAN_DATES.findIndex(
+              (d) => seatRegisteredByUs.reservationDate === d
+            );
+            if (index !== -1) {
+              switch (index) {
+                case 0:
+                  l["fredag"] = true;
+                  break;
+                case 1:
+                  l["lordag"] = true;
+                  break;
+                case 2:
+                  l["sondag"] = true;
+                  break;
               }
             }
           }
-        });
-        setDaysAttending(l);
-        setFilteredDays(dates);
-        sethasSelectedOwn(true);
-      } else if (hasSelectedOwn) {
-        resetSidebar();
-      }
+        }
+      });
+      setDaysAttending(l);
+      setFilteredDays(dates);
+      sethasSelectedOwn(true);
+    } else if (hasSelectedOwn) {
+      resetSidebar();
     }
 
     if (!selectedSeat) resetSidebar();
