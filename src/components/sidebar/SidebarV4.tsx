@@ -327,7 +327,7 @@ export default function Sidebarv4({
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             <button
               onClick={savePerson}
               disabled={
