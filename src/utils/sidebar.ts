@@ -1,12 +1,23 @@
 import { RegisterFieldsType } from "@/components/register/types";
 import { LAN_DATES } from "@/server/config";
 
+// Define the desired sorting order for titles (day ranges)
+const sortingOrder = [
+  "fredag",
+  "fredag og sørdag",
+  "fredag og søndag",
+  "fredag-søndag",
+  "lørdag",
+  "lørdag og søndag",
+  "søndag",
+];
+
 export function formatRegisteredDates(registeredDates: string[]) {
   // Create a map to convert date strings to day names
   const dayMap = {
-    [LAN_DATES[0]]: 'Fredag',
-    [LAN_DATES[1]]: 'Lørdag',
-    [LAN_DATES[2]]: 'Søndag',
+    [LAN_DATES[0]]: "fredag",
+    [LAN_DATES[1]]: "lørdag",
+    [LAN_DATES[2]]: "søndag",
     // Add more date-to-day mappings as needed
   };
 
@@ -49,28 +60,26 @@ export function formatRegisteredDates(registeredDates: string[]) {
   if (rangeStart === rangeEnd) {
     formattedRanges.push(dayMap[rangeStart]);
   } else {
-    formattedRanges.push(`${dayMap[rangeStart]}-${dayMap[rangeEnd]}`);
+    formattedRanges.push(
+      `${dayMap[rangeStart]}${registeredDates.length === 3 ? "-" : " og "}${
+        dayMap[rangeEnd]
+      }`
+    );
   }
 
-  // Define the desired sorting order for titles (day ranges)
-  const sortingOrder = [
-    'Fredag',
-    'Fredag-Lørdag',
-    'Fredag-Søndag',
-    'Fredag og Søndag',
-    'Lørdag',
-    'Lørdag-Søndag',
-    'Søndag',
-  ];
-
   // Sort the formattedRanges based on the sortingOrder
-  formattedRanges.sort((a, b) => sortingOrder.indexOf(a) - sortingOrder.indexOf(b));
+  formattedRanges.sort(
+    (a, b) => sortingOrder.indexOf(a) - sortingOrder.indexOf(b)
+  );
 
+  const ret = formattedRanges.join(" og ");
   // Join the formattedRanges array with " og " to create the desired format
-  return formattedRanges.join(' og ');
+  return ret.charAt(0).toUpperCase() + ret.slice(1);
 }
 
-export function generateUniqueTitles(sidebarPeople: (RegisterFieldsType & { registeredDates: string[] })[]): string[] {
+export function generateUniqueTitles(
+  sidebarPeople: (RegisterFieldsType & { registeredDates: string[] })[]
+): string[] {
   const uniqueTitles: string[] = [];
 
   sidebarPeople.forEach((person) => {
@@ -80,19 +89,10 @@ export function generateUniqueTitles(sidebarPeople: (RegisterFieldsType & { regi
     }
   });
 
-  // Define the desired sorting order for titles (day ranges)
-  const sortingOrder = [
-    'Fredag',
-    'Fredag-Lørdag',
-    'Fredag-Søndag',
-    'Fredag og Søndag',
-    'Lørdag',
-    'Lørdag-Søndag',
-    'Søndag',
-  ];
-
   // Sort the uniqueTitles based on the sortingOrder
-  uniqueTitles.sort((a, b) => sortingOrder.indexOf(a) - sortingOrder.indexOf(b));
+  uniqueTitles.sort(
+    (a, b) => sortingOrder.indexOf(a) - sortingOrder.indexOf(b)
+  );
 
   return uniqueTitles;
 }

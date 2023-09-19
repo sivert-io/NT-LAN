@@ -423,48 +423,54 @@ export default function Sidebarv4({
       ) : sidebarPeople.length > 0 ? (
         <div className="flex flex-col justify-between h-full">
           <div className="flex flex-col gap-6">
-            <h2 className="font-bold text-xl flex justify-between items-center">
+            <h2 className="font-bold text-2xl flex justify-between items-center">
               {sidebarPeople.length === 1 ? <>Din plass</> : <>Dine plasser</>}
             </h2>
             {uniqueTitles.map((title, index) => (
               <div key={index} className="flex flex-col gap-2">
                 <h3 className="text-xs font-bold">{title}</h3>
-                <div className="flex flex-col gap-4">
-                  {sidebarPeople.map(
-                    (person, index) =>
-                      formatRegisteredDates(person.registeredDates) ===
-                        title && (
-                        <SeatListItem
-                          delDisable={index === 0 && sidebarPeople.length > 1}
-                          firstName={
-                            index === 0
-                              ? `Du (${person.firstName})`
-                              : person.firstName
-                          }
-                          seatNumber={person.seatNumber}
-                          key={`${person.firstName} ${person.lastName} ${person.reservationDate}`}
-                          editSeat={(seatNumber) => {
-                            updateMapFilter(seatNumber, person);
-                          }}
-                          deleteSeat={() => {
-                            deletePerson(
-                              person.seatNumber,
-                              sidebarPeople[index].firstName
-                            );
-                          }}
-                        />
-                      )
-                  )}
-                </div>
+                {sidebarPeople.map(
+                  (person, index) =>
+                    formatRegisteredDates(person.registeredDates) === title && (
+                      <SeatListItem
+                        delDisable={index === 0 && sidebarPeople.length > 1}
+                        firstName={
+                          index === 0
+                            ? `Du (${person.firstName})`
+                            : person.firstName
+                        }
+                        seatNumber={person.seatNumber}
+                        key={`${person.firstName} ${person.lastName} ${person.reservationDate}`}
+                        editSeat={(seatNumber) => {
+                          updateMapFilter(seatNumber, person);
+                        }}
+                        deleteSeat={() => {
+                          deletePerson(
+                            person.seatNumber,
+                            sidebarPeople[index].firstName
+                          );
+                        }}
+                      />
+                    )
+                )}
               </div>
             ))}
           </div>
-          <div className="flex flex-col justify-end gap-2">
-            <p className="font-bold text-sm">Skal du ha med deg noen?</p>
-            <p className="text-sm font-medium">
-              Trykk på kartet for å velge en plass til gjesten din ✨
-            </p>
-          </div>
+          {sidebarPeople.length === 1 ? (
+            <div className="flex flex-col justify-end gap-2">
+              <p className="font-bold text-sm">Skal du ha med deg noen?</p>
+              <p className="text-sm font-medium">
+                Trykk på kartet for å velge en plass til gjesten din ✨
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col justify-end gap-2">
+              <p className="font-bold text-sm">Vil du endre plass? ✨</p>
+              <p className="text-sm font-medium">
+                Du kan endre plass med drag’n’drop
+              </p>
+            </div>
+          )}
         </div>
       ) : (
         <div className="flex flex-col justify-between h-full">

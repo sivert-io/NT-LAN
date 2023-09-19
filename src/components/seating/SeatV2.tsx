@@ -137,7 +137,7 @@ export default function SeatV2({
       >
         {occupant}
         <p
-          className={`${seatNumberClassName} ${
+          className={`pointer-events-none ${seatNumberClassName} ${
             isSelected || isYours ? "opacity-100" : "opacity-75"
           }`}
         >
