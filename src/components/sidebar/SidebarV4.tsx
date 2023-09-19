@@ -31,7 +31,7 @@ export default function Sidebarv4({
   const timerDuration = 120; // 2 minutes in seconds
   const [hasSelectedOwn, sethasSelectedOwn] = useState(false);
   const [sidebarPeople, setsidebarPeople] = useState<
-    (RegisterFieldsType & { registeredDates: string[] })[]
+    (RegisterFieldsType & { registeredDates: string[]; isYou: boolean })[]
   >([]);
   const [uniqueTitles, setuniqueTitles] = useState(
     generateUniqueTitles(sidebarPeople)
@@ -83,7 +83,8 @@ export default function Sidebarv4({
 
   useEffect(() => {
     const newList: typeof sidebarPeople = [];
-    registeredPeople.forEach((person) => {
+
+    registeredPeople.forEach((person, i) => {
       const index = newList.findIndex(
         (p) =>
           p.firstName === person.firstName &&
@@ -91,7 +92,11 @@ export default function Sidebarv4({
           p.seatNumber === person.seatNumber
       );
       if (index === -1)
-        newList.push({ ...person, registeredDates: [person.reservationDate] });
+        newList.push({
+          ...person,
+          registeredDates: [person.reservationDate],
+          isYou: person.isYou || false,
+        });
       else
         newList[
           newList.findIndex(
@@ -432,9 +437,9 @@ export default function Sidebarv4({
                   (person, index) =>
                     formatRegisteredDates(person.registeredDates) === title && (
                       <SeatListItem
-                        delDisable={index === 0 && sidebarPeople.length > 1}
+                        delDisable={person.isYou && sidebarPeople.length > 1}
                         firstName={
-                          index === 0
+                          person.isYou
                             ? `Du (${person.firstName})`
                             : person.firstName
                         }

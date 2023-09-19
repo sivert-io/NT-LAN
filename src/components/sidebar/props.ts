@@ -20,7 +20,7 @@ export type daysAttending = {
 };
 
 export type SidebarV3Props = {
-  myRegisteredSeats: RegisterFieldsType[];
+  myRegisteredSeats: (RegisterFieldsType & {isYou?: boolean})[];
   saveSeat: () => any;
   deleteSeat: (seatNumber: number, firstName: string) => any;
   seatSelected?: number;

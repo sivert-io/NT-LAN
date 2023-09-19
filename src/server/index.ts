@@ -51,7 +51,12 @@ if (!username || !password) {
 const db = new Database(databaseUrl, username, password);
 
 import { ReservationData, ReservedSeat } from "./utils/types";
-import { ReserveSeat, ReserveSeats, ReservedBy } from "./api-client";
+import {
+  PersonName,
+  ReserveSeat,
+  ReserveSeats,
+  ReservedBy,
+} from "./api-client";
 
 function mapSeatsData(reservedSeats: ReservationData) {
   seatsMappedByDate = {};
@@ -81,7 +86,16 @@ function mapSeatsData(reservedSeats: ReservationData) {
       if (!seatsMappedByAnumber[seat.reservedBy.employeeId])
         seatsMappedByAnumber[seat.reservedBy.employeeId] = [];
 
-      seatsMappedByAnumber[seat.reservedBy.employeeId].push(registeredSeat);
+      if (
+        seat.personName.firstName === seat.reservedBy.personName.firstName &&
+        seat.personName.lastName === seat.reservedBy.personName.lastName
+      )
+        seatsMappedByAnumber[seat.reservedBy.employeeId].push({
+          ...registeredSeat,
+          isYou: true,
+        });
+      else
+        seatsMappedByAnumber[seat.reservedBy.employeeId].push(registeredSeat);
     }
   }, {});
 
@@ -185,7 +199,8 @@ io.on("connection", (socket: Socket) => {
   function flatHeldSeats() {
     let l: (number | undefined)[] = [];
     Object.keys(heldSeats).forEach((key) => {
-      if (heldSeats[key] && heldSeats[key] !== undefined) l.push(heldSeats[key]);
+      if (heldSeats[key] && heldSeats[key] !== undefined)
+        l.push(heldSeats[key]);
     });
     return l;
   }
@@ -277,10 +292,14 @@ io.on("connection", (socket: Socket) => {
             reservationDate: seat.reservationDate,
           });
       });
-    
+
     if (seatsToDelete.length > 0)
       deleteSeats(aNumber.toUpperCase(), seatsToDelete);
   });
+
+  socket.on("iAmMrAdminGiveMeSeats", () => {
+    socket.emit("hereAreAllSeatsMrAdmin", cachedAPIData)
+  })
   // ------------------------------- NEW -------------------------------
 });
 

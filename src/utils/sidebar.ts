@@ -12,14 +12,15 @@ const sortingOrder = [
   "søndag",
 ];
 
+export const dayMap = {
+  [LAN_DATES[0]]: "fredag",
+  [LAN_DATES[1]]: "lørdag",
+  [LAN_DATES[2]]: "søndag",
+  // Add more date-to-day mappings as needed
+};
+
 export function formatRegisteredDates(registeredDates: string[]) {
   // Create a map to convert date strings to day names
-  const dayMap = {
-    [LAN_DATES[0]]: "fredag",
-    [LAN_DATES[1]]: "lørdag",
-    [LAN_DATES[2]]: "søndag",
-    // Add more date-to-day mappings as needed
-  };
 
   // Sort the registeredDates in chronological order
   registeredDates.sort();

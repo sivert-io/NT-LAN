@@ -10,7 +10,7 @@ import SeatV2 from "./SeatV2";
 import { days, daysAttending } from "../sidebar/props";
 import { LAN_DATES } from "@/server/config";
 import Sidebarv4 from "../sidebar/SidebarV4";
-import { ReserveSeat } from "@/server/api-client";
+import { ReserveSeat, ReservedSeat } from "@/server/api-client";
 
 const numCols = 5;
 
@@ -41,7 +41,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
 
   // Seats registered to my aNumber
   const [myRegisteredSeats, setMyRegisteredSeats] = useState<
-    RegisterFieldsType[]
+    (RegisterFieldsType & { isYou?: boolean })[]
   >([]);
 
   // Seats fetched from API

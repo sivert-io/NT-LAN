@@ -1,6 +1,6 @@
 "use client";
+import { ConnecitonError } from "@/components/connectionError/connecitonError";
 import ANumberModal from "@/components/modal/ANumberModal";
-import SeatingV2 from "@/components/seating/SeatingV2";
 import SeatingV3 from "@/components/seating/SeatingV3";
 import { socket } from "@/utils/socket";
 import { useEffect, useState } from "react";
@@ -26,15 +26,7 @@ export default function Home() {
   return (
     <main className="flex h-screen w-screen flex-col items-center justify-center gap-12">
       {connectionError !== "" && (
-        <div className="fixed z-50 w-screen h-screen bg-[rgba(0,0,0,.65)] flex items-center justify-center">
-          <div className="flex-col text-center p-4 flex gap-6 rounded-lg bg-[#FFC4DD] text-[#82052F] font-medium">
-            <p>Seating systemet er nede! 🥺</p>
-            <b className="text-xs font-bold">
-              Error Message: {connectionError}
-            </b>
-            <p>Vennligst vent mens vi kobler deg opp igjen</p>
-          </div>
-        </div>
+        <ConnecitonError connectionError={connectionError} />
       )}
       {aNumber !== "" && (
         <>

@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var socket_io_1 = require("socket.io");
 var db_1 = require("./utils/db");
@@ -61,7 +72,11 @@ function mapSeatsData(reservedSeats) {
             seatsMappedBySeatId[seat.id].push(registeredSeat);
             if (!seatsMappedByAnumber[seat.reservedBy.employeeId])
                 seatsMappedByAnumber[seat.reservedBy.employeeId] = [];
-            seatsMappedByAnumber[seat.reservedBy.employeeId].push(registeredSeat);
+            if (seat.personName.firstName === seat.reservedBy.personName.firstName &&
+                seat.personName.lastName === seat.reservedBy.personName.lastName)
+                seatsMappedByAnumber[seat.reservedBy.employeeId].push(__assign(__assign({}, registeredSeat), { isYou: true }));
+            else
+                seatsMappedByAnumber[seat.reservedBy.employeeId].push(registeredSeat);
         }
     }, {});
     var seats = [];
@@ -212,6 +227,9 @@ io.on("connection", function (socket) {
             });
         if (seatsToDelete.length > 0)
             deleteSeats(aNumber.toUpperCase(), seatsToDelete);
+    });
+    socket.on("iAmMrAdminGiveMeSeats", function () {
+        socket.emit("hereAreAllSeatsMrAdmin", cachedAPIData);
     });
     // ------------------------------- NEW -------------------------------
 });

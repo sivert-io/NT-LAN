@@ -6,5 +6,5 @@ export type RegisterFieldsType = {
 };
 
 export type mappedSeats = {
-  [reservationDate: string | number]: RegisterFieldsType[];
+  [reservationDate: string | number]: (RegisterFieldsType & {isYou?: boolean})[];
 }
