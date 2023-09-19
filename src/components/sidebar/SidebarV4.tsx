@@ -5,6 +5,7 @@ import SeatListItem from "./SeatListItem";
 import Button from "../button/Button";
 import { RegisterFieldsType } from "../register/types";
 import { LAN_DATES } from "@/server/config";
+import { formatRegisteredDates, generateUniqueTitles } from "@/utils/sidebar";
 
 export default function Sidebarv4({
   myRegisteredSeats: registeredPeople,
@@ -29,10 +30,29 @@ export default function Sidebarv4({
   const [timer, setTimer] = useState<number | null>(null);
   const timerDuration = 120; // 2 minutes in seconds
   const [hasSelectedOwn, sethasSelectedOwn] = useState(false);
-  const [sidebarPeople, setsidebarPeople] = useState<RegisterFieldsType[]>([]);
+  const [sidebarPeople, setsidebarPeople] = useState<
+    (RegisterFieldsType & { registeredDates: string[] })[]
+  >([]);
+  const [uniqueTitles, setuniqueTitles] = useState(
+    generateUniqueTitles(sidebarPeople)
+  );
 
   function atLeastOneDay(dayVariable: daysAttending) {
     return dayVariable.fredag || dayVariable.lordag || dayVariable.sondag;
+  }
+
+  function updateMapFilter(seatNumber: number, person: RegisterFieldsType) {
+    const dates: string[] = [];
+    registeredPeople.forEach((seatRegisteredByUs) => {
+      if (
+        seatRegisteredByUs.seatNumber === seatNumber &&
+        seatRegisteredByUs.firstName === person.firstName
+      ) {
+        dates.push(seatRegisteredByUs.reservationDate);
+      }
+    });
+    setFilteredDays(dates);
+    setSelectedSeat(seatNumber);
   }
 
   const handleEnterKeyPress = (event: any) => {
@@ -69,10 +89,29 @@ export default function Sidebarv4({
           p.lastName === person.lastName &&
           p.seatNumber === person.seatNumber
       );
-      if (index === -1) newList.push(person);
+      if (index === -1)
+        newList.push({ ...person, registeredDates: [person.reservationDate] });
+      else
+        newList[
+          newList.findIndex(
+            (p) =>
+              p.seatNumber === person.seatNumber &&
+              p.firstName &&
+              person.firstName
+          )
+        ].registeredDates.push(person.reservationDate);
     });
     setsidebarPeople(newList);
+    setuniqueTitles(generateUniqueTitles(newList));
   }, [registeredPeople]);
+
+  useEffect(() => {
+    const days: string[] = [];
+    Object.keys(daysAttending).forEach((day, index) => {
+      if (daysAttending[day as days]) days.push(LAN_DATES[index]);
+    });
+    if (days.length > 0) setFilteredDays(days);
+  }, [daysAttending, selectedSeat]);
 
   useEffect(() => {
     if (!isEditing) {
@@ -387,34 +426,37 @@ export default function Sidebarv4({
             <h2 className="font-bold text-xl flex justify-between items-center">
               {sidebarPeople.length === 1 ? <>Din plass</> : <>Dine plasser</>}
             </h2>
-            {sidebarPeople.map((person, index) => (
-              <SeatListItem
-                delDisable={index === 0 && sidebarPeople.length > 1}
-                firstName={
-                  index === 0 ? `Du (${person.firstName})` : person.firstName
-                }
-                seatNumber={person.seatNumber}
-                key={`${person.firstName} ${person.lastName} ${person.reservationDate}`}
-                editSeat={(seatNumber) => {
-                  const dates: string[] = [];
-                  registeredPeople.forEach((seatRegisteredByUs) => {
-                    if (
-                      seatRegisteredByUs.seatNumber === seatNumber &&
-                      seatRegisteredByUs.firstName === person.firstName
-                    ) {
-                      dates.push(seatRegisteredByUs.reservationDate);
-                    }
-                  });
-                  setFilteredDays(dates);
-                  setSelectedSeat(seatNumber);
-                }}
-                deleteSeat={() => {
-                  deletePerson(
-                    person.seatNumber,
-                    sidebarPeople[index].firstName
-                  );
-                }}
-              />
+            {uniqueTitles.map((title, index) => (
+              <div key={index} className="flex flex-col gap-2">
+                <h3 className="text-xs font-bold">{title}</h3>
+                <div className="flex flex-col gap-4">
+                  {sidebarPeople.map(
+                    (person, index) =>
+                      formatRegisteredDates(person.registeredDates) ===
+                        title && (
+                        <SeatListItem
+                          delDisable={index === 0 && sidebarPeople.length > 1}
+                          firstName={
+                            index === 0
+                              ? `Du (${person.firstName})`
+                              : person.firstName
+                          }
+                          seatNumber={person.seatNumber}
+                          key={`${person.firstName} ${person.lastName} ${person.reservationDate}`}
+                          editSeat={(seatNumber) => {
+                            updateMapFilter(seatNumber, person);
+                          }}
+                          deleteSeat={() => {
+                            deletePerson(
+                              person.seatNumber,
+                              sidebarPeople[index].firstName
+                            );
+                          }}
+                        />
+                      )
+                  )}
+                </div>
+              </div>
             ))}
           </div>
           <div className="flex flex-col justify-end gap-2">
