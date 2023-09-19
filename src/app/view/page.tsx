@@ -214,7 +214,8 @@ export default function Home() {
               </tbody>
             </table>
             <div className="flex gap-4 items-center text-xs text-gray-400">
-              <p>Totalt: {seatsToDisplay.reservedSeats.length}</p>
+              <p>Totale plasser: {seatsToDisplay.reservedSeats.length}</p>
+              <p>Totale deltakere: {totalAnsatte + totalGjester}</p>
               <p>Ansatte: {totalAnsatte}</p>
               <p>Gjester: {totalGjester}</p>
             </div>
