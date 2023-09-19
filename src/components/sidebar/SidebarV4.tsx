@@ -78,6 +78,7 @@ export default function Sidebarv4({
     if (selectedSeat) updateRegisteredPeople();
     resetSidebar();
     setSelectedSeat(undefined);
+    setFilteredDays(LAN_DATES);
   }
 
   useEffect(() => {
