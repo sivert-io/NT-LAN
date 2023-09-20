@@ -7,6 +7,7 @@ import { RegisterFieldsType } from "../register/types";
 import { LAN_DATES } from "@/server/config";
 import { formatRegisteredDates, generateUniqueTitles } from "@/utils/sidebar";
 import { Feedback } from "../feedback/feedback";
+import { socket } from "@/utils/socket";
 
 export default function Sidebarv4({
   myRegisteredSeats: registeredPeople,
@@ -117,6 +118,7 @@ export default function Sidebarv4({
 
   useEffect(() => {
     if (sidebarPeople.length > 1 && !feedbackGiven) setshowFeedback(true);
+    else setshowFeedback(false);
   }, [sidebarPeople]);
 
   useEffect(() => {
@@ -219,13 +221,15 @@ export default function Sidebarv4({
 
   return (
     <div className="bg-zinc-700 overflow-hidden select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6">
-      {showFeedback && (
+      {showFeedback && selectedSeat === undefined && (
         <Feedback
           closeFunction={() => {
             setshowFeedback(false);
             setfeedbackGiven(true);
           }}
-          sendFeedback={() => {}}
+          sendFeedback={(rating, feedbackText) => {
+            socket.emit("hereIsMyFeedback", { rating, feedbackText });
+          }}
         />
       )}
       {selectedSeat !== undefined ? (

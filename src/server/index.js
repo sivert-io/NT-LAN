@@ -48,6 +48,9 @@ if (!username || !password) {
     process.exit(1);
 }
 var db = new db_1.default(databaseUrl, username, password);
+function getANumber(socketId) {
+    return idList[socketId].toUpperCase();
+}
 function mapSeatsData(reservedSeats) {
     var _a;
     seatsMappedByDate = {};
@@ -88,8 +91,8 @@ function mapSeatsData(reservedSeats) {
     io.emit("hereAreSeatsForDate", seats);
     io.emit("hereAreAllRegisteredSeats", seatsMappedBySeatId);
     io.sockets.sockets.forEach(function (socket) {
-        var aNumber = idList[socket.id];
-        socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber.toUpperCase()]);
+        var aNumber = getANumber(socket.id);
+        socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber]);
     });
 }
 function updateSeatByDate(newSeatData, reservedBy, socket) {
@@ -99,7 +102,7 @@ function updateSeatByDate(newSeatData, reservedBy, socket) {
         reserveSeats: [newSeatData],
     };
     try {
-        db.reserveSeats(idList[socket.id], body).then(function () {
+        db.reserveSeats(getANumber(socket.id), body).then(function () {
             fetcDathabase();
         });
     }
@@ -174,7 +177,7 @@ io.on("connection", function (socket) {
     // When user connects
     socket.on("iHaveArrived", function (aNumber) {
         idList[socket.id] = aNumber.toUpperCase();
-        console.log("".concat(idList[socket.id], " connected!"));
+        console.log("".concat(getANumber(socket.id), " connected!"));
         // Send connected user seat-data
         socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber.toUpperCase()]);
         socket.emit("hereAreAllRegisteredSeats", seatsMappedBySeatId);
@@ -183,7 +186,7 @@ io.on("connection", function (socket) {
     });
     // Give only registered seats
     socket.on("giveMeMySeats", function () {
-        var aNumber = idList[socket.id];
+        var aNumber = getANumber(socket.id);
         socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber.toUpperCase()]);
     });
     // Give seats specific to date
@@ -200,21 +203,24 @@ io.on("connection", function (socket) {
     });
     // User has updated a seat
     socket.on("iHaveUpdatedASeat", function (newSeatInformation, reservedBy) {
-        var aNumber = idList[socket.id];
+        var _a, _b;
+        var aNumber = getANumber(socket.id);
         if (aNumber) {
+            if (!seatsMappedByAnumber[aNumber])
+                db.updateEmployeeInfo(aNumber, ((_a = newSeatInformation.personName) === null || _a === void 0 ? void 0 : _a.firstName) || "", ((_b = newSeatInformation.personName) === null || _b === void 0 ? void 0 : _b.lastName) || "");
             updateSeatByDate(newSeatInformation, reservedBy, socket);
-            socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber.toUpperCase()]);
+            socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber]);
         }
     });
     // Event handler for when a user holds new seats
-    socket.on("iAmHoldingANewSeat", function (aNumber, heldSeat) {
+    socket.on("iAmHoldingANewSeat", function (heldSeat) {
         // When a user is holding new seats, update the heldSeats dictionary
-        heldSeats[aNumber.toUpperCase()] = heldSeat;
+        heldSeats[getANumber(socket.id)] = heldSeat;
         io.emit("hereAreAllHeldSeats", flatHeldSeats());
     });
     // User has deleted a seat
     socket.on("iHaveDeletedASeat", function (seatNumber, firstName) {
-        var aNumber = idList[socket.id];
+        var aNumber = getANumber(socket.id);
         var seats = seatsMappedBySeatId[seatNumber];
         var seatsToDelete = [];
         if (seats)
@@ -226,10 +232,13 @@ io.on("connection", function (socket) {
                     });
             });
         if (seatsToDelete.length > 0)
-            deleteSeats(aNumber.toUpperCase(), seatsToDelete);
+            deleteSeats(aNumber, seatsToDelete);
     });
     socket.on("iAmMrAdminGiveMeSeats", function () {
         socket.emit("hereAreAllSeatsMrAdmin", cachedAPIData);
+    });
+    socket.on("hereIsMyFeedback", function (feedbackObject) {
+        db.sendFeedback(getANumber(socket.id), feedbackObject.rating, feedbackObject.feedbackText);
     });
     // ------------------------------- NEW -------------------------------
 });

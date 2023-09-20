@@ -47,6 +47,10 @@ var Database = /** @class */ (function () {
         this.GetSeatsApi = new api_client_1.GetSeatsApi(this.config);
         this.DeleteSeatReservationsApi = new api_client_1.DeleteSeatReservationsApi(this.config);
         this.ReserveSeatsApi = new api_client_1.ReserveSeatsApi(this.config);
+        this.AddFeedbackApi = new api_client_1.AddFeedbackApi(this.config);
+        this.GetFeedbackOnlyApi = new api_client_1.GetFeedbackOnlyApi(this.config);
+        this.GetRatingsAndAverageRatingApi = new api_client_1.GetRatingsAndAverageRatingApi(this.config);
+        this.UpdateEmployeeApi = new api_client_1.UpdateEmployeeApi(this.config);
     }
     Database.prototype.getReservedSeats = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -97,10 +101,94 @@ var Database = /** @class */ (function () {
             });
         });
     };
+    Database.prototype.sendFeedback = function (aNumber, rating, feedbackText) {
+        return __awaiter(this, void 0, void 0, function () {
+            var data, error_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.AddFeedbackApi.addFeedback({ employeeId: aNumber, feedback: feedbackText.length > 5 ? feedbackText : undefined, rating: rating })];
+                    case 1:
+                        data = (_a.sent()).data;
+                        return [2 /*return*/, data];
+                    case 2:
+                        error_3 = _a.sent();
+                        // Handle any errors here
+                        console.error("Error sending feedback:", error_3);
+                        throw error_3;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Database.prototype.getFeedback = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var data, error_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.GetFeedbackOnlyApi.getFeedbackOnly()];
+                    case 1:
+                        data = (_a.sent()).data;
+                        return [2 /*return*/, data];
+                    case 2:
+                        error_4 = _a.sent();
+                        // Handle any errors here
+                        console.error("Error getting feedback:", error_4);
+                        throw error_4;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Database.prototype.getRatings = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var data, error_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.GetRatingsAndAverageRatingApi.getRatingsAndAverageRating()];
+                    case 1:
+                        data = (_a.sent()).data;
+                        return [2 /*return*/, data];
+                    case 2:
+                        error_5 = _a.sent();
+                        // Handle any errors here
+                        console.error("Error getting feedback:", error_5);
+                        throw error_5;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Database.prototype.updateEmployeeInfo = function (aNumber, firstName, lastName) {
+        return __awaiter(this, void 0, void 0, function () {
+            var data, error_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.UpdateEmployeeApi.updateEmployee({ employeeId: aNumber, newEmployeeId: aNumber, personName: { firstName: firstName, lastName: lastName } })];
+                    case 1:
+                        data = (_a.sent()).data;
+                        return [2 /*return*/, data];
+                    case 2:
+                        error_6 = _a.sent();
+                        // Handle any errors here
+                        console.error("Error updating employee:", error_6);
+                        throw error_6;
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     Database.prototype.reserveSeats = function (aNumber, reserveSeats) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var allSeats_1, seatsToDelete_1, data, error_3;
+            var allSeats_1, seatsToDelete_1, data, error_7;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -136,10 +224,10 @@ var Database = /** @class */ (function () {
                         data = (_b.sent()).data;
                         return [2 /*return*/, data];
                     case 4:
-                        error_3 = _b.sent();
+                        error_7 = _b.sent();
                         // Handle any errors here
-                        console.error("Error reserving seats:", error_3);
-                        throw error_3;
+                        console.error("Error reserving seats:", error_7);
+                        throw error_7;
                     case 5: return [2 /*return*/];
                 }
             });

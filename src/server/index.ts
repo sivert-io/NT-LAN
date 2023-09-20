@@ -58,6 +58,10 @@ import {
   ReservedBy,
 } from "./api-client";
 
+function getANumber(socketId: string) {
+  return idList[socketId].toUpperCase();
+}
+
 function mapSeatsData(reservedSeats: ReservationData) {
   seatsMappedByDate = {};
   LAN_DATES.forEach((date) => {
@@ -109,11 +113,8 @@ function mapSeatsData(reservedSeats: ReservationData) {
   io.emit("hereAreSeatsForDate", seats);
   io.emit("hereAreAllRegisteredSeats", seatsMappedBySeatId);
   io.sockets.sockets.forEach((socket) => {
-    const aNumber = idList[socket.id];
-    socket.emit(
-      "hereAreYourRegisteredSeats",
-      seatsMappedByAnumber[aNumber.toUpperCase()]
-    );
+    const aNumber = getANumber(socket.id);
+    socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber]);
   });
 }
 
@@ -129,7 +130,7 @@ function updateSeatByDate(
   };
 
   try {
-    db.reserveSeats(idList[socket.id], body).then(() => {
+    db.reserveSeats(getANumber(socket.id), body).then(() => {
       fetcDathabase();
     });
   } catch (error) {
@@ -219,7 +220,7 @@ io.on("connection", (socket: Socket) => {
   // When user connects
   socket.on("iHaveArrived", (aNumber: string) => {
     idList[socket.id as string] = aNumber.toUpperCase();
-    console.log(`${idList[socket.id]} connected!`);
+    console.log(`${getANumber(socket.id)} connected!`);
 
     // Send connected user seat-data
     socket.emit(
@@ -233,7 +234,7 @@ io.on("connection", (socket: Socket) => {
 
   // Give only registered seats
   socket.on("giveMeMySeats", () => {
-    const aNumber = idList[socket.id];
+    const aNumber = getANumber(socket.id);
     socket.emit(
       "hereAreYourRegisteredSeats",
       seatsMappedByAnumber[aNumber.toUpperCase()]
@@ -259,29 +260,36 @@ io.on("connection", (socket: Socket) => {
   socket.on(
     "iHaveUpdatedASeat",
     (newSeatInformation: ReserveSeat, reservedBy: ReservedBy) => {
-      const aNumber = idList[socket.id];
+      const aNumber = getANumber(socket.id);
       if (aNumber) {
+        if (!seatsMappedByAnumber[aNumber])
+          db.updateEmployeeInfo(
+            aNumber,
+            newSeatInformation.personName?.firstName || "",
+            newSeatInformation.personName?.lastName || ""
+          );
+
         updateSeatByDate(newSeatInformation, reservedBy, socket);
 
         socket.emit(
           "hereAreYourRegisteredSeats",
-          seatsMappedByAnumber[aNumber.toUpperCase()]
+          seatsMappedByAnumber[aNumber]
         );
       }
     }
   );
 
   // Event handler for when a user holds new seats
-  socket.on("iAmHoldingANewSeat", (aNumber: string, heldSeat: number) => {
+  socket.on("iAmHoldingANewSeat", (heldSeat: number) => {
     // When a user is holding new seats, update the heldSeats dictionary
-    heldSeats[aNumber.toUpperCase()] = heldSeat;
+    heldSeats[getANumber(socket.id)] = heldSeat;
 
     io.emit("hereAreAllHeldSeats", flatHeldSeats());
   });
 
   // User has deleted a seat
   socket.on("iHaveDeletedASeat", (seatNumber: number, firstName: string) => {
-    const aNumber = idList[socket.id];
+    const aNumber = getANumber(socket.id);
     const seats = seatsMappedBySeatId[seatNumber];
     const seatsToDelete: { id: number; reservationDate: string }[] = [];
     if (seats)
@@ -293,13 +301,23 @@ io.on("connection", (socket: Socket) => {
           });
       });
 
-    if (seatsToDelete.length > 0)
-      deleteSeats(aNumber.toUpperCase(), seatsToDelete);
+    if (seatsToDelete.length > 0) deleteSeats(aNumber, seatsToDelete);
   });
 
   socket.on("iAmMrAdminGiveMeSeats", () => {
-    socket.emit("hereAreAllSeatsMrAdmin", cachedAPIData)
-  })
+    socket.emit("hereAreAllSeatsMrAdmin", cachedAPIData);
+  });
+
+  socket.on(
+    "hereIsMyFeedback",
+    (feedbackObject: { rating: number; feedbackText: string }) => {
+      db.sendFeedback(
+        getANumber(socket.id),
+        feedbackObject.rating,
+        feedbackObject.feedbackText
+      );
+    }
+  );
   // ------------------------------- NEW -------------------------------
 });
 

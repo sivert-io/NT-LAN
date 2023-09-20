@@ -13,7 +13,7 @@ export function Feedback({
   sendFeedback,
 }: {
   closeFunction: () => void;
-  sendFeedback: () => void;
+  sendFeedback: (rating: number, feedbackText: string) => void;
 }) {
   function RatingButton({
     text,
@@ -65,9 +65,9 @@ export function Feedback({
   }, []);
 
   return (
-    <div className="absolute left-0 top-0 bottom-0 p-6 w-[300px] flex items-end">
+    <div className="absolute left-0 top-0 bottom-0 p-6 w-[300px] flex items-end pointer-events-none">
       <div
-        className={`bg-[#242127] rounded-2xl p-3 w-full transition-all duration-500 ${
+        className={`bg-[#242127] rounded-2xl p-3 w-full transition-all duration-500 pointer-events-auto ${
           !isVisible ? "translate-y-[150%]" : "translate-y-0"
         }`}
       >
@@ -135,7 +135,7 @@ export function Feedback({
                 <Button
                   onClick={() => {
                     setdone(true);
-                    sendFeedback();
+                    sendFeedback(rating, "");
                     setTimeout(() => {
                       setisVisible(false);
                       setTimeout(() => {
@@ -151,7 +151,7 @@ export function Feedback({
                 <Button
                   onClick={() => {
                     setdone(true);
-                    sendFeedback();
+                    sendFeedback(rating, feedbackText);
                     setTimeout(() => {
                       setisVisible(false);
                       setTimeout(() => {

@@ -100,7 +100,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
 
   // When selected seat updates
   useEffect(() => {
-    socket.emit("iAmHoldingANewSeat", aNumber, seatSelected);
+    socket.emit("iAmHoldingANewSeat", seatSelected);
   }, [seatSelected]);
 
   // When Seats are updated

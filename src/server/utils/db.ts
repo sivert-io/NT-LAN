@@ -4,14 +4,21 @@ import {
   DeleteSeatReservationsApi,
   ReserveSeatsApi,
   ReserveSeats,
+  AddFeedbackApi,
+  GetFeedbackOnlyApi,
+  GetRatingsAndAverageRatingApi,
+  UpdateEmployeeApi,
 } from "../api-client";
-import { LAN_DATES } from "../config";
 import { ReservationData } from "./types";
 
 class Database {
   GetSeatsApi: GetSeatsApi;
   DeleteSeatReservationsApi: DeleteSeatReservationsApi;
   ReserveSeatsApi: ReserveSeatsApi;
+  AddFeedbackApi: AddFeedbackApi;
+  GetFeedbackOnlyApi: GetFeedbackOnlyApi;
+  GetRatingsAndAverageRatingApi: GetRatingsAndAverageRatingApi;
+  UpdateEmployeeApi: UpdateEmployeeApi;
   config: any;
 
   constructor(databaseUrl: string, username: string, password: string) {
@@ -23,6 +30,10 @@ class Database {
     this.GetSeatsApi = new GetSeatsApi(this.config);
     this.DeleteSeatReservationsApi = new DeleteSeatReservationsApi(this.config);
     this.ReserveSeatsApi = new ReserveSeatsApi(this.config);
+    this.AddFeedbackApi = new AddFeedbackApi(this.config);
+    this.GetFeedbackOnlyApi = new GetFeedbackOnlyApi(this.config);
+    this.GetRatingsAndAverageRatingApi = new GetRatingsAndAverageRatingApi(this.config);
+    this.UpdateEmployeeApi = new UpdateEmployeeApi(this.config);
   }
 
   async getReservedSeats() {
@@ -55,6 +66,50 @@ class Database {
     } catch (error) {
       // Handle any errors here
       console.error("Error deleting reserved seat:", error);
+      throw error;
+    }
+  }
+
+  async sendFeedback(aNumber: string, rating: number, feedbackText: string) {
+    try {
+      const { data } = await this.AddFeedbackApi.addFeedback({employeeId: aNumber, feedback: feedbackText.length > 5 ? feedbackText : undefined, rating: rating});
+      return data;
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error sending feedback:", error);
+      throw error;
+    }
+  }
+
+  async getFeedback() {
+    try {
+      const { data } = await this.GetFeedbackOnlyApi.getFeedbackOnly();
+      return data;
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error getting feedback:", error);
+      throw error;
+    }
+  }
+
+  async getRatings() {
+    try {
+      const { data } = await this.GetRatingsAndAverageRatingApi.getRatingsAndAverageRating();
+      return data;
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error getting feedback:", error);
+      throw error;
+    }
+  }
+
+  async updateEmployeeInfo(aNumber: string, firstName: string, lastName: string) {
+    try {
+      const { data } = await this.UpdateEmployeeApi.updateEmployee({employeeId: aNumber, newEmployeeId: aNumber, personName: {firstName, lastName}});
+      return data;
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error updating employee:", error);
       throw error;
     }
   }
