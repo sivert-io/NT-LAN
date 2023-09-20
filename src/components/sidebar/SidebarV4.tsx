@@ -6,6 +6,7 @@ import Button from "../button/Button";
 import { RegisterFieldsType } from "../register/types";
 import { LAN_DATES } from "@/server/config";
 import { formatRegisteredDates, generateUniqueTitles } from "@/utils/sidebar";
+import { Feedback } from "../feedback/feedback";
 
 export default function Sidebarv4({
   myRegisteredSeats: registeredPeople,
@@ -36,6 +37,9 @@ export default function Sidebarv4({
   const [uniqueTitles, setuniqueTitles] = useState(
     generateUniqueTitles(sidebarPeople)
   );
+
+  const [showFeedback, setshowFeedback] = useState(false);
+  const [feedbackGiven, setfeedbackGiven] = useState(false);
 
   function atLeastOneDay(dayVariable: daysAttending) {
     return dayVariable.fredag || dayVariable.lordag || dayVariable.sondag;
@@ -110,6 +114,10 @@ export default function Sidebarv4({
     setsidebarPeople(newList);
     setuniqueTitles(generateUniqueTitles(newList));
   }, [registeredPeople]);
+
+  useEffect(() => {
+    if (sidebarPeople.length > 1 && !feedbackGiven) setshowFeedback(true);
+  }, [sidebarPeople]);
 
   useEffect(() => {
     const days: string[] = [];
@@ -210,7 +218,16 @@ export default function Sidebarv4({
   }, [timer, setSelectedSeat]);
 
   return (
-    <div className="bg-zinc-700 select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6">
+    <div className="bg-zinc-700 overflow-hidden select-none w-[300px] shrink-0 h-full relative transition-all shadow rounded-2xl p-6">
+      {showFeedback && (
+        <Feedback
+          closeFunction={() => {
+            setshowFeedback(false);
+            setfeedbackGiven(true);
+          }}
+          sendFeedback={() => {}}
+        />
+      )}
       {selectedSeat !== undefined ? (
         <div className="flex flex-col items-center justify-between h-full w-full">
           <div className="flex flex-col items-center gap-8">
@@ -468,7 +485,11 @@ export default function Sidebarv4({
               </p>
             </div>
           ) : (
-            <div className="flex flex-col justify-end gap-2">
+            <div
+              className={`flex flex-col justify-end gap-2 transition-transform duration-500 ${
+                showFeedback ? "translate-y-[200%]" : "translate-y0"
+              }`}
+            >
               <p className="font-bold text-sm">Vil du endre plass? ✨</p>
               <p className="text-sm font-medium">
                 Du kan endre plass med drag’n’drop
