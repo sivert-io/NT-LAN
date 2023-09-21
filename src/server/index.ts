@@ -52,7 +52,9 @@ const db = new Database(databaseUrl, username, password);
 
 import { ReservationData, ReservedSeat } from "./utils/types";
 import {
+  FeedbackOnly,
   PersonName,
+  RatingsWithAverageRating,
   ReserveSeat,
   ReserveSeats,
   ReservedBy,
@@ -308,9 +310,40 @@ io.on("connection", (socket: Socket) => {
     socket.emit("hereAreAllSeatsMrAdmin", cachedAPIData);
   });
 
+  socket.on("iAmMrAdminGiveMeFeedback", () => {
+    db.getRatings().then((ratings: unknown) => {
+      const feedbackIds: number[] = [];
+      const returnValue: {
+        feedBack: string[];
+        ratings: number[];
+        averageRating: number;
+      } = { averageRating: 0, feedBack: [], ratings: [] };
+      const len = (ratings as RatingsWithAverageRating).ratings?.length || 0;
+
+      for (let i = 0; i < len + 1; i++) {
+        feedbackIds.push(i);
+        returnValue.ratings.push((ratings as RatingsWithAverageRating).ratings?.[i] || 0);
+      }
+
+      returnValue.averageRating = (ratings as RatingsWithAverageRating).averageRating || 0;
+
+      db.getFeedback({ feedbackIds }).then((feedBack: unknown) => {
+        console.log(feedBack);
+        
+        (feedBack as FeedbackOnly).feedbackOnly?.forEach((feedback, i) => {
+          returnValue.feedBack.push(feedback)
+        })
+
+        socket.emit("hereAreAllFeedbackMrAdmin", returnValue);
+      });
+    });
+  })
+
   socket.on(
     "hereIsMyFeedback",
     (feedbackObject: { rating: number; feedbackText: string }) => {
+      console.log(feedbackObject);
+      
       db.sendFeedback(
         getANumber(socket.id),
         feedbackObject.rating,

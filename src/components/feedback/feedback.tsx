@@ -91,21 +91,21 @@ export function Feedback({
             </div>
             <div className="flex justify-evenly">
               <RatingButton
-                rating={0}
+                rating={1}
                 text="Likte ikke"
                 textColor="text-[#FFE6F3]"
                 icon={sad}
                 color="bg-[#FFE6F3]"
               />
               <RatingButton
-                rating={1}
+                rating={2}
                 text="Nøytral"
                 textColor="text-[#FEF4C4]"
                 icon={neutral}
                 color="bg-[#FEF4C4]"
               />
               <RatingButton
-                rating={2}
+                rating={3}
                 text="Likte godt"
                 textColor="text-[#E9FCD8]"
                 icon={happy}

@@ -237,7 +237,29 @@ io.on("connection", function (socket) {
     socket.on("iAmMrAdminGiveMeSeats", function () {
         socket.emit("hereAreAllSeatsMrAdmin", cachedAPIData);
     });
+    socket.on("iAmMrAdminGiveMeFeedback", function () {
+        db.getRatings().then(function (ratings) {
+            var _a, _b;
+            var feedbackIds = [];
+            var returnValue = { averageRating: 0, feedBack: [], ratings: [] };
+            var len = ((_a = ratings.ratings) === null || _a === void 0 ? void 0 : _a.length) || 0;
+            for (var i = 0; i < len + 1; i++) {
+                feedbackIds.push(i);
+                returnValue.ratings.push(((_b = ratings.ratings) === null || _b === void 0 ? void 0 : _b[i]) || 0);
+            }
+            returnValue.averageRating = ratings.averageRating || 0;
+            db.getFeedback({ feedbackIds: feedbackIds }).then(function (feedBack) {
+                var _a;
+                console.log(feedBack);
+                (_a = feedBack.feedbackOnly) === null || _a === void 0 ? void 0 : _a.forEach(function (feedback, i) {
+                    returnValue.feedBack.push(feedback);
+                });
+                socket.emit("hereAreAllFeedbackMrAdmin", returnValue);
+            });
+        });
+    });
     socket.on("hereIsMyFeedback", function (feedbackObject) {
+        console.log(feedbackObject);
         db.sendFeedback(getANumber(socket.id), feedbackObject.rating, feedbackObject.feedbackText);
     });
     // ------------------------------- NEW -------------------------------

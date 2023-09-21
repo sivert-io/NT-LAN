@@ -8,6 +8,7 @@ import {
   GetFeedbackOnlyApi,
   GetRatingsAndAverageRatingApi,
   UpdateEmployeeApi,
+  GetFeedbackOnlyRequest,
 } from "../api-client";
 import { ReservationData } from "./types";
 
@@ -81,9 +82,9 @@ class Database {
     }
   }
 
-  async getFeedback() {
+  async getFeedback(feedBackBody: GetFeedbackOnlyRequest) {
     try {
-      const { data } = await this.GetFeedbackOnlyApi.getFeedbackOnly();
+      const { data } = await this.GetFeedbackOnlyApi.getFeedbackOnly(feedBackBody);
       return data;
     } catch (error) {
       // Handle any errors here

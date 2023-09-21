@@ -122,14 +122,14 @@ var Database = /** @class */ (function () {
             });
         });
     };
-    Database.prototype.getFeedback = function () {
+    Database.prototype.getFeedback = function (feedBackBody) {
         return __awaiter(this, void 0, void 0, function () {
             var data, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.GetFeedbackOnlyApi.getFeedbackOnly()];
+                        return [4 /*yield*/, this.GetFeedbackOnlyApi.getFeedbackOnly(feedBackBody)];
                     case 1:
                         data = (_a.sent()).data;
                         return [2 /*return*/, data];
