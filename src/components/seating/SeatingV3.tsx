@@ -157,11 +157,20 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
       setdaySelected((old) => [...old, lanDate]);
     }
   }
+
+  function getSidebarAmount() {
+    const s: string[] = [];
+    myRegisteredSeats.forEach((seat) => {
+      if (!s.includes(`${seat.seatNumber} ${seat.firstName} ${seat.lastName}`))
+        s.push(`${seat.seatNumber} ${seat.firstName} ${seat.lastName}`);
+    });
+    return s.length;
+  }
   // NEW
 
   return (
     <div className="flex flex-col gap-12">
-      <div className="flex items-end justify-between px-4 w-[50vw] max-w-[890px] min-w-[634px]">
+      <div className="flex items-end gap-32 px-4 w-[50vw] max-w-[890px] min-w-[634px]">
         <Title />
         <DaySelector
           enableAll={() => {
@@ -172,14 +181,11 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         />
       </div>
       <div className="flex gap-12 relative">
-        <div className="flex flex-col gap-16 px-4 overflow-auto max-h-[690px]">
+        <div className="flex flex-col gap-10 px-4 overflow-auto">
           {Array.from({
             length: Math.ceil(seatsToDisplay.length / (numCols * 2)),
           }).map((_, groupIndex) => (
-            <div
-              key={groupIndex}
-              className="grid grid-cols-5 gap-3 w-[50vw] max-w-[860px] min-w-[600px]"
-            >
+            <div key={groupIndex} className="grid grid-cols-5 gap-3">
               {seatsToDisplay
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
                 .map((seat) => {
@@ -222,59 +228,61 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
             </div>
           ))}
         </div>
-        <Sidebarv4
-          seatsMappedBySeatId={seatsMappedBySeatId}
-          filteredDays={daySelected}
-          setFilteredDays={setdaySelected}
-          sidebar_daysAttending={sidebar_daysAttending}
-          sidebar_setDaysAttending={sidebar_setDaysAttending}
-          sidebar_updateDay={(day: days, value: boolean) => {
-            sidebar_setDaysAttending((old) => ({ ...old, [day]: value }));
-          }}
-          sidebar_setSeatBeingEdited={sidebar_setSeatBeingEdited}
-          sidebar_seatBeingEdited={sidebar_seatBeingEdited}
-          setSelectedSeat={setSeatSelected}
-          deleteSeat={(seatNumber: number, firstName: string) => {
-            socket.emit("iHaveDeletedASeat", seatNumber, firstName);
-          }}
-          myRegisteredSeats={myRegisteredSeats}
-          saveSeat={() => {
-            if (seatSelected) {
-              const dates: typeof LAN_DATES = [];
-              Object.keys(sidebar_daysAttending).forEach((d, index) => {
-                if (sidebar_daysAttending[d as days] && LAN_DATES[index])
-                  dates.push(LAN_DATES[index]);
-              });
+        <div className="flex flex-col gap-12">
+          <Legend seatAmnt={getSidebarAmount()} />
+          <Sidebarv4
+            seatsMappedBySeatId={seatsMappedBySeatId}
+            filteredDays={daySelected}
+            setFilteredDays={setdaySelected}
+            sidebar_daysAttending={sidebar_daysAttending}
+            sidebar_setDaysAttending={sidebar_setDaysAttending}
+            sidebar_updateDay={(day: days, value: boolean) => {
+              sidebar_setDaysAttending((old) => ({ ...old, [day]: value }));
+            }}
+            sidebar_setSeatBeingEdited={sidebar_setSeatBeingEdited}
+            sidebar_seatBeingEdited={sidebar_seatBeingEdited}
+            setSelectedSeat={setSeatSelected}
+            deleteSeat={(seatNumber: number, firstName: string) => {
+              socket.emit("iHaveDeletedASeat", seatNumber, firstName);
+            }}
+            myRegisteredSeats={myRegisteredSeats}
+            saveSeat={() => {
+              if (seatSelected) {
+                const dates: typeof LAN_DATES = [];
+                Object.keys(sidebar_daysAttending).forEach((d, index) => {
+                  if (sidebar_daysAttending[d as days] && LAN_DATES[index])
+                    dates.push(LAN_DATES[index]);
+                });
 
-              const personName = {
-                firstName: sidebar_firstName,
-                lastName: sidebar_lastName,
-              };
-              const newSeat: ReserveSeat = {
-                id: seatSelected,
-                personName,
-                reservationDates: dates,
-              };
+                const personName = {
+                  firstName: sidebar_firstName,
+                  lastName: sidebar_lastName,
+                };
+                const newSeat: ReserveSeat = {
+                  id: seatSelected,
+                  personName,
+                  reservationDates: dates,
+                };
 
-              socket.emit("iHaveUpdatedASeat", newSeat, {
-                employeeId: aNumber,
-                personName:
-                  myRegisteredSeats.length !== 0
-                    ? {
-                        firstName: myRegisteredSeats[0].firstName,
-                        lastName: myRegisteredSeats[0].lastName,
-                      }
-                    : personName,
-              });
-            }
-          }}
-          seatSelected={seatSelected}
-          sidebar_firstName={sidebar_firstName}
-          sidebar_lastName={sidebar_lastName}
-          sidebar_setFirstName={sidebar_setFirstName}
-          sidebar_setLastName={sidebar_setLastName}
-        />
-        <Legend seatAmnt={myRegisteredSeats.length} />
+                socket.emit("iHaveUpdatedASeat", newSeat, {
+                  employeeId: aNumber,
+                  personName:
+                    myRegisteredSeats.length !== 0
+                      ? {
+                          firstName: myRegisteredSeats[0].firstName,
+                          lastName: myRegisteredSeats[0].lastName,
+                        }
+                      : personName,
+                });
+              }
+            }}
+            seatSelected={seatSelected}
+            sidebar_firstName={sidebar_firstName}
+            sidebar_lastName={sidebar_lastName}
+            sidebar_setFirstName={sidebar_setFirstName}
+            sidebar_setLastName={sidebar_setLastName}
+          />
+        </div>
       </div>
     </div>
   );

@@ -116,7 +116,7 @@ export default function SeatV2({
         }}
         className={`${
           isDragging && "opacity-0"
-        } w-full h-[64px] flex-1 select-none relative capitalize disabled:transition-none disabled:scale-100 disabled:cursor-not-allowed truncate whitespace-nowrap 2xl:px-4 text-sm 2xl:text-lg font-medium rounded-lg
+        } h-[48px] w-[120px] flex-1 select-none relative capitalize disabled:transition-none disabled:scale-100 disabled:cursor-not-allowed truncate whitespace-nowrap 2xl:px-4 font-medium rounded-lg
       ${
         onHold
           ? "border-2 border-[#FF5797] text-[#FF5797] hover:cursor-not-allowed"
