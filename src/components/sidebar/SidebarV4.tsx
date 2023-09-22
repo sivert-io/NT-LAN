@@ -458,7 +458,7 @@ export default function Sidebarv4({
                   (person, index) =>
                     formatRegisteredDates(person.registeredDates) === title && (
                       <SeatListItem
-                        delDisable={person.isYou && sidebarPeople.length > 1}
+                        delDisable={false}
                         firstName={
                           person.isYou
                             ? `Du (${person.firstName})`
