@@ -54,10 +54,6 @@ class Database {
     seatsToDelete: { id: number; reservationDate: string }[]
   ) {
     try {
-      console.log({
-        employeeId: aNumber,
-        seatReservations: seatsToDelete,
-      });
       // Make an API request to delete reserved seat
       const { data } = await this.DeleteSeatReservationsApi.deleteSeats({
         employeeId: aNumber,

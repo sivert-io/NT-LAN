@@ -215,7 +215,6 @@ export default function Sidebarv4({
     // When the timer goes off, set selectedSeat to undefined
     if (timer === 0) {
       setSelectedSeat(undefined);
-      console.log("Timer ran out!");
     }
   }, [timer, setSelectedSeat]);
 

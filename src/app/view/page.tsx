@@ -157,8 +157,6 @@ export default function Home() {
       updateNumbers(seats);
     });
     socket.on("hereAreAllFeedbackMrAdmin", (results: typeof feedBackData) => {
-      console.log(results);
-
       setfeedBackData(results);
     });
 

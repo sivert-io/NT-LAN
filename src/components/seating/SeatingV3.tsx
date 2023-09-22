@@ -65,7 +65,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     if (myRegisteredSeats.length === 0) socket.emit("iHaveArrived", aNumber);
 
     socket.on("hereAreYourRegisteredSeats", (seats: RegisterFieldsType[]) => {
-      console.log("Server sent us our owned seats:", seats);
+      // console.log("Server sent us our owned seats:", seats);
       !!seats ? setMyRegisteredSeats(seats) : setMyRegisteredSeats([]);
     });
 
@@ -79,7 +79,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
       const index = seats.findIndex((v) => v === seatSelected);
 
       if (index !== -1) s.splice(index, 1);
-      console.log("Server sent us all held seats:", s);
+      // console.log("Server sent us all held seats:", s);
 
       setseatsThatAreHeld(s);
     });
