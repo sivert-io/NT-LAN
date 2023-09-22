@@ -213,7 +213,7 @@ export default function Home() {
         (seat) =>
           seat.personName.firstName.toUpperCase() ===
             seat.reservedBy.personName.firstName.toUpperCase() &&
-          seat.personName.lastName.toUpperCase() !==
+          seat.personName.lastName.toUpperCase() ===
             seat.reservedBy.personName.lastName.toUpperCase() &&
           seat.reservationDate === date
       ).length,
