@@ -197,17 +197,15 @@ io.on("connection", function (socket) {
     socket.on("giveMeAllRegisteredSeats", function () {
         socket.emit("hereAreAllRegisteredSeats", seatsMappedBySeatId);
     });
-    // Give all seats that are held
-    socket.on("giveMeAllHeldSeats", function () {
-        socket.emit("hereAreAllHeldSeats", flatHeldSeats());
-    });
     // User has updated a seat
     socket.on("iHaveUpdatedASeat", function (newSeatInformation, reservedBy) {
         var _a, _b;
         var aNumber = getANumber(socket.id);
         if (aNumber) {
-            if (!seatsMappedByAnumber[aNumber])
+            if (process.env.NODE_ENV === "production" &&
+                !seatsMappedByAnumber[aNumber]) {
                 db.updateEmployeeInfo(aNumber, ((_a = newSeatInformation.personName) === null || _a === void 0 ? void 0 : _a.firstName) || "", ((_b = newSeatInformation.personName) === null || _b === void 0 ? void 0 : _b.lastName) || "");
+            }
             updateSeatByDate(newSeatInformation, reservedBy, socket);
             socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber]);
         }
@@ -247,10 +245,10 @@ io.on("connection", function (socket) {
                 feedbackIds.push(i);
                 returnValue.ratings.push(((_b = ratings.ratings) === null || _b === void 0 ? void 0 : _b[i]) || 0);
             }
-            returnValue.averageRating = ratings.averageRating || 0;
+            returnValue.averageRating =
+                ratings.averageRating || 0;
             db.getFeedback({ feedbackIds: feedbackIds }).then(function (feedBack) {
                 var _a;
-                console.log(feedBack);
                 (_a = feedBack.feedbackOnly) === null || _a === void 0 ? void 0 : _a.forEach(function (feedback, i) {
                     returnValue.feedBack.push(feedback);
                 });

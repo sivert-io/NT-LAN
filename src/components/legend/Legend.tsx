@@ -3,7 +3,7 @@ import LegendItem from "./LegendItem";
 
 export default function Legend({ seatAmnt }: { seatAmnt: number }) {
   return (
-    <div className="flex flex-col gap-4 min-w-[142px]">
+    <div className="flex flex-col gap-4 min-w-[142px] min-h-[126px]">
       <LegendItem
         text="Ledig"
         boxClass="border-[#E7E4ED]"

@@ -62,7 +62,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
 
   // When user connects
   useEffect(() => {
-    socket.emit("iHaveArrived", aNumber);
+    if (myRegisteredSeats.length === 0) socket.emit("iHaveArrived", aNumber);
 
     socket.on("hereAreYourRegisteredSeats", (seats: RegisterFieldsType[]) => {
       console.log("Server sent us our owned seats:", seats);
@@ -76,10 +76,9 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
 
     socket.on("hereAreAllHeldSeats", (seats: number[]) => {
       const s = seats;
-      s.splice(
-        seats.findIndex((v) => v === seatSelected),
-        1
-      );
+      const index = seats.findIndex((v) => v === seatSelected);
+
+      if (index !== -1) s.splice(index, 1);
       console.log("Server sent us all held seats:", s);
 
       setseatsThatAreHeld(s);
@@ -96,7 +95,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
       socket.off("hereAreAllHeldSeats");
       socket.off("hereAreSeatsForDate");
     };
-  }, []);
+  }, [aNumber, myRegisteredSeats.length, seatSelected]);
 
   // When selected seat updates
   useEffect(() => {

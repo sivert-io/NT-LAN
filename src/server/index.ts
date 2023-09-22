@@ -253,23 +253,22 @@ io.on("connection", (socket: Socket) => {
     socket.emit("hereAreAllRegisteredSeats", seatsMappedBySeatId);
   });
 
-  // Give all seats that are held
-  socket.on("giveMeAllHeldSeats", () => {
-    socket.emit("hereAreAllHeldSeats", flatHeldSeats());
-  });
-
   // User has updated a seat
   socket.on(
     "iHaveUpdatedASeat",
     (newSeatInformation: ReserveSeat, reservedBy: ReservedBy) => {
       const aNumber = getANumber(socket.id);
       if (aNumber) {
-        if (!seatsMappedByAnumber[aNumber])
+        if (
+          process.env.NODE_ENV === "production" &&
+          !seatsMappedByAnumber[aNumber]
+        ) {
           db.updateEmployeeInfo(
             aNumber,
             newSeatInformation.personName?.firstName || "",
             newSeatInformation.personName?.lastName || ""
           );
+        }
 
         updateSeatByDate(newSeatInformation, reservedBy, socket);
 
@@ -285,7 +284,6 @@ io.on("connection", (socket: Socket) => {
   socket.on("iAmHoldingANewSeat", (heldSeat: number) => {
     // When a user is holding new seats, update the heldSeats dictionary
     heldSeats[getANumber(socket.id)] = heldSeat;
-
     io.emit("hereAreAllHeldSeats", flatHeldSeats());
   });
 
@@ -322,28 +320,29 @@ io.on("connection", (socket: Socket) => {
 
       for (let i = 0; i < len + 1; i++) {
         feedbackIds.push(i);
-        returnValue.ratings.push((ratings as RatingsWithAverageRating).ratings?.[i] || 0);
+        returnValue.ratings.push(
+          (ratings as RatingsWithAverageRating).ratings?.[i] || 0
+        );
       }
 
-      returnValue.averageRating = (ratings as RatingsWithAverageRating).averageRating || 0;
+      returnValue.averageRating =
+        (ratings as RatingsWithAverageRating).averageRating || 0;
 
       db.getFeedback({ feedbackIds }).then((feedBack: unknown) => {
-        console.log(feedBack);
-        
         (feedBack as FeedbackOnly).feedbackOnly?.forEach((feedback, i) => {
-          returnValue.feedBack.push(feedback)
-        })
+          returnValue.feedBack.push(feedback);
+        });
 
         socket.emit("hereAreAllFeedbackMrAdmin", returnValue);
       });
     });
-  })
+  });
 
   socket.on(
     "hereIsMyFeedback",
     (feedbackObject: { rating: number; feedbackText: string }) => {
       console.log(feedbackObject);
-      
+
       db.sendFeedback(
         getANumber(socket.id),
         feedbackObject.rating,
