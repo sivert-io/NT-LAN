@@ -38,6 +38,10 @@ export type SidebarV3Props = {
   setFilteredDays: (newDays: string[]) => void;
   filteredDays: string[];
   seatsMappedBySeatId: mappedSeats;
+  guestNtNumber: string;
+  setGuestNtNumber: (newnumber: string) => void;
+  isGuestNTMember: boolean;
+  setGuestNtMember: (n: boolean) => void;
 };
 
 export type InputBoxType = {

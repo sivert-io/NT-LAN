@@ -8,6 +8,7 @@ import { LAN_DATES } from "@/server/config";
 import { formatRegisteredDates, generateUniqueTitles } from "@/utils/sidebar";
 import { Feedback } from "../feedback/feedback";
 import { socket } from "@/utils/socket";
+import Toggle from "../input/toggle";
 
 export default function Sidebarv4({
   myRegisteredSeats: registeredPeople,
@@ -26,6 +27,10 @@ export default function Sidebarv4({
   sidebar_setDaysAttending: setDaysAttending,
   sidebar_updateDay: updateDay,
   setFilteredDays,
+  guestNtNumber,
+  setGuestNtMember,
+  isGuestNTMember,
+  setGuestNtNumber,
   filteredDays,
   seatsMappedBySeatId,
 }: SidebarV3Props) {
@@ -268,6 +273,40 @@ export default function Sidebarv4({
                 onKeyDown={handleEnterKeyPress}
                 value={lastName}
               />
+              {sidebarPeople.length === 0 ||
+              (sidebarPeople[0].firstName === firstName &&
+                sidebarPeople[0].lastName === lastName) ||
+              (isEditing && sidebarPeople.length === 1) ? null : (
+                <>
+                  <div className="flex items-center justify-start gap-4">
+                    <Toggle
+                      checked={isGuestNTMember}
+                      onClick={() => {
+                        setGuestNtMember(!isGuestNTMember);
+                      }}
+                    />
+                    <p className="text-sm font-medium">Er gjesten ansatt?</p>
+                  </div>
+                  {isGuestNTMember && (
+                    <Input
+                      placeholder="a00000"
+                      name="Ansatt nummer"
+                      maxLength={6}
+                      id="aNumberGuest"
+                      onChange={(event) => {
+                        const input = event.target.value;
+                        const regex = /^[aAkK]\d{0,5}$/;
+
+                        if (input === "" || regex.test(input)) {
+                          setGuestNtNumber(input);
+                        }
+                      }}
+                      onKeyDown={handleEnterKeyPress}
+                      value={guestNtNumber}
+                    />
+                  )}
+                </>
+              )}
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col w-full gap-4">

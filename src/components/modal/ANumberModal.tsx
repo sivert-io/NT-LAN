@@ -1,6 +1,7 @@
 import Title from "@/components/title/Title";
-import Input from "../input/Input";
 import { useState } from "react";
+
+export const verifyRegex = /^[aAkK]\d{5}$/;
 
 export default function ANumberModal({
   setaNumber,
@@ -8,7 +9,6 @@ export default function ANumberModal({
   setaNumber: (newValue: string) => any;
 }) {
   const [tempANumber, settempANumber] = useState("");
-  const verifyRegex = /^[aAkK]\d{5}$/;
 
   function onChange(event: any) {
     const input = event.target.value;

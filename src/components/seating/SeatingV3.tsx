@@ -23,6 +23,8 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   );
   // Sidebar usestates
   const [sidebar_firstName, sidebar_setFirstName] = useState("");
+  const [sidebar_guestNTNumber, sidebar_setguestNTNumber] = useState("");
+  const [sidebar_guestIsNT, sidebar_setguestIsNT] = useState(false);
   const [sidebar_lastName, sidebar_setLastName] = useState("");
   const [sidebar_daysAttending, sidebar_setDaysAttending] =
     useState<daysAttending>({
@@ -230,6 +232,10 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         <div className="flex flex-col gap-12">
           <Legend seatAmnt={getSidebarAmount()} />
           <Sidebarv4
+            guestNtNumber={sidebar_guestNTNumber}
+            isGuestNTMember={sidebar_guestIsNT}
+            setGuestNtMember={sidebar_setguestIsNT}
+            setGuestNtNumber={sidebar_setguestNTNumber}
             seatsMappedBySeatId={seatsMappedBySeatId}
             filteredDays={daySelected}
             setFilteredDays={setdaySelected}
