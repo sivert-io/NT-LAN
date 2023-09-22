@@ -5,6 +5,7 @@ interface Props extends React.ComponentPropsWithoutRef<"button"> {
   activeClass?: string;
   inActiveClass?: string;
   transparent?: boolean;
+  customDisabled?: boolean;
 }
 
 export default function Button({
@@ -13,6 +14,7 @@ export default function Button({
   children,
   inActiveClass,
   transparent,
+  customDisabled,
   ...rest
 }: Props) {
   const buttonColor = !transparent
@@ -31,7 +33,10 @@ export default function Button({
         ${
           !transparent && "py-2 px-4"
         } rounded-full font-medium text-sm whitespace-nowrap
-        disabled:cursor-not-allowed disabled:bg-[#D8D6DB] disabled:text-[#6D6973]
+        ${
+          !customDisabled &&
+          "disabled:cursor-not-allowed disabled:bg-[#D8D6DB] disabled:text-[#6D6973]"
+        }
         active:scale-95 transition-all duration-75
         `}
       {...rest}

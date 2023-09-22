@@ -220,7 +220,7 @@ export default function Sidebarv4({
   }, [timer, setSelectedSeat]);
 
   return (
-    <div className="bg-zinc-700 overflow-hidden select-none w-[300px] shrink-0 h-[534px] relative transition-all shadow rounded-2xl p-6">
+    <div className="bg-zinc-700 overflow-hidden select-none w-[300px] shrink-0 relative min-h-[534px] transition-all shadow rounded-2xl p-6 flex flex-col gap-4">
       {showFeedback && selectedSeat === undefined && (
         <Feedback
           closeFunction={() => {
@@ -233,7 +233,7 @@ export default function Sidebarv4({
         />
       )}
       {selectedSeat !== undefined ? (
-        <div className="flex flex-col items-center justify-between h-full w-full">
+        <div className="flex flex-col items-center gap-12 justify-between w-full">
           <div className="flex flex-col items-center gap-8">
             <div className="flex justify-between items-center w-full">
               <h2 className="font-bold flex justify-between items-center">
@@ -377,7 +377,8 @@ export default function Sidebarv4({
                     })
                   }
                   isActive
-                  activeClass="text-right w-fit px-4 text-[#C7D7FF] text-xs font-medium disabled:opacity-25 disabled:cursor-not-allowed"
+                  customDisabled
+                  activeClass="text-right w-fit px-4 text-[#C7D7FF] text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => {
                     setDaysAttending({
                       fredag: true,
@@ -522,7 +523,7 @@ export default function Sidebarv4({
         </div>
       )}
       {timer && timer <= 60 && (
-        <p className="absolute left-0 bottom-0 font-medium text-sm right-0 text-center p-4">
+        <p className="font-medium text-sm right-0 text-center p-4">
           Du har vært inaktiv for lenge og mister snart plassen! {timer}s
         </p>
       )}
