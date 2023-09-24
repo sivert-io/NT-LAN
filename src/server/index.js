@@ -202,8 +202,7 @@ io.on("connection", function (socket) {
         var _a, _b;
         var aNumber = getANumber(socket.id);
         if (aNumber) {
-            if (process.env.NODE_ENV === "production" &&
-                !seatsMappedByAnumber[aNumber]) {
+            if (!seatsMappedByAnumber[aNumber]) {
                 db.updateEmployeeInfo(aNumber, ((_a = newSeatInformation.personName) === null || _a === void 0 ? void 0 : _a.firstName) || "", ((_b = newSeatInformation.personName) === null || _b === void 0 ? void 0 : _b.lastName) || "");
             }
             updateSeatByDate(newSeatInformation, reservedBy, socket);

@@ -80,10 +80,6 @@ var Database = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        console.log({
-                            employeeId: aNumber,
-                            seatReservations: seatsToDelete,
-                        });
                         return [4 /*yield*/, this.DeleteSeatReservationsApi.deleteSeats({
                                 employeeId: aNumber,
                                 seatReservations: seatsToDelete,

@@ -260,7 +260,6 @@ io.on("connection", (socket: Socket) => {
       const aNumber = getANumber(socket.id);
       if (aNumber) {
         if (
-          process.env.NODE_ENV === "production" &&
           !seatsMappedByAnumber[aNumber]
         ) {
           db.updateEmployeeInfo(
