@@ -201,8 +201,10 @@ io.on("connection", function (socket) {
     socket.on("iHaveUpdatedASeat", function (newSeatInformation, reservedBy) {
         var _a, _b;
         var aNumber = getANumber(socket.id);
+        console.log(seatsMappedByAnumber[aNumber]);
         if (aNumber) {
-            if (!seatsMappedByAnumber[aNumber]) {
+            if (seatsMappedByAnumber[aNumber] === undefined) {
+                console.log('Updating user with new info', aNumber, newSeatInformation.personName);
                 db.updateEmployeeInfo(aNumber, ((_a = newSeatInformation.personName) === null || _a === void 0 ? void 0 : _a.firstName) || "", ((_b = newSeatInformation.personName) === null || _b === void 0 ? void 0 : _b.lastName) || "");
             }
             updateSeatByDate(newSeatInformation, reservedBy, socket);

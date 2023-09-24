@@ -258,10 +258,13 @@ io.on("connection", (socket: Socket) => {
     "iHaveUpdatedASeat",
     (newSeatInformation: ReserveSeat, reservedBy: ReservedBy) => {
       const aNumber = getANumber(socket.id);
+      console.log(seatsMappedByAnumber[aNumber]);
       if (aNumber) {
         if (
-          !seatsMappedByAnumber[aNumber]
+          seatsMappedByAnumber[aNumber] === undefined
         ) {
+          console.log('Updating user with new info', aNumber, newSeatInformation.personName);
+          
           db.updateEmployeeInfo(
             aNumber,
             newSeatInformation.personName?.firstName || "",

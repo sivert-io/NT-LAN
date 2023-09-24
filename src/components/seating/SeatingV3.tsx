@@ -21,6 +21,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   const [seatSelected, setSeatSelected] = useState<number | undefined>(
     undefined
   );
+  const [hasArrived, sethasArrived] = useState(false);
   // Sidebar usestates
   const [sidebar_firstName, sidebar_setFirstName] = useState("");
   const [sidebar_lastName, sidebar_setLastName] = useState("");
@@ -62,7 +63,10 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
 
   // When user connects
   useEffect(() => {
-    if (myRegisteredSeats.length === 0) socket.emit("iHaveArrived", aNumber);
+    if (!hasArrived) {
+      socket.emit("iHaveArrived", aNumber);
+      sethasArrived(true);
+    }
 
     socket.on("hereAreYourRegisteredSeats", (seats: RegisterFieldsType[]) => {
       // console.log("Server sent us our owned seats:", seats);
