@@ -414,10 +414,7 @@ export default function Sidebarv4({
             </button>
             {sidebarPeople.some(
               (p) => p.seatNumber === selectedSeat && p.firstName === firstName
-            ) &&
-            ((sidebarPeople.length > 0 &&
-              sidebarPeople[0].firstName !== firstName) ||
-              sidebarPeople.length === 1) ? (
+            ) && (
               <button
                 onClick={() => {
                   deletePerson(
@@ -438,7 +435,7 @@ export default function Sidebarv4({
               >
                 Slett person
               </button>
-            ) : null}
+            )}
             <button
               onClick={() => {
                 resetSidebar();
