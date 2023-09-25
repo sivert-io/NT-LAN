@@ -224,7 +224,7 @@ export default function Home() {
         <ConnecitonError connectionError={connectionError} />
       )}
       {ADMINS.includes(aNumber.toLowerCase() as any) && (
-        <div className="w-[80vw] max-h-[80vh] overflow-auto flex items-start justify-start flex-col gap-4">
+        <div className="w-[80vw] flex items-start justify-start flex-col gap-4">
           <Title />
           <div className="flex gap-4 items-center">
             <p>Velg dag:</p>
