@@ -81,6 +81,8 @@ export default function Sidebarv4({
   }
 
   function savePerson() {
+    console.log("updating seat");
+
     if (selectedSeat !== undefined) updateRegisteredPeople();
     resetSidebar();
     setSelectedSeat(undefined);

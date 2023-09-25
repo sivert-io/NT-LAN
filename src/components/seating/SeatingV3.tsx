@@ -250,7 +250,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
             }}
             myRegisteredSeats={myRegisteredSeats}
             saveSeat={() => {
-              if (seatSelected) {
+              if (seatSelected !== undefined) {
                 const dates: typeof LAN_DATES = [];
                 Object.keys(sidebar_daysAttending).forEach((d, index) => {
                   if (sidebar_daysAttending[d as days] && LAN_DATES[index])

@@ -111,7 +111,9 @@ function updateSeatByDate(newSeatData, reservedBy, socket) {
                     var firstSeat = seatsMappedByAnumber[getANumber(socket.id)][0];
                     if (firstSeat.seatNumber === newSeatData.id) {
                         console.log("Updating user with new info", getANumber(socket.id), newSeatData.personName);
-                        db.updateEmployeeInfo(getANumber(socket.id), ((_a = newSeatData.personName) === null || _a === void 0 ? void 0 : _a.firstName) || "", ((_b = newSeatData.personName) === null || _b === void 0 ? void 0 : _b.lastName) || "");
+                        db.updateEmployeeInfo(getANumber(socket.id), ((_a = newSeatData.personName) === null || _a === void 0 ? void 0 : _a.firstName) || "", ((_b = newSeatData.personName) === null || _b === void 0 ? void 0 : _b.lastName) || "").then(function () {
+                            fetcDathabase();
+                        });
                     }
                 }
             });
@@ -212,7 +214,7 @@ io.on("connection", function (socket) {
     socket.on("iHaveUpdatedASeat", function (newSeatInformation, reservedBy) {
         var aNumber = getANumber(socket.id);
         if (aNumber) {
-            console.log(aNumber, 'updated seat', newSeatInformation.id, 'with', newSeatInformation);
+            console.log(aNumber, "updated seat", newSeatInformation.id, "with", newSeatInformation);
             updateSeatByDate(newSeatInformation, reservedBy, socket);
             socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber]);
         }
