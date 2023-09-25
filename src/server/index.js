@@ -103,7 +103,18 @@ function updateSeatByDate(newSeatData, reservedBy, socket) {
     };
     try {
         db.reserveSeats(getANumber(socket.id), body).then(function () {
-            fetcDathabase();
+            db.getReservedSeats().then(function (reservedSeats) {
+                var _a, _b;
+                cachedAPIData = reservedSeats;
+                mapSeatsData(reservedSeats);
+                if (seatsMappedByAnumber[getANumber(socket.id)] !== undefined) {
+                    var firstSeat = seatsMappedByAnumber[getANumber(socket.id)][0];
+                    if (firstSeat.seatNumber === newSeatData.id) {
+                        console.log("Updating user with new info", getANumber(socket.id), newSeatData.personName);
+                        db.updateEmployeeInfo(getANumber(socket.id), ((_a = newSeatData.personName) === null || _a === void 0 ? void 0 : _a.firstName) || "", ((_b = newSeatData.personName) === null || _b === void 0 ? void 0 : _b.lastName) || "");
+                    }
+                }
+            });
         });
     }
     catch (error) {
@@ -199,14 +210,8 @@ io.on("connection", function (socket) {
     });
     // User has updated a seat
     socket.on("iHaveUpdatedASeat", function (newSeatInformation, reservedBy) {
-        var _a, _b;
         var aNumber = getANumber(socket.id);
-        console.log(seatsMappedByAnumber[aNumber]);
         if (aNumber) {
-            if (seatsMappedByAnumber[aNumber] === undefined) {
-                console.log('Updating user with new info', aNumber, newSeatInformation.personName);
-                db.updateEmployeeInfo(aNumber, ((_a = newSeatInformation.personName) === null || _a === void 0 ? void 0 : _a.firstName) || "", ((_b = newSeatInformation.personName) === null || _b === void 0 ? void 0 : _b.lastName) || "");
-            }
             updateSeatByDate(newSeatInformation, reservedBy, socket);
             socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber]);
         }

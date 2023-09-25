@@ -133,24 +133,29 @@ function updateSeatByDate(
 
   try {
     db.reserveSeats(getANumber(socket.id), body).then(() => {
-      if (
-        seatsMappedByAnumber[getANumber(socket.id)][0].seatNumber ===
-        newSeatData.id
-      ) {
-        console.log(
-          "Updating user with new info",
-          getANumber(socket.id),
-          newSeatData.personName
-        );
+      db.getReservedSeats().then((reservedSeats) => {
+        cachedAPIData = reservedSeats;
+        mapSeatsData(reservedSeats);
 
-        db.updateEmployeeInfo(
-          getANumber(socket.id),
-          newSeatData.personName?.firstName || "",
-          newSeatData.personName?.lastName || ""
-        ).then(() => {
-          fetcDathabase();
-        });
-      }
+        if (seatsMappedByAnumber[getANumber(socket.id)] !== undefined) {
+          const firstSeat = seatsMappedByAnumber[getANumber(socket.id)][0];
+          if (
+            firstSeat.seatNumber === newSeatData.id
+          ) {
+            console.log(
+              "Updating user with new info",
+              getANumber(socket.id),
+              newSeatData.personName
+            );
+
+            db.updateEmployeeInfo(
+              getANumber(socket.id),
+              newSeatData.personName?.firstName || "",
+              newSeatData.personName?.lastName || ""
+            );
+          }
+        }
+      });
     });
   } catch (error) {
     console.log("failed to update seat");
