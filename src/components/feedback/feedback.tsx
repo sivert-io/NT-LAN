@@ -125,6 +125,7 @@ export function Feedback({
             </div>
             <div className="flex flex-col gap-2">
               <textarea
+                maxLength={200}
                 value={feedbackText}
                 onChange={(event) => {
                   setfeedbackText(event.target.value);
