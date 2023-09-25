@@ -212,6 +212,7 @@ io.on("connection", function (socket) {
     socket.on("iHaveUpdatedASeat", function (newSeatInformation, reservedBy) {
         var aNumber = getANumber(socket.id);
         if (aNumber) {
+            console.log(aNumber, 'updated seat', newSeatInformation.id, 'with', newSeatInformation);
             updateSeatByDate(newSeatInformation, reservedBy, socket);
             socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber]);
         }

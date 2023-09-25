@@ -281,6 +281,8 @@ io.on("connection", (socket: Socket) => {
     (newSeatInformation: ReserveSeat, reservedBy: ReservedBy) => {
       const aNumber = getANumber(socket.id);
       if (aNumber) {
+        console.log(aNumber, 'updated seat', newSeatInformation.id, 'with', newSeatInformation);
+        
         updateSeatByDate(newSeatInformation, reservedBy, socket);
 
         socket.emit(

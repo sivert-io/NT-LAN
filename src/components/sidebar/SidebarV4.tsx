@@ -8,6 +8,7 @@ import { LAN_DATES } from "@/server/config";
 import { formatRegisteredDates, generateUniqueTitles } from "@/utils/sidebar";
 import { Feedback } from "../feedback/feedback";
 import { socket } from "@/utils/socket";
+import { personNameRegex } from "@/utils/regex";
 
 export default function Sidebarv4({
   myRegisteredSeats: registeredPeople,
@@ -254,7 +255,8 @@ export default function Sidebarv4({
                 name="Fornavn"
                 id="firstName"
                 onChange={(event) => {
-                  setFirstName(event.target.value);
+                  if (personNameRegex.test(event.target.value))
+                    setFirstName(event.target.value);
                 }}
                 onKeyDown={handleEnterKeyPress}
                 value={firstName}
@@ -263,7 +265,8 @@ export default function Sidebarv4({
                 name="Etternavn"
                 id="lastName"
                 onChange={(event) => {
-                  setLastName(event.target.value);
+                  if (personNameRegex.test(event.target.value))
+                    setLastName(event.target.value);
                 }}
                 onKeyDown={handleEnterKeyPress}
                 value={lastName}

@@ -1,0 +1,1 @@
+export const personNameRegex = /^$|^[A-Za-zÀ-ÿ\s]+$/;
