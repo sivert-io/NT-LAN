@@ -133,7 +133,24 @@ function updateSeatByDate(
 
   try {
     db.reserveSeats(getANumber(socket.id), body).then(() => {
-      fetcDathabase();
+      if (
+        seatsMappedByAnumber[getANumber(socket.id)][0].seatNumber ===
+        newSeatData.id
+      ) {
+        console.log(
+          "Updating user with new info",
+          getANumber(socket.id),
+          newSeatData.personName
+        );
+
+        db.updateEmployeeInfo(
+          getANumber(socket.id),
+          newSeatData.personName?.firstName || "",
+          newSeatData.personName?.lastName || ""
+        ).then(() => {
+          fetcDathabase();
+        });
+      }
     });
   } catch (error) {
     console.log("failed to update seat");
@@ -259,19 +276,6 @@ io.on("connection", (socket: Socket) => {
     (newSeatInformation: ReserveSeat, reservedBy: ReservedBy) => {
       const aNumber = getANumber(socket.id);
       if (aNumber) {
-        if (
-          seatsMappedByAnumber[aNumber] === undefined
-          || seatsMappedByAnumber[aNumber][0].seatNumber === newSeatInformation.id
-        ) {
-          console.log('Updating user with new info', aNumber, newSeatInformation.personName);
-          
-          db.updateEmployeeInfo(
-            aNumber,
-            newSeatInformation.personName?.firstName || "",
-            newSeatInformation.personName?.lastName || ""
-          );
-        }
-
         updateSeatByDate(newSeatInformation, reservedBy, socket);
 
         socket.emit(
