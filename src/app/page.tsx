@@ -28,17 +28,7 @@ export default function Home() {
       {connectionError !== "" && (
         <ConnecitonError connectionError={connectionError} />
       )}
-      {aNumber !== "" && (
-        <>
-          <div className="fixed top-0 left-0 p-28 grid items-center justify-center select-none">
-            <p className="uppercase text-xl text-[#D8D6DB]">Scene</p>
-          </div>
-          <div className="fixed bottom-0 left-0 p-28 grid items-center justify-center select-none">
-            <p className="uppercase text-xl text-[#D8D6DB]">Kantine</p>
-          </div>
-          <SeatingV3 aNumber={aNumber} />
-        </>
-      )}
+      {aNumber !== "" && <SeatingV3 aNumber={aNumber} />}
 
       {aNumber === "" && <ANumberModal setaNumber={setaNumber} />}
     </main>

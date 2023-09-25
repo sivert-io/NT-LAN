@@ -185,7 +185,15 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         />
       </div>
       <div className="flex gap-12">
-        <div className="flex flex-col gap-10 px-4 overflow-auto">
+        <div className="flex flex-col gap-10 px-4 overflow-visible relative">
+          <div className="absolute -top-12 -left-32 grid items-center justify-center select-none">
+            <p className="uppercase text-xl font-bold text-[#D8D6DB]">Scene</p>
+          </div>
+          <div className="absolute -bottom-24 -left-32 grid items-center justify-center select-none">
+            <p className="uppercase text-xl font-bold text-[#D8D6DB]">
+              Kantine
+            </p>
+          </div>
           {Array.from({
             length: Math.ceil(seatsToDisplay.length / (numCols * 2)),
           }).map((_, groupIndex) => (
