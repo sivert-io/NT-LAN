@@ -1,1 +1,1 @@
-export const personNameRegex = /^$|^[A-Za-zÀ-ÿ\s]+$/;
+export const personNameRegex = /^$|^[A-Za-zÀ-ÿ\s-]+$/;
