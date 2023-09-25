@@ -222,7 +222,7 @@ export default function Sidebarv4({
   }, [timer, setSelectedSeat]);
 
   return (
-    <div className="bg-zinc-700 overflow-hidden select-none w-[300px] shrink-0 relative min-h-[534px] max-h-[660px] transition-all shadow rounded-2xl p-6 flex flex-col gap-4">
+    <div className="bg-zinc-700 overflow-hidden select-none w-[300px] shrink-0 relative min-h-[534px] max-h-[672px] transition-all shadow rounded-2xl p-6 flex flex-col gap-4">
       {showFeedback && selectedSeat === undefined && (
         <Feedback
           closeFunction={() => {
