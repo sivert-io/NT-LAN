@@ -139,9 +139,7 @@ function updateSeatByDate(
 
         if (seatsMappedByAnumber[getANumber(socket.id)] !== undefined) {
           const firstSeat = seatsMappedByAnumber[getANumber(socket.id)][0];
-          if (
-            firstSeat.seatNumber === newSeatData.id
-          ) {
+          if (firstSeat.seatNumber === newSeatData.id) {
             console.log(
               "Updating user with new info",
               getANumber(socket.id),
@@ -152,7 +150,9 @@ function updateSeatByDate(
               getANumber(socket.id),
               newSeatData.personName?.firstName || "",
               newSeatData.personName?.lastName || ""
-            );
+            ).then(() => {
+              fetcDathabase();
+            });
           }
         }
       });
@@ -281,8 +281,14 @@ io.on("connection", (socket: Socket) => {
     (newSeatInformation: ReserveSeat, reservedBy: ReservedBy) => {
       const aNumber = getANumber(socket.id);
       if (aNumber) {
-        console.log(aNumber, 'updated seat', newSeatInformation.id, 'with', newSeatInformation);
-        
+        console.log(
+          aNumber,
+          "updated seat",
+          newSeatInformation.id,
+          "with",
+          newSeatInformation
+        );
+
         updateSeatByDate(newSeatInformation, reservedBy, socket);
 
         socket.emit(
