@@ -468,7 +468,7 @@ export default function Sidebarv4({
                             : person.firstName
                         }
                         seatNumber={person.seatNumber}
-                        key={`${person.firstName} ${person.lastName} ${person.reservationDate}`}
+                        key={`${person.seatNumber} ${person.firstName} ${person.lastName} ${person.reservationDate}`}
                         editSeat={(seatNumber) => {
                           updateMapFilter(seatNumber, person);
                         }}

@@ -69,12 +69,12 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     }
 
     socket.on("hereAreYourRegisteredSeats", (seats: RegisterFieldsType[]) => {
-      // console.log("Server sent us our owned seats:", seats);
+      console.log("Server sent us our owned seats:", seats);
       !!seats ? setMyRegisteredSeats(seats) : setMyRegisteredSeats([]);
     });
 
     socket.on("hereAreAllRegisteredSeats", (seats: mappedSeats) => {
-      // console.log("Server sent us seats mapped by seatId:", seats);
+      console.log("Server sent us seats mapped by seatId:", seats);
       setseatsMappedBySeatId(seats);
     });
 
