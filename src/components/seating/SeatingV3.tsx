@@ -184,7 +184,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           updateFilteredDay={updateFilteredDay}
         />
       </div>
-      <div className="flex gap-12 relative">
+      <div className="flex gap-12">
         <div className="flex flex-col gap-10 px-4 overflow-auto">
           {Array.from({
             length: Math.ceil(seatsToDisplay.length / (numCols * 2)),

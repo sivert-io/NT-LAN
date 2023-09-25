@@ -26,7 +26,7 @@ export default function ANumberModal({
   };
 
   return (
-    <div className="flex flex-col gap-8 items-center justify-center">
+    <div className="flex flex-col gap-8 items-center justify-center fixed top-0 bottom-0 left-0 right-0">
       <Title />
       <div className="px-20 py-10 rounded-2xl bg-[#423E49] w-[562px] flex flex-col gap-6">
         <label htmlFor="A-nummer" className="flex flex-col gap-1 font-medium">
