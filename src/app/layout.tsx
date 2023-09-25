@@ -21,7 +21,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="NT.svg" />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={`py-12 2xl:py-0 ${inter.className}`}>{children}</body>
     </html>
   );
 }

@@ -24,7 +24,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex h-screen w-screen flex-col items-center justify-center overflow-x-hidden">
+    <main className="flex min-h-screen pb-12 w-full flex-col items-center justify-center">
       {connectionError !== "" && (
         <ConnecitonError connectionError={connectionError} />
       )}
