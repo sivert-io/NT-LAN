@@ -89,7 +89,7 @@ export default function SeatV2({
                 isSelected || isYours ? "opacity-100" : "opacity-75"
               }`}
             >
-              {id + 1}
+              {id}
             </p>
           </span>
         )}
@@ -141,7 +141,7 @@ export default function SeatV2({
             isSelected || isYours ? "opacity-100" : "opacity-75"
           }`}
         >
-          {id + 1}
+          {id}
         </p>
       </button>
     </>

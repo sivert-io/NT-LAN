@@ -10,7 +10,7 @@ import SeatV2 from "./SeatV2";
 import { days, daysAttending } from "../sidebar/props";
 import { LAN_DATES } from "@/server/config";
 import Sidebarv4 from "../sidebar/SidebarV4";
-import { ReserveSeat, ReservedSeat } from "@/server/api-client";
+import { ReserveSeat } from "@/server/api-client";
 
 const numCols = 5;
 
@@ -112,14 +112,15 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
       let newSeats = generateSeats(numCols);
 
       seatsMappedByDay?.forEach((seat) => {
+        const seatId = seat.seatNumber - 1;
         if (daySelected.includes(seat.reservationDate)) {
           if (
-            newSeats[seat.seatNumber].firstName === "" ||
-            (newSeats[seat.seatNumber].firstName === seat.firstName &&
-              newSeats[seat.seatNumber].lastName === seat.lastName)
+            newSeats[seatId].firstName === "" ||
+            (newSeats[seatId].firstName === seat.firstName &&
+              newSeats[seatId].lastName === seat.lastName)
           )
-            newSeats[seat.seatNumber] = {
-              ...newSeats[seat.seatNumber],
+            newSeats[seatId] = {
+              ...newSeats[seatId],
               ...seat,
               id: seat.seatNumber,
               isYours:
@@ -130,8 +131,8 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
                 ) !== -1,
             };
           else
-            newSeats[seat.seatNumber] = {
-              ...newSeats[seat.seatNumber],
+            newSeats[seatId] = {
+              ...newSeats[seatId],
               ...seat,
               id: seat.seatNumber,
               firstName: "(...)",
@@ -191,7 +192,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
             <div key={groupIndex} className="grid grid-cols-5 gap-3">
               {seatsToDisplay
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
-                .map((seat) => {
+                .map((seat, index) => {
                   return (
                     <SeatV2
                       isDisabled={
@@ -223,7 +224,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
                             : seat.id
                         );
                       }}
-                      key={seat.id}
+                      key={index}
                       isSelected={seatSelected === seat.id}
                     />
                   );

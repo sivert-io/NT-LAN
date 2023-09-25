@@ -19,7 +19,7 @@ export default function SeatListItem({
   return (
     <div className="flex text-[#242127] whitespace-nowrap text-xs gap-2 w-full items-center justify-center font-bold">
       <p className="p-2 w-16 shrink-0 bg-[#D7AAFF] rounded">
-        Plass {seatNumber + 1}
+        Plass {seatNumber}
       </p>
       <p className="p-2 truncate w-full bg-[#D7AAFF] rounded capitalize">
         {firstName}

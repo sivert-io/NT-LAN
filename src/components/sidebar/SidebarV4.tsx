@@ -249,7 +249,7 @@ export default function Sidebarv4({
                 )}
               </h2>
               <p className="px-2 py-1 text-xs flex items-center justify-center h-6 whitespace-nowrap font-bold rounded-sm bg-[#91FFC3] text-black">
-                Plass {selectedSeat + 1}
+                Plass {selectedSeat}
               </p>
             </div>
             <div className="flex flex-col gap-4 w-full">

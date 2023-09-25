@@ -13,7 +13,7 @@ export function generateSeats(numCols: number) {
     }
 
     seatsList.push({
-      id: index,
+      id: index + 1,
       col,
       row,
       firstName: "",
