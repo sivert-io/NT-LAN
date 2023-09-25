@@ -81,7 +81,7 @@ export default function Sidebarv4({
   }
 
   function savePerson() {
-    if (selectedSeat) updateRegisteredPeople();
+    if (selectedSeat !== undefined) updateRegisteredPeople();
     resetSidebar();
     setSelectedSeat(undefined);
     setFilteredDays(LAN_DATES);
