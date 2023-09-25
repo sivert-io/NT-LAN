@@ -448,7 +448,7 @@ export default function Sidebarv4({
           </div>
         </div>
       ) : sidebarPeople.length > 0 ? (
-        <div className="flex flex-col justify-between h-full">
+        <div className="flex flex-col justify-between h-full gap-6">
           <div className="flex flex-col gap-6">
             <h2 className="font-bold text-2xl flex justify-between items-center">
               {sidebarPeople.length === 1 ? <>Din plass</> : <>Dine plasser</>}
@@ -490,18 +490,18 @@ export default function Sidebarv4({
                 Trykk på kartet for å velge en plass til gjesten din ✨
               </p>
             </div>
-          ) : (
-            <div
-              className={`flex flex-col justify-end gap-2 transition-transform duration-500 ${
-                showFeedback ? "translate-y-[200%]" : "translate-y0"
-              }`}
-            >
-              <p className="font-bold text-sm">Vil du endre plass? ✨</p>
-              <p className="text-sm font-medium">
-                Du kan endre plass med drag’n’drop
-              </p>
-            </div>
-          )}
+          ) : null
+          // <div
+          //   className={`flex flex-col justify-end gap-2 transition-transform duration-500 ${
+          //     showFeedback ? "translate-y-[200%]" : "translate-y0"
+          //   }`}
+          // >
+          //   <p className="font-bold text-sm">Vil du endre plass? ✨</p>
+          //   <p className="text-sm font-medium">
+          //     Du kan endre plass med drag’n’drop
+          //   </p>
+          // </div>
+          }
         </div>
       ) : (
         <div className="flex flex-col justify-between h-full">
