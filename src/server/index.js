@@ -95,7 +95,7 @@ function mapSeatsData(reservedSeats) {
         socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber]);
     });
 }
-function updateSeatByDate(newSeatData, reservedBy, socket) {
+function updateSeatByDate(newSeatData, reservedBy, socket, shouldUpdateYou) {
     // UPDATE DATABASE
     var body = {
         reservedBy: reservedBy,
@@ -108,8 +108,7 @@ function updateSeatByDate(newSeatData, reservedBy, socket) {
                 cachedAPIData = reservedSeats;
                 mapSeatsData(reservedSeats);
                 if (seatsMappedByAnumber[getANumber(socket.id)] !== undefined) {
-                    var firstSeat = seatsMappedByAnumber[getANumber(socket.id)][0];
-                    if (firstSeat.seatNumber === newSeatData.id) {
+                    if (shouldUpdateYou) {
                         console.log("Updating user with new info", getANumber(socket.id), newSeatData.personName);
                         db.updateEmployeeInfo(getANumber(socket.id), ((_a = newSeatData.personName) === null || _a === void 0 ? void 0 : _a.firstName) || "", ((_b = newSeatData.personName) === null || _b === void 0 ? void 0 : _b.lastName) || "").then(function () {
                             fetcDathabase();
@@ -211,11 +210,11 @@ io.on("connection", function (socket) {
         socket.emit("hereAreAllRegisteredSeats", seatsMappedBySeatId);
     });
     // User has updated a seat
-    socket.on("iHaveUpdatedASeat", function (newSeatInformation, reservedBy) {
+    socket.on("iHaveUpdatedASeat", function (newSeatInformation, reservedBy, shouldUpdateYou) {
         var aNumber = getANumber(socket.id);
         if (aNumber) {
             console.log(aNumber, "updated seat", newSeatInformation.id, "with", newSeatInformation);
-            updateSeatByDate(newSeatInformation, reservedBy, socket);
+            updateSeatByDate(newSeatInformation, reservedBy, socket, shouldUpdateYou);
             socket.emit("hereAreYourRegisteredSeats", seatsMappedByAnumber[aNumber]);
         }
     });

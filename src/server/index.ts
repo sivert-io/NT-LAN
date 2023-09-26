@@ -123,7 +123,8 @@ function mapSeatsData(reservedSeats: ReservationData) {
 function updateSeatByDate(
   newSeatData: ReserveSeat,
   reservedBy: any,
-  socket: Socket
+  socket: Socket,
+  shouldUpdateYou: boolean,
 ) {
   // UPDATE DATABASE
   const body: ReserveSeats = {
@@ -138,8 +139,7 @@ function updateSeatByDate(
         mapSeatsData(reservedSeats);
 
         if (seatsMappedByAnumber[getANumber(socket.id)] !== undefined) {
-          const firstSeat = seatsMappedByAnumber[getANumber(socket.id)][0];
-          if (firstSeat.seatNumber === newSeatData.id) {
+          if (shouldUpdateYou) {
             console.log(
               "Updating user with new info",
               getANumber(socket.id),
@@ -278,7 +278,7 @@ io.on("connection", (socket: Socket) => {
   // User has updated a seat
   socket.on(
     "iHaveUpdatedASeat",
-    (newSeatInformation: ReserveSeat, reservedBy: ReservedBy) => {
+    (newSeatInformation: ReserveSeat, reservedBy: ReservedBy, shouldUpdateYou: boolean) => {
       const aNumber = getANumber(socket.id);
       if (aNumber) {
         console.log(
@@ -289,7 +289,7 @@ io.on("connection", (socket: Socket) => {
           newSeatInformation
         );
 
-        updateSeatByDate(newSeatInformation, reservedBy, socket);
+        updateSeatByDate(newSeatInformation, reservedBy, socket, shouldUpdateYou);
 
         socket.emit(
           "hereAreYourRegisteredSeats",

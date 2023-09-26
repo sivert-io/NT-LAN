@@ -25,6 +25,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   // Sidebar usestates
   const [sidebar_firstName, sidebar_setFirstName] = useState("");
   const [sidebar_lastName, sidebar_setLastName] = useState("");
+  const [sidebar_isYou, sidebar_setIsYou] = useState(false);
   const [sidebar_daysAttending, sidebar_setDaysAttending] =
     useState<daysAttending>({
       fredag: false,
@@ -243,6 +244,8 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         <div className="flex flex-col gap-12">
           <Legend seatAmnt={getSidebarAmount()} />
           <Sidebarv4
+            isYou={sidebar_isYou}
+            setIsYou={sidebar_setIsYou}
             seatsMappedBySeatId={seatsMappedBySeatId}
             filteredDays={daySelected}
             setFilteredDays={setdaySelected}
@@ -258,7 +261,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
               socket.emit("iHaveDeletedASeat", seatNumber, firstName);
             }}
             myRegisteredSeats={myRegisteredSeats}
-            saveSeat={() => {
+            saveSeat={(shouldUpdateYou: boolean) => {
               if (seatSelected !== undefined) {
                 const dates: typeof LAN_DATES = [];
                 Object.keys(sidebar_daysAttending).forEach((d, index) => {
@@ -270,22 +273,28 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
                   firstName: sidebar_firstName,
                   lastName: sidebar_lastName,
                 };
+
                 const newSeat: ReserveSeat = {
                   id: seatSelected,
                   personName,
                   reservationDates: dates,
                 };
 
-                socket.emit("iHaveUpdatedASeat", newSeat, {
-                  employeeId: aNumber,
-                  personName:
-                    myRegisteredSeats.length !== 0
-                      ? {
-                          firstName: myRegisteredSeats[0].firstName,
-                          lastName: myRegisteredSeats[0].lastName,
-                        }
-                      : personName,
-                });
+                socket.emit(
+                  "iHaveUpdatedASeat",
+                  newSeat,
+                  {
+                    employeeId: aNumber,
+                    personName:
+                      myRegisteredSeats.length !== 0
+                        ? {
+                            firstName: myRegisteredSeats[0].firstName,
+                            lastName: myRegisteredSeats[0].lastName,
+                          }
+                        : personName,
+                  },
+                  shouldUpdateYou
+                );
               }
             }}
             seatSelected={seatSelected}

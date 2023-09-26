@@ -9,6 +9,7 @@ import { formatRegisteredDates, generateUniqueTitles } from "@/utils/sidebar";
 import { Feedback } from "../feedback/feedback";
 import { socket } from "@/utils/socket";
 import { personNameRegex } from "@/utils/regex";
+import Toggle from "../input/toggle";
 
 export default function Sidebarv4({
   myRegisteredSeats: registeredPeople,
@@ -20,15 +21,14 @@ export default function Sidebarv4({
   sidebar_lastName: lastName,
   sidebar_setLastName: setLastName,
   deleteSeat: deletePerson,
-  sidebar_seatBeingEdited: isEditing,
-  sidebar_setSeatBeingEdited: setisEditing,
-  seatEditing,
   sidebar_daysAttending: daysAttending,
   sidebar_setDaysAttending: setDaysAttending,
   sidebar_updateDay: updateDay,
   setFilteredDays,
   filteredDays,
   seatsMappedBySeatId,
+  isYou,
+  setIsYou,
 }: SidebarV3Props) {
   const [timer, setTimer] = useState<number | null>(null);
   const timerDuration = 120; // 2 minutes in seconds
@@ -42,6 +42,12 @@ export default function Sidebarv4({
 
   const [showFeedback, setshowFeedback] = useState(false);
   const [feedbackGiven, setfeedbackGiven] = useState(false);
+
+  const isThisMe =
+    registeredPeople.length !== 0 &&
+    registeredPeople[
+      registeredPeople.findIndex((p) => p.seatNumber === selectedSeat)
+    ]?.isYou;
 
   function atLeastOneDay(dayVariable: daysAttending) {
     return dayVariable.fredag || dayVariable.lordag || dayVariable.sondag;
@@ -75,15 +81,13 @@ export default function Sidebarv4({
   function resetSidebar() {
     setFirstName("");
     setLastName("");
+    setIsYou(false);
     setDaysAttending({ fredag: false, lordag: false, sondag: false });
-    setisEditing(undefined);
     sethasSelectedOwn(false);
   }
 
   function savePerson() {
-    console.log("updating seat");
-
-    if (selectedSeat !== undefined) updateRegisteredPeople();
+    if (selectedSeat !== undefined) updateRegisteredPeople(isYou);
     resetSidebar();
     setSelectedSeat(undefined);
     setFilteredDays(LAN_DATES);
@@ -144,6 +148,7 @@ export default function Sidebarv4({
         setFirstName(registeredPeople[isRegistered].firstName);
       registeredPeople[isRegistered].lastName !== "" &&
         setLastName(registeredPeople[isRegistered].lastName);
+      setIsYou(registeredPeople[isRegistered]?.isYou || false);
       const l = daysAttending;
       const dates: string[] = [];
       registeredPeople.forEach((seatRegisteredByUs) => {
@@ -181,13 +186,12 @@ export default function Sidebarv4({
     }
 
     if (!selectedSeat) resetSidebar();
-  }, [isEditing, registeredPeople, selectedSeat, setFirstName, setLastName]);
+  }, [registeredPeople, selectedSeat, setFirstName, setLastName]);
 
   useEffect(() => {
     // Start the timer when selectedSeat changes
     if (
       selectedSeat !== undefined &&
-      !isEditing &&
       sidebarPeople.findIndex(
         (person) => person.seatNumber === selectedSeat
       ) === -1
@@ -205,7 +209,6 @@ export default function Sidebarv4({
       };
     }
   }, [
-    isEditing,
     selectedSeat,
     setTimer,
     firstName,
@@ -239,14 +242,7 @@ export default function Sidebarv4({
           <div className="flex flex-col items-center gap-8">
             <div className="flex justify-between items-center w-full">
               <h2 className="font-bold flex justify-between items-center">
-                {sidebarPeople.length === 0 ||
-                (sidebarPeople[0].firstName === firstName &&
-                  sidebarPeople[0].lastName === lastName) ||
-                (isEditing && sidebarPeople.length === 1) ? (
-                  <>Hvem er du?</>
-                ) : (
-                  <>Hvem er gjesten din?</>
-                )}
+                Hvem er {isThisMe ? <>du?</> : <>gjesten din?</>}
               </h2>
               <p className="px-2 py-1 text-xs flex items-center justify-center h-6 whitespace-nowrap font-bold rounded-sm bg-[#91FFC3] text-black">
                 Plass {selectedSeat}
@@ -277,16 +273,7 @@ export default function Sidebarv4({
             <div className="flex flex-col gap-4">
               <div className="flex flex-col w-full gap-4">
                 <p className="text-sm font-bold">
-                  Hvilke dager skal{" "}
-                  {sidebarPeople.length === 0 ||
-                  (sidebarPeople[0].firstName === firstName &&
-                    sidebarPeople[0].lastName === lastName) ||
-                  (isEditing && sidebarPeople.length === 1) ? (
-                    <>du</>
-                  ) : (
-                    <>de</>
-                  )}{" "}
-                  delta?
+                  Hvilke dager skal {isThisMe ? <>du</> : <>de</>} delta?
                 </p>
               </div>
               <div className="flex flex-col gap-2 items-end">
@@ -395,6 +382,17 @@ export default function Sidebarv4({
                 </Button>
               </div>
             </div>
+            {!registeredPeople[
+              registeredPeople.findIndex((p) => p.seatNumber === selectedSeat)
+            ]?.isYou && (
+              <button
+                className="flex gap-2 w-full cursor-pointer"
+                onClick={() => setIsYou(!isYou)}
+              >
+                <Toggle checked={isYou} />
+                Dette er meg
+              </button>
+            )}
           </div>
           <div className="flex flex-col gap-6">
             <button
@@ -406,11 +404,7 @@ export default function Sidebarv4({
               }
               className="py-3 px-5 flex justify-center items-center bg-[#FFCF3F] rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isEditing && seatEditing !== selectedSeat ? (
-                <>Flytt</>
-              ) : (
-                <>Lagre</>
-              )}
+              Lagre
             </button>
             {sidebarPeople.some(
               (p) => p.seatNumber === selectedSeat && p.firstName === firstName

@@ -79,7 +79,7 @@ export default function SeatV2({
               top: mousePosition.y - offset.y + "px",
               cursor: "grabbing",
             }}
-            className={`fixed z-10 flex items-center justify-center select-none capitalize truncate whitespace-nowrap 2xl:px-4 text-sm 2xl:text-lg font-medium rounded-lg
+            className={`fixed z-10 flex items-center justify-center select-none capitalize truncate whitespace-nowrap 2xl:px-4 font-medium rounded-lg
             bg-[#91FFC3] text-gray-900
           `}
           >

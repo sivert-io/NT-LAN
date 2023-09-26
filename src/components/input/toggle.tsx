@@ -5,7 +5,7 @@ export default function Toggle({
   onClick,
 }: {
   checked: boolean;
-  onClick: () => any;
+  onClick?: () => any;
 }) {
   return (
     <label className="inline-flex relative items-center cursor-pointer">
