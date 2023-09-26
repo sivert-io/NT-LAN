@@ -201,10 +201,10 @@ export default function Home() {
       name: ["Fredag", "Lørdag", "Søndag"][index],
       Gjester: allSeats.reservedSeats.filter(
         (seat) =>
-          seat.personName.firstName.toUpperCase() !==
-            seat.reservedBy.personName.firstName.toUpperCase() &&
-          seat.personName.lastName.toUpperCase() !==
-            seat.reservedBy.personName.lastName.toUpperCase() &&
+          (seat.personName.firstName.toUpperCase() !==
+            seat.reservedBy.personName.firstName.toUpperCase() ||
+            seat.personName.lastName.toUpperCase() !==
+              seat.reservedBy.personName.lastName.toUpperCase()) &&
           seat.reservationDate === date
       ).length,
       Ansatte: allSeats.reservedSeats.filter(
