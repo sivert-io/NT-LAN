@@ -64,8 +64,8 @@ export default function Sidebarv4({
   const handleEnterKeyPress = (event: any) => {
     if (event.key === "Enter") {
       if (
-        firstName.length >= 2 &&
-        lastName.length >= 2 &&
+        firstName.length >= 1 &&
+        lastName.length >= 1 &&
         atLeastOneDay(daysAttending)
       )
         savePerson();
@@ -400,8 +400,8 @@ export default function Sidebarv4({
             <button
               onClick={savePerson}
               disabled={
-                firstName.length <= 2 ||
-                lastName.length <= 2 ||
+                firstName.length <= 1 ||
+                lastName.length <= 1 ||
                 !atLeastOneDay(daysAttending)
               }
               className="py-3 px-5 flex justify-center items-center bg-[#FFCF3F] rounded-3xl font-bold text-gray-900 active:scale-95 transition-all duration-[50ms] disabled:opacity-50 disabled:cursor-not-allowed"
