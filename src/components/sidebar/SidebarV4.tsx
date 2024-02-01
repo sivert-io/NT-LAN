@@ -124,8 +124,9 @@ export default function Sidebarv4({
   }, [registeredPeople]);
 
   useEffect(() => {
-    if (sidebarPeople.length > 1 && !feedbackGiven) setshowFeedback(true);
+    if (sidebarPeople.length > 0 && !feedbackGiven) setshowFeedback(true);
     else setshowFeedback(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sidebarPeople]);
 
   useEffect(() => {
@@ -134,6 +135,7 @@ export default function Sidebarv4({
       if (daysAttending[day as days]) days.push(LAN_DATES[index]);
     });
     if (days.length > 0) setFilteredDays(days);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daysAttending, selectedSeat]);
 
   useEffect(() => {
@@ -186,6 +188,7 @@ export default function Sidebarv4({
     }
 
     if (!selectedSeat) resetSidebar();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registeredPeople, selectedSeat, setFirstName, setLastName]);
 
   useEffect(() => {
@@ -208,14 +211,8 @@ export default function Sidebarv4({
         setTimer(null);
       };
     }
-  }, [
-    selectedSeat,
-    setTimer,
-    firstName,
-    lastName,
-    daysAttending,
-    registeredPeople,
-  ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSeat, setTimer, firstName, lastName, daysAttending, registeredPeople]);
 
   useEffect(() => {
     // When the timer goes off, set selectedSeat to undefined

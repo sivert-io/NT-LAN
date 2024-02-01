@@ -100,7 +100,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
       socket.off("hereAreAllHeldSeats");
       socket.off("hereAreSeatsForDate");
     };
-  }, [aNumber, myRegisteredSeats.length, seatSelected]);
+  }, [aNumber, hasArrived, myRegisteredSeats.length, seatSelected]);
 
   // When selected seat updates
   useEffect(() => {
@@ -136,7 +136,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
               ...newSeats[seatId],
               ...seat,
               id: seat.seatNumber,
-              firstName: "(...)",
+              firstName: "Flere personer",
               isYours: false,
             };
         }
