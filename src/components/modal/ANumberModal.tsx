@@ -1,6 +1,7 @@
 import Title from "@/components/title/Title";
 import Input from "../input/Input";
 import { useState } from "react";
+import { aNumberRegex, verifyANumberRegex } from "@/utils/regex";
 
 export default function ANumberModal({
   setaNumber,
@@ -8,20 +9,19 @@ export default function ANumberModal({
   setaNumber: (newValue: string) => any;
 }) {
   const [tempANumber, settempANumber] = useState("");
-  const verifyRegex = /^[aAkK]\d{5}$/;
 
   function onChange(event: any) {
     const input = event.target.value;
-    const regex = /^[aAkK]\d{0,5}$/;
 
-    if (input === "" || regex.test(input)) {
+    if (input === "" || aNumberRegex.test(input)) {
       settempANumber(input);
     }
   }
 
   const handleEnterKeyPress = (event: any) => {
     if (event.key === "Enter") {
-      if (verifyRegex.test(tempANumber)) setaNumber(tempANumber.toLowerCase());
+      if (verifyANumberRegex.test(tempANumber))
+        setaNumber(tempANumber.toLowerCase());
     }
   };
 
@@ -49,9 +49,9 @@ export default function ANumberModal({
         </label>
         <div className="flex justify-end items-center">
           <button
-            disabled={!verifyRegex.test(tempANumber)}
+            disabled={!verifyANumberRegex.test(tempANumber)}
             onClick={() => {
-              if (verifyRegex.test(tempANumber))
+              if (verifyANumberRegex.test(tempANumber))
                 setaNumber(tempANumber.toLowerCase());
             }}
             className="rounded-3xl px-5 py-3 bg-[#91FFC3] text-[#242127] active:scale-95 transition-all duration-[50ms] disabled:bg-[#D8D6DB] disabled:text-[#6D6973] disabled:cursor-not-allowed"
