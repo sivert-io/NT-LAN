@@ -239,7 +239,7 @@ export default function Sidebarv4({
           <div className="flex flex-col items-center gap-8">
             <div className="flex justify-between items-center w-full">
               <h2 className="font-bold flex justify-between items-center">
-                Hvem er {isThisMe ? <>du?</> : <>gjesten din?</>}
+                Hvem skal sitte her?
               </h2>
               <p className="px-2 py-1 text-xs flex items-center justify-center h-6 whitespace-nowrap font-bold rounded-sm bg-[#91FFC3] text-black">
                 Plass {selectedSeat}
@@ -477,26 +477,6 @@ export default function Sidebarv4({
               </div>
             ))}
           </div>
-          {
-            sidebarPeople.length === 1 ? (
-              <div className="flex flex-col justify-end gap-2">
-                <p className="font-bold text-sm">Skal du ha med deg noen?</p>
-                <p className="text-sm font-medium">
-                  Trykk på kartet for å velge en plass til gjesten din ✨
-                </p>
-              </div>
-            ) : null
-            // <div
-            //   className={`flex flex-col justify-end gap-2 transition-transform duration-500 ${
-            //     showFeedback ? "translate-y-[200%]" : "translate-y0"
-            //   }`}
-            // >
-            //   <p className="font-bold text-sm">Vil du endre plass? ✨</p>
-            //   <p className="text-sm font-medium">
-            //     Du kan endre plass med drag’n’drop
-            //   </p>
-            // </div>
-          }
         </div>
       ) : (
         <div className="flex flex-col justify-between h-full">
@@ -509,13 +489,13 @@ export default function Sidebarv4({
               Trykk på en plass for å komme i gang 😁
             </p>
           </div>
-          <div className="flex flex-col gap-1">
+          {/* <div className="flex flex-col gap-1">
             <h3 className="font-bold text-sm">Skal du ha med deg noen?</h3>
             <p className="text-sm font-medium">
               Velg din egen plass først, deretter kan du velge en plass til
               gjesten din ✨
             </p>
-          </div>
+          </div> */}
         </div>
       )}
       {timer && timer <= 60 && (
