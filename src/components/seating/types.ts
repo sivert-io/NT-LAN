@@ -6,4 +6,5 @@ export type SeatType = {
     lastName?: string,
     isYours: boolean,
     reservationDate: string;
+    disabled: boolean;
 }

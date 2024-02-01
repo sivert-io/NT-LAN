@@ -1,21 +1,27 @@
 import { RegisterFieldsType } from "@/components/register/types";
 import { SeatType } from "@/components/seating/types";
 
-export function generateSeats(numCols: number) {
+export function generateSeats(numCols: number, numTotalSeats: number) {
   let seatsList: SeatType[] = [];
   let row = 0;
   let col = 0;
+  let count = 0;
 
-  for (let index = 0; index < 60; index++) {
+  for (let index = 0; index < numTotalSeats; index++) {
     if (col >= numCols) {
       col = 0;
       row++;
     }
 
+    const isDisabled = (col === 0 || col === 1) && (row === 0 || row === 1);
+    if (!isDisabled)
+      count += 1;
+
     seatsList.push({
-      id: index + 1,
+      id: count,
       col,
       row,
+      disabled: isDisabled,
       firstName: "",
       lastName: "",
       reservationDate: "",

@@ -13,6 +13,7 @@ import Sidebarv4 from "../sidebar/SidebarV4";
 import { ReserveSeat } from "@/server/api-client";
 
 const numCols = 5;
+const numTotalSeats = 90;
 
 export default function SeatingV3({ aNumber }: { aNumber: string }) {
   // NEW
@@ -57,7 +58,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   );
 
   // The seats we display to the user
-  const [seatsToDisplay, setseatsToDisplay] = useState(generateSeats(numCols));
+  const [seatsToDisplay, setseatsToDisplay] = useState(generateSeats(numCols, numTotalSeats));
 
   // All held seats
   const [seatsThatAreHeld, setseatsThatAreHeld] = useState<number[]>([]);
@@ -110,7 +111,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   // When Seats are updated
   useEffect(() => {
     function mapSeatsFromDay() {
-      let newSeats = generateSeats(numCols);
+      let newSeats = generateSeats(numCols, numTotalSeats);
 
       seatsMappedByDay?.forEach((seat) => {
         const seatId = seat.seatNumber - 1;
@@ -187,7 +188,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
       </div>
       <div className="flex gap-12">
         <div className="flex flex-col gap-10 px-4 overflow-visible relative">
-          <div className="absolute -top-12 -left-24 grid items-center justify-center select-none">
+          <div className="absolute top-0 -left-24 grid items-center justify-center select-none">
             <p className="uppercase text-xl font-bold text-[#D8D6DB]">Scene</p>
           </div>
           <div className="absolute -bottom-12 -left-24 grid items-center justify-center select-none">
@@ -204,6 +205,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
                 .map((seat, index) => {
                   return (
                     <SeatV2
+                      isHidden={seat.disabled}
                       isDisabled={
                         (seat.isYours &&
                           !!sidebar_seatBeingEdited &&

@@ -12,6 +12,7 @@ export default function SeatV2({
   occupant,
   isDisabled,
   onHold,
+  isHidden
 }: SeatProps) {
   const [isDragging, setisDragging] = useState(false);
   const [startPosition, setstartPosition] = useState<mousePosition>({
@@ -65,7 +66,9 @@ export default function SeatV2({
   ]);
 
   return (
-    <>
+      isHidden?
+        <div />
+        : <>
       {isDragging &&
         mousePosition.x &&
         mousePosition.y &&

@@ -7,4 +7,5 @@ export type SeatProps = {
   isDisabled?: boolean;
   occupant: string;
   onHold: boolean;
+  isHidden: boolean;
 };
