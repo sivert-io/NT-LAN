@@ -105,6 +105,10 @@ function updateSeatByDate(newSeatData, reservedBy, socket, shouldUpdateYou) {
         db.reserveSeats(getANumber(socket.id), body).then(function () {
             db.getReservedSeats().then(function (reservedSeats) {
                 var _a, _b;
+                if (!reservedSeats) {
+                    console.log('No reserved seats!');
+                    return;
+                }
                 cachedAPIData = reservedSeats;
                 mapSeatsData(reservedSeats);
                 if (seatsMappedByAnumber[getANumber(socket.id)] !== undefined) {
@@ -136,6 +140,10 @@ function deleteSeats(aNumber, seatsToDelete) {
 function fetcDathabase() {
     // Map seats from API
     db.getReservedSeats().then(function (reservedSeats) {
+        if (!reservedSeats) {
+            console.log('No reserved seats!');
+            return;
+        }
         cachedAPIData = reservedSeats;
         mapSeatsData(reservedSeats);
     });

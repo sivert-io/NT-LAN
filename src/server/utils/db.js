@@ -67,7 +67,7 @@ var Database = /** @class */ (function () {
                         error_1 = _a.sent();
                         // Handle any errors here
                         console.error("Error fetching reserved seats:", error_1);
-                        throw error_1;
+                        return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -91,7 +91,7 @@ var Database = /** @class */ (function () {
                         error_2 = _a.sent();
                         // Handle any errors here
                         console.error("Error deleting reserved seat:", error_2);
-                        throw error_2;
+                        return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -112,7 +112,7 @@ var Database = /** @class */ (function () {
                         error_3 = _a.sent();
                         // Handle any errors here
                         console.error("Error sending feedback:", error_3);
-                        throw error_3;
+                        return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -133,7 +133,7 @@ var Database = /** @class */ (function () {
                         error_4 = _a.sent();
                         // Handle any errors here
                         console.error("Error getting feedback:", error_4);
-                        throw error_4;
+                        return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -154,7 +154,7 @@ var Database = /** @class */ (function () {
                         error_5 = _a.sent();
                         // Handle any errors here
                         console.error("Error getting feedback:", error_5);
-                        throw error_5;
+                        return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -175,7 +175,7 @@ var Database = /** @class */ (function () {
                         error_6 = _a.sent();
                         // Handle any errors here
                         console.error("Error updating employee:", error_6);
-                        throw error_6;
+                        return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -192,6 +192,10 @@ var Database = /** @class */ (function () {
                         return [4 /*yield*/, this.getReservedSeats()];
                     case 1:
                         allSeats_1 = _b.sent();
+                        if (!allSeats_1) {
+                            console.log('No seats returned!');
+                            return [2 /*return*/];
+                        }
                         seatsToDelete_1 = [];
                         (_a = reserveSeats.reserveSeats) === null || _a === void 0 ? void 0 : _a.forEach(function (seat) {
                             var _a;
@@ -223,7 +227,7 @@ var Database = /** @class */ (function () {
                         error_7 = _b.sent();
                         // Handle any errors here
                         console.error("Error reserving seats:", error_7);
-                        throw error_7;
+                        return [2 /*return*/, null];
                     case 5: return [2 /*return*/];
                 }
             });

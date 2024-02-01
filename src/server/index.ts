@@ -135,6 +135,12 @@ function updateSeatByDate(
   try {
     db.reserveSeats(getANumber(socket.id), body).then(() => {
       db.getReservedSeats().then((reservedSeats) => {
+        if (!reservedSeats)
+        {
+          console.log('No reserved seats!');
+          
+          return;
+          }
         cachedAPIData = reservedSeats;
         mapSeatsData(reservedSeats);
 
@@ -179,6 +185,12 @@ function deleteSeats(
 function fetcDathabase() {
   // Map seats from API
   db.getReservedSeats().then((reservedSeats) => {
+    if (!reservedSeats)
+    {
+      console.log('No reserved seats!');
+      
+      return;
+      }
     cachedAPIData = reservedSeats;
     mapSeatsData(reservedSeats);
   });

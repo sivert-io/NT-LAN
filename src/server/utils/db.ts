@@ -45,7 +45,7 @@ class Database {
     } catch (error) {
       // Handle any errors here
       console.error("Error fetching reserved seats:", error);
-      throw error;
+      return null;
     }
   }
 
@@ -63,7 +63,7 @@ class Database {
     } catch (error) {
       // Handle any errors here
       console.error("Error deleting reserved seat:", error);
-      throw error;
+      return null;
     }
   }
 
@@ -74,7 +74,7 @@ class Database {
     } catch (error) {
       // Handle any errors here
       console.error("Error sending feedback:", error);
-      throw error;
+      return null;
     }
   }
 
@@ -85,7 +85,7 @@ class Database {
     } catch (error) {
       // Handle any errors here
       console.error("Error getting feedback:", error);
-      throw error;
+      return null;
     }
   }
 
@@ -96,7 +96,7 @@ class Database {
     } catch (error) {
       // Handle any errors here
       console.error("Error getting feedback:", error);
-      throw error;
+      return null;
     }
   }
 
@@ -107,13 +107,19 @@ class Database {
     } catch (error) {
       // Handle any errors here
       console.error("Error updating employee:", error);
-      throw error;
+      return null;
     }
   }
 
   async reserveSeats(aNumber: string, reserveSeats: ReserveSeats) {
     try {
       const allSeats = await this.getReservedSeats();
+      if (!allSeats)
+      {
+        console.log('No seats returned!');
+        
+        return;
+        }
       const seatsToDelete: { id: number; reservationDate: string }[] = [];
       reserveSeats.reserveSeats?.forEach((seat) => {
         if (seat.id) {
@@ -143,7 +149,7 @@ class Database {
     } catch (error) {
       // Handle any errors here
       console.error("Error reserving seats:", error);
-      throw error;
+      return null;
     }
   }
 }
