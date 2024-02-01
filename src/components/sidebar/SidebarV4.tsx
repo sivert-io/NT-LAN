@@ -382,13 +382,16 @@ export default function Sidebarv4({
             {!registeredPeople[
               registeredPeople.findIndex((p) => p.seatNumber === selectedSeat)
             ]?.isYou && (
-              <button
-                className="flex gap-2 w-full cursor-pointer"
+              <div className="flex gap-2 w-full cursor-pointer">
+                <Toggle
                 onClick={() => setIsYou(!isYou)}
-              >
-                <Toggle checked={isYou} />
+                checked={isYou} />
+              <button
+                onClick={() => setIsYou(!isYou)}
+                >
                 Dette er meg
               </button>
+                </div>
             )}
           </div>
           <div className="flex flex-col gap-6">

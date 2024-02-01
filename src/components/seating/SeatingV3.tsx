@@ -112,9 +112,9 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   useEffect(() => {
     function mapSeatsFromDay() {
       let newSeats = generateSeats(numCols, numTotalSeats);
-
+      const numDisabledSeats = newSeats.filter((seat) => seat.disabled).length
       seatsMappedByDay?.forEach((seat) => {
-        const seatId = seat.seatNumber - 1;
+        const seatId = seat.seatNumber - 1 + numDisabledSeats;
         if (daySelected.includes(seat.reservationDate)) {
           if (
             newSeats[seatId].firstName === "" ||
