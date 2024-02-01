@@ -12,8 +12,9 @@ import { LAN_DATES } from "@/server/config";
 import Sidebarv4 from "../sidebar/SidebarV4";
 import { ReserveSeat } from "@/server/api-client";
 
-const numCols = 5;
-const numTotalSeats = 90;
+const numCols = 7;
+const gridClass = 'grid-cols-7';
+const numTotalSeats = 94;
 
 export default function SeatingV3({ aNumber }: { aNumber: string }) {
   // NEW
@@ -199,7 +200,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           {Array.from({
             length: Math.ceil(seatsToDisplay.length / (numCols * 2)),
           }).map((_, groupIndex) => (
-            <div key={groupIndex} className="grid grid-cols-5 gap-3">
+            <div key={groupIndex} className={`grid gap-3 ${gridClass}`}>
               {seatsToDisplay
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
                 .map((seat, index) => {

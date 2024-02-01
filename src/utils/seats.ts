@@ -6,8 +6,9 @@ export function generateSeats(numCols: number, numTotalSeats: number) {
   let row = 0;
   let col = 0;
   let count = 0;
+  const amountOfSeatsToDisable = 4;
 
-  for (let index = 0; index < numTotalSeats; index++) {
+  for (let index = 0; index < numTotalSeats + amountOfSeatsToDisable; index++) {
     if (col >= numCols) {
       col = 0;
       row++;
