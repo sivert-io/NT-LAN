@@ -14,7 +14,7 @@ import { ReserveSeat } from "@/server/api-client";
 
 const numCols = 7;
 const gridClass = 'grid-cols-7';
-const numTotalSeats = 94;
+const numTotalSeats = 98;
 
 export default function SeatingV3({ aNumber }: { aNumber: string }) {
   // NEW
@@ -113,9 +113,17 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   useEffect(() => {
     function mapSeatsFromDay() {
       let newSeats = generateSeats(numCols, numTotalSeats);
-      const numDisabledSeats = newSeats.filter((seat) => seat.disabled).length
-      seatsMappedByDay?.forEach((seat) => {
-        const seatId = seat.seatNumber - 1 + numDisabledSeats;
+      const numDisabledSeats = newSeats.filter((seat) => seat.disabled).length      
+      seatsMappedByDay?.forEach((seat, index) => {
+        let seatId = seat.seatNumber - 1;
+        if (seat.seatNumber < 6)
+          seatId += numDisabledSeats / 2
+        else {
+          seatId += numDisabledSeats
+        }
+
+        console.log(seat.seatNumber, seat.seatNumber - 1, seatId);
+        
         if (daySelected.includes(seat.reservationDate)) {
           if (
             newSeats[seatId].firstName === "" ||
