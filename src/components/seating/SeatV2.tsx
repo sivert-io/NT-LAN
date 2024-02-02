@@ -61,7 +61,7 @@ export default function SeatV2({
             showTooltip ? "opacity-1" : "opacity-0 translate-y-2"
           }`}
         >
-          <span className="rounded-lg bg-[#FF5797] text-black whitespace-nowrap text-center py-1 px-2">
+          <span className="rounded-lg bg-[#FF5797] capitalize text-black whitespace-nowrap text-center py-1 px-2">
             {toolTip}
           </span>
         </p>
