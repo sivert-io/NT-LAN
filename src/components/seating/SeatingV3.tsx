@@ -122,8 +122,6 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           seatId += numDisabledSeats
         }
 
-        console.log(seat.seatNumber, seat.seatNumber - 1, seatId);
-        
         if (daySelected.includes(seat.reservationDate)) {
           if (
             newSeats[seatId].firstName === "" ||
