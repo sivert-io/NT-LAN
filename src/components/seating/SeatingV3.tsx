@@ -232,9 +232,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
                       }
                       isYours={seat.isYours}
                       id={seat.id}
-                      deselectAllSeats={() => {
-                        setSeatSelected(undefined);
-                      }}
+                      toolTip={seat.firstName && seat.lastName && `${seat.firstName} ${seat.lastName}`}
                       selectSeat={() => {
                         return setSeatSelected(
                           seatSelected === seat.id && !sidebar_seatBeingEdited

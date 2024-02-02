@@ -1,131 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SeatProps } from "./props";
-import { mousePosition, useMousePosition } from "@/utils/useMousePosition";
-import { useMouseButtonDown } from "@/utils/useMouseButtonDown";
 
 export default function SeatV2({
   isSelected,
   selectSeat,
-  deselectAllSeats,
   id,
   isYours,
   occupant,
   isDisabled,
+  toolTip,
   onHold,
-  isHidden
+  isHidden,
 }: SeatProps) {
-  const [isDragging, setisDragging] = useState(false);
-  const [startPosition, setstartPosition] = useState<mousePosition>({
-    x: null,
-    y: null,
-  });
-  const [offset, setOffset] = useState<mousePosition>({
-    x: null,
-    y: null,
-  });
-  const [boxSize, setboxSize] = useState<mousePosition>({ x: null, y: null });
-  const mousePosition = useMousePosition();
-  const mouseButtonDown = useMouseButtonDown();
+  const [showTooltip, setshowTooltip] = useState(false);
   const seatNumberClassName =
     "absolute text-sm top-0 right-0 px-2 py-1 font-extralight";
+  const disabled = (onHold || (!isYours && occupant !== "") || isDisabled);
 
-  function clearDrag() {
-    setstartPosition({ x: null, y: null });
-    setOffset({ x: null, y: null });
-    setboxSize({ x: null, y: null });
-    setisDragging(false);
-  }
-
-  useEffect(() => {
-    if (
-      mouseButtonDown &&
-      !isDragging &&
-      startPosition.x &&
-      startPosition.y &&
-      mousePosition.x &&
-      mousePosition.y
-    ) {
-      if (
-        Math.abs(startPosition.x - mousePosition.x) > 6 ||
-        Math.abs(startPosition.y - mousePosition.y) > 6
-      ) {
-        setisDragging(true);
-        deselectAllSeats();
-      }
-    }
-
-    if (!mouseButtonDown && isDragging) {
-      clearDrag();
-    }
-  }, [
-    deselectAllSeats,
-    isDragging,
-    mouseButtonDown,
-    mousePosition,
-    startPosition,
-  ]);
-
-  return (
-      isHidden?
-        <div />
-        : <>
-      {isDragging &&
-        mousePosition.x &&
-        mousePosition.y &&
-        offset.x &&
-        offset.y && (
-          <span
-            style={{
-              width: boxSize.x + "px",
-              height: boxSize.y + "px",
-              left: mousePosition.x - offset.x + "px",
-              top: mousePosition.y - offset.y + "px",
-              cursor: "grabbing",
-            }}
-            className={`fixed z-10 flex items-center justify-center select-none capitalize truncate whitespace-nowrap 2xl:px-4 font-medium rounded-lg
-            bg-[#91FFC3] text-gray-900
-          `}
-          >
-            {occupant}
-            <p
-              className={`${seatNumberClassName} ${
-                isSelected || isYours ? "opacity-100" : "opacity-75"
-              }`}
-            >
-              {id}
-            </p>
-          </span>
-        )}
-
+  return isHidden ? (
+    <div />
+  ) : (
+    <div className="relative">
       <button
-        disabled={onHold || (!isYours && occupant !== "") || isDisabled}
+        onMouseEnter={() => setshowTooltip(true)}
+        onMouseLeave={() => setshowTooltip(false)}
         onClick={() => {
-          selectSeat(id);
-          clearDrag();
+          if (!disabled) selectSeat(id);
         }}
-        onMouseDown={(event: any) => {
-          if (isYours) {
-            const rect = event.target.getBoundingClientRect();
-            setboxSize({
-              x: event.target.offsetWidth,
-              y: event.target.offsetHeight,
-            });
-            const offsetX = event.clientX - rect.left;
-            const offsetY = event.clientY - rect.top;
-
-            setOffset({ x: offsetX, y: offsetY });
-            setstartPosition(mousePosition);
-          }
-        }}
-        className={`${
-          isDragging && "opacity-0"
-        } h-[48px] w-[120px] flex-1 select-none relative capitalize disabled:transition-none disabled:scale-100 disabled:cursor-not-allowed truncate whitespace-nowrap 2xl:px-4 font-medium rounded-lg
+          
+        className={`h-[48px] w-[120px] select-none relative capitalize truncate whitespace-nowrap px-4 text-sm rounded-lg
       ${
-        onHold
-          ? "border-2 border-[#FF5797] text-[#FF5797] hover:cursor-not-allowed"
-          : !isDragging && "active:scale-95 transition-all duration-[100ms]"
+        onHold &&
+        "border-2 border-[#FF5797] text-[#FF5797] hover:cursor-not-allowed"
       } 
-      ${isDisabled && "cursor-not-allowed"}
+      ${disabled && "cursor-default"}
       ${
         !onHold &&
         (isSelected
@@ -133,7 +41,7 @@ export default function SeatV2({
           : isYours
           ? "bg-[#D7AAFF] text-gray-900"
           : occupant.length > 0
-          ? "border-2 border-[#FF5797] cursor-grab text-[#FF5797]"
+          ? "border-2 border-[#FF5797] text-[#FF5797]"
           : "border-[#E7E4ED] border")
       }
           `}
@@ -147,6 +55,17 @@ export default function SeatV2({
           {id}
         </p>
       </button>
-    </>
+      {toolTip && !isSelected && !isYours && (
+        <p
+          className={`absolute pointer-events-none -top-10 left-0 right-0 flex items-center justify-center transition-all duration-200 ${
+            showTooltip ? "opacity-1" : "opacity-0 translate-y-2"
+          }`}
+        >
+          <span className="rounded-lg bg-[#FF5797] text-black whitespace-nowrap text-center py-1 px-2">
+            {toolTip}
+          </span>
+        </p>
+      )}
+    </div>
   );
 }
