@@ -13,7 +13,7 @@ import { ReserveSeat } from "@/server/api-client";
 
 const numCols = 7;
 const gridClass = 'grid-cols-7';
-const numTotalSeats = 98;
+const numTotalSeats = 84;
 
 export default function SeatingV3({ aNumber }: { aNumber: string }) {
   // Which seat have we currently selected?
