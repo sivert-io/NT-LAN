@@ -111,8 +111,13 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     function mapSeatsFromDay() {
       let newSeats = generateSeats(numCols, numTotalSeats);
       const numDisabledSeats = newSeats.filter((seat) => seat.disabled).length      
-      seatsMappedByDay?.forEach((seat, index) => {
+      seatsMappedByDay?.forEach(seat => {
+        
         let seatId = seat.seatNumber - 1;
+        
+        if (seatId > numTotalSeats)
+          return;
+
         if (seat.seatNumber < 6)
           seatId += numDisabledSeats / 2
         else {
