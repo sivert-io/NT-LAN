@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { SeatType } from "./types";
 import { socket } from "../../utils/socket";
 import { generateSeats } from "@/utils/seats";
 import Title from "../title/Title";
@@ -17,8 +16,6 @@ const gridClass = 'grid-cols-7';
 const numTotalSeats = 98;
 
 export default function SeatingV3({ aNumber }: { aNumber: string }) {
-  // NEW
-
   // Which seat have we currently selected?
   const [seatSelected, setSeatSelected] = useState<number | undefined>(
     undefined
@@ -179,7 +176,6 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     });
     return s.length;
   }
-  // NEW
 
   return (
     <div className="flex flex-col gap-12">

@@ -13,7 +13,9 @@ export function generateSeats(numCols: number, numTotalSeats: number) {
       row++;
     }
 
-    const isDisabled = (col === 0 || col === 1) && (row === 0 || row === 1);
+    // const isDisabled = (col === 0 || col === 1) && (row === 0 || row === 1);
+    const isDisabled = false;
+    
     if (!isDisabled)
       count += 1;
 

@@ -402,7 +402,7 @@ export default function Home() {
             <h1 className="font-bold">Gjennomsnitlig karakter</h1>
             <GetLanScore />
             <p className="text-xs font-bold">
-              Score: {Math.round(feedBackData.averageRating * 10) / 10} av 3
+              {Math.round(feedBackData.averageRating * 10) / 10} av 3
             </p>
           </Card>
           <Card className="flex flex-col gap-4 w-[512px]">
