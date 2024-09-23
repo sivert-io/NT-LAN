@@ -24,16 +24,16 @@ let seatsMappedBySeatId: mappedSeats = {};
 let seatsMappedByAnumber: mappedSeats = {};
 
 // Port on which the server is running
-const serverPort = 3004;
+const serverPort = Number(process.env.WS_PORT) || 3004;
 
 // Database configuration
-const databaseUrl = "http://lan-party-seating.apps.ocpdq02.norsk-tipping.no"; // Replace with your actual database URL
-const username = process.env.LAN_USERNAME;
-const password = process.env.LAN_PASSWORD;
+const databaseUrl = process.env.API_USERNAME; // Replace with your actual database URL
+const username = process.env.API_USERNAME;
+const password = process.env.API_PASSWORD;
 
-if (!username || !password) {
+if (!databaseUrl || !username || !password) {
   const errorMessage =
-    "Missing username or password ENV!!! (LAN_USERNAME or LAN_PASSWORD)";
+    "Missing username or password ENV!!! (API_USERNAME or API_USERNAME or API_PASSWORD)";
   const boxWidth = errorMessage.length + 4;
 
   console.log("\x1b[31m%s\x1b[0m", "ERROR".padStart(boxWidth, "━"));
@@ -124,7 +124,7 @@ function updateSeatByDate(
   newSeatData: ReserveSeat,
   reservedBy: any,
   socket: Socket,
-  shouldUpdateYou: boolean,
+  shouldUpdateYou: boolean
 ) {
   // UPDATE DATABASE
   const body: ReserveSeats = {
@@ -135,12 +135,11 @@ function updateSeatByDate(
   try {
     db.reserveSeats(getANumber(socket.id), body).then(() => {
       db.getReservedSeats().then((reservedSeats) => {
-        if (!reservedSeats)
-        {
-          console.log('No reserved seats!');
-          
+        if (!reservedSeats) {
+          console.log("No reserved seats!");
+
           return;
-          }
+        }
         cachedAPIData = reservedSeats;
         mapSeatsData(reservedSeats);
 
@@ -185,12 +184,11 @@ function deleteSeats(
 function fetcDathabase() {
   // Map seats from API
   db.getReservedSeats().then((reservedSeats) => {
-    if (!reservedSeats)
-    {
-      console.log('No reserved seats!');
-      
+    if (!reservedSeats) {
+      console.log("No reserved seats!");
+
       return;
-      }
+    }
     cachedAPIData = reservedSeats;
     mapSeatsData(reservedSeats);
   });
@@ -290,7 +288,11 @@ io.on("connection", (socket: Socket) => {
   // User has updated a seat
   socket.on(
     "iHaveUpdatedASeat",
-    (newSeatInformation: ReserveSeat, reservedBy: ReservedBy, shouldUpdateYou: boolean) => {
+    (
+      newSeatInformation: ReserveSeat,
+      reservedBy: ReservedBy,
+      shouldUpdateYou: boolean
+    ) => {
       const aNumber = getANumber(socket.id);
       if (aNumber) {
         console.log(
@@ -301,7 +303,12 @@ io.on("connection", (socket: Socket) => {
           newSeatInformation
         );
 
-        updateSeatByDate(newSeatInformation, reservedBy, socket, shouldUpdateYou);
+        updateSeatByDate(
+          newSeatInformation,
+          reservedBy,
+          socket,
+          shouldUpdateYou
+        );
 
         socket.emit(
           "hereAreYourRegisteredSeats",
