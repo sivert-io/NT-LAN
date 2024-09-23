@@ -2,6 +2,20 @@
 
 <img src="./public/NT.svg" width="64" alt="Norsk Tipping">
 
+## Docker Example
+
+```sh
+docker build -t ntlan-seating .
+```
+
+```sh
+docker run -p 3000:3000 -p 3004:3004 \
+  -e API_USERNAME='someUsername' \
+  -e API_PASSWORD='somePassword' \
+  -e API_URL='localhost:5000' \
+  ntlan-seating
+```
+
 ## Installere packages
 
 ```yarn
