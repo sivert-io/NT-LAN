@@ -27,7 +27,7 @@ let seatsMappedByAnumber: mappedSeats = {};
 const serverPort = Number(process.env.WS_PORT) || 3004;
 
 // Database configuration
-const databaseUrl = process.env.API_USERNAME; // Replace with your actual database URL
+const databaseUrl = process.env.API_URL; // Replace with your actual database URL
 const username = process.env.API_USERNAME;
 const password = process.env.API_PASSWORD;
 
