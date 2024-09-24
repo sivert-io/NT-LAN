@@ -5,4 +5,4 @@ export const ADMINS = ["a01799", "a01794", "a01760", "a01513"] as const;
 export const totalNumberOfSeats = 98 as const;
 
 export const numberOfColumns = 7 as const;
-export const numberOfColumnsClass = "rid-cols-7" as const;
+export const numberOfColumnsClass = "grid-cols-7" as const;
