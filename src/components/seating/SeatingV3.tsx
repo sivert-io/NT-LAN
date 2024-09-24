@@ -7,13 +7,14 @@ import DaySelector from "../daySelector/DaySelector";
 import Legend from "../legend/Legend";
 import SeatV2 from "./SeatV2";
 import { days, daysAttending } from "../sidebar/props";
-import { LAN_DATES } from "@/server/config";
+import {
+  LAN_DATES,
+  numberOfColumns,
+  numberOfColumnsClass,
+  totalNumberOfSeats,
+} from "@/server/config";
 import Sidebarv4 from "../sidebar/SidebarV4";
 import { ReserveSeat } from "@/server/api-client";
-
-const numCols = 7;
-const gridClass = 'grid-cols-7';
-const numTotalSeats = 84;
 
 export default function SeatingV3({ aNumber }: { aNumber: string }) {
   // Which seat have we currently selected?
@@ -56,7 +57,9 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   );
 
   // The seats we display to the user
-  const [seatsToDisplay, setseatsToDisplay] = useState(generateSeats(numCols, numTotalSeats));
+  const [seatsToDisplay, setseatsToDisplay] = useState(
+    generateSeats(numberOfColumns, totalNumberOfSeats)
+  );
 
   // All held seats
   const [seatsThatAreHeld, setseatsThatAreHeld] = useState<number[]>([]);
@@ -109,19 +112,16 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   // When Seats are updated
   useEffect(() => {
     function mapSeatsFromDay() {
-      let newSeats = generateSeats(numCols, numTotalSeats);
-      const numDisabledSeats = newSeats.filter((seat) => seat.disabled).length      
-      seatsMappedByDay?.forEach(seat => {
-        
+      let newSeats = generateSeats(numberOfColumns, totalNumberOfSeats);
+      const numDisabledSeats = newSeats.filter((seat) => seat.disabled).length;
+      seatsMappedByDay?.forEach((seat) => {
         let seatId = seat.seatNumber - 1;
-        
-        if (seatId > numTotalSeats)
-          return;
 
-        if (seat.seatNumber < 6)
-          seatId += numDisabledSeats / 2
+        if (seatId > totalNumberOfSeats) return;
+
+        if (seat.seatNumber < 6) seatId += numDisabledSeats / 2;
         else {
-          seatId += numDisabledSeats
+          seatId += numDisabledSeats;
         }
 
         if (daySelected.includes(seat.reservationDate)) {
@@ -205,9 +205,12 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
             </p>
           </div>
           {Array.from({
-            length: Math.ceil(seatsToDisplay.length / (numCols * 2)),
+            length: Math.ceil(seatsToDisplay.length / (numberOfColumns * 2)),
           }).map((_, groupIndex) => (
-            <div key={groupIndex} className={`grid gap-3 ${gridClass}`}>
+            <div
+              key={groupIndex}
+              className={`grid gap-3 ${numberOfColumnsClass}`}
+            >
               {seatsToDisplay
                 .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
                 .map((seat, index) => {
@@ -233,7 +236,13 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
                       }
                       isYours={seat.isYours}
                       id={seat.id}
-                      toolTip={(seat.firstName && seat.lastName) ? seat.firstName === 'Flere personer' ? seat.firstName : `${seat.firstName} ${seat.lastName}` : undefined}
+                      toolTip={
+                        seat.firstName && seat.lastName
+                          ? seat.firstName === "Flere personer"
+                            ? seat.firstName
+                            : `${seat.firstName} ${seat.lastName}`
+                          : undefined
+                      }
                       selectSeat={() => {
                         return setSeatSelected(
                           seatSelected === seat.id && !sidebar_seatBeingEdited
