@@ -161,21 +161,21 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   function Area({
     name,
     position,
-    height,
+    size,
     color = "red",
     dashArray = "8",
     rounded = "16px",
   }: {
     name: string;
     position?: string;
-    height?: string;
+    size?: string;
     color?: string;
     dashArray?: string;
     rounded?: string;
   }) {
     return (
       <div
-        className={`opacity-75 absolute flex items-center justify-center ${position} ${height} rounded-2xl`}
+        className={`opacity-75 absolute flex items-center justify-center ${position} ${size} rounded-2xl`}
       >
         <svg width="100%" height="100%">
           <rect
@@ -193,7 +193,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           style={{
             color,
             background:
-              "linear-gradient(90deg, transparent 0%, #1A171F 20%, #1A171F 80%, transparent 100%)",
+              "linear-gradient(90deg, transparent 0%, #1A171F 10%, #1A171F 90%, transparent 100%)",
           }}
           className="absolute -top-2 h-4 right-10 flex items-center justify-center font-bold text-lg px-8 whitespace-nowrap"
         >
@@ -251,17 +251,17 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           </div>
 
           <Area
-            name="Ventilated area"
+            name="Støy-sone"
             color="#57a5ff"
-            height="h-[160px]"
-            position="-top-6 -left-1.5 -right-1.5"
+            size="h-[152px] w-[538px]"
+            position="-top-5 right-0"
           />
 
           <Area
-            name="Kids area"
+            name="Kidz zone"
             color="#57ffcd"
-            height="h-[316px]"
-            position="-bottom-4 -left-1.5 -right-1.5"
+            size="h-[310px]"
+            position="-bottom-3 left-0 right-0"
           />
 
           {Array.from({
