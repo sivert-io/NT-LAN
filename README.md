@@ -13,6 +13,7 @@ docker run -p 3000:3000 -p 3004:3004 \
   -e API_USERNAME='someUsername' \
   -e API_PASSWORD='somePassword' \
   -e API_URL='localhost:5000' \
+  -e NEXT_PUBLIC_WS_URL='https://ws.seating.com' \
   ntlan-seating
 ```
 
