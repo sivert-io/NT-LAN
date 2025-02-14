@@ -33,7 +33,7 @@ const password = process.env.API_PASSWORD;
 
 if (!databaseUrl || !username || !password) {
   const errorMessage =
-    "Missing username or password ENV!!! (API_USERNAME or API_USERNAME or API_PASSWORD)";
+    "Missing username or password ENV!!! (API_USERNAME and/or API_PASSWORD)";
   const boxWidth = errorMessage.length + 4;
 
   console.log("\x1b[31m%s\x1b[0m", "ERROR".padStart(boxWidth, "━"));
