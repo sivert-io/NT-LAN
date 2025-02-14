@@ -158,6 +158,51 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     mapSeatsFromDay();
   }, [daySelected, myRegisteredSeats, seatsMappedByDay]);
 
+  function Area({
+    name,
+    position,
+    height,
+    color = "red",
+    dashArray = "8",
+    rounded = "16px",
+  }: {
+    name: string;
+    position?: string;
+    height?: string;
+    color?: string;
+    dashArray?: string;
+    rounded?: string;
+  }) {
+    return (
+      <div
+        className={`opacity-75 absolute flex items-center justify-center ${position} ${height} rounded-2xl`}
+      >
+        <svg width="100%" height="100%">
+          <rect
+            width="100%"
+            height="100%"
+            fill="transparent"
+            strokeWidth="2px"
+            stroke={color}
+            strokeDasharray={dashArray}
+            rx={rounded}
+          />
+        </svg>
+        <p
+          // Gradient background - transparent color transparent
+          style={{
+            color,
+            background:
+              "linear-gradient(90deg, transparent 0%, #1A171F 20%, #1A171F 80%, transparent 100%)",
+          }}
+          className="absolute -top-2 h-4 right-10 flex items-center justify-center font-bold text-lg px-8 whitespace-nowrap"
+        >
+          {name}
+        </p>
+      </div>
+    );
+  }
+
   function updateFilteredDay(day: number) {
     const lanDate: string = LAN_DATES[day];
     if (daySelected.length === 1 && daySelected.includes(lanDate)) {
@@ -204,6 +249,21 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
               Kantine
             </p>
           </div>
+
+          <Area
+            name="Ventilated area"
+            color="#57a5ff"
+            height="h-[160px]"
+            position="-top-6 -left-1.5 -right-1.5"
+          />
+
+          <Area
+            name="Kids area"
+            color="#57ffcd"
+            height="h-[316px]"
+            position="-bottom-4 -left-1.5 -right-1.5"
+          />
+
           {Array.from({
             length: Math.ceil(seatsToDisplay.length / (numberOfColumns * 2)),
           }).map((_, groupIndex) => (

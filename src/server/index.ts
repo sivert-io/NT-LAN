@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io";
 import Database from "./utils/db";
 import { RegisterFieldsType, mappedSeats } from "../components/register/types";
 import { LAN_DATES } from "./config";
+import "dotenv/config";
 
 // Dictionary to hold seats that are currently held by users
 const heldSeats: Record<string, number | undefined> = {};
@@ -50,10 +51,9 @@ if (!databaseUrl || !username || !password) {
 
 const db = new Database(databaseUrl, username, password);
 
-import { ReservationData, ReservedSeat } from "./utils/types";
+import { ReservationData } from "./utils/types";
 import {
   FeedbackOnly,
-  PersonName,
   RatingsWithAverageRating,
   ReserveSeat,
   ReserveSeats,

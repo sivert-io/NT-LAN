@@ -19,6 +19,7 @@
     "axios": "^1.5.0",
     "concurrently": "^8.2.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "engine.io": "^6.5.2",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
