@@ -28,23 +28,3 @@
     border-radius: 64px;
     background-color: #E7E4ED;
 }
-
-.kids-zone {
-        color: yellow;
-      
-        background: linear-gradient(to right, yellow 50%, transparent 0%) top repeat-x, 
-          linear-gradient(yellow 50%, transparent 0%) right repeat-y,
-          linear-gradient(to right, yellow 50%, transparent 0%) bottom repeat-x,
-          linear-gradient(yellow 50%, transparent 0%) left repeat-y;
-        background-size: 24px 2px, 2px 24px;
-}
-
-.noise-zone {
-        color: pink;
-      
-        background: linear-gradient(to right, pink 50%, transparent 0%) top repeat-x, 
-          linear-gradient(pink 50%, transparent 0%) right repeat-y,
-          linear-gradient(to right, pink 50%, transparent 0%) bottom repeat-x,
-          linear-gradient(pink 50%, transparent 0%) left repeat-y;
-        background-size: 24px 2px, 2px 24px;
-}

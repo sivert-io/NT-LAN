@@ -164,7 +164,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     size,
     color = "red",
     dashArray = "8",
-    rounded = "16px",
+    rounded = "14px",
   }: {
     name: string;
     position?: string;
@@ -195,7 +195,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
             background:
               "linear-gradient(90deg, transparent 0%, #1A171F 10%, #1A171F 90%, transparent 100%)",
           }}
-          className="absolute -top-2 h-4 right-10 flex items-center justify-center font-bold text-lg px-8 whitespace-nowrap"
+          className="absolute -top-2 h-4 flex items-center justify-center font-bold text-lg px-8 whitespace-nowrap"
         >
           {name}
         </p>
@@ -229,7 +229,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
 
   return (
     <div className="flex flex-col gap-12">
-      <div className="flex items-end gap-32 px-4 w-[50vw] max-w-[890px] min-w-[634px]">
+      <div className="flex items-end gap-32 w-[50vw] max-w-[890px] min-w-[634px]">
         <Title />
         <DaySelector
           enableAll={() => {
@@ -240,7 +240,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         />
       </div>
       <div className="flex gap-12">
-        <div className="flex flex-col gap-10 px-4 overflow-visible relative">
+        <div className="flex flex-col gap-10 overflow-visible relative">
           <div className="absolute top-0 -left-24 grid items-center justify-center select-none">
             <p className="uppercase text-xl font-bold text-[#D8D6DB]">Scene</p>
           </div>
@@ -253,15 +253,15 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           <Area
             name="Støy-sone"
             color="#57a5ff"
-            size="h-[152px] w-[538px]"
-            position="-top-5 right-0"
+            size="h-[140px] w-[280px]"
+            position="-top-4 -right-4"
           />
 
           <Area
             name="Kidz zone"
             color="#57ffcd"
-            size="h-[310px]"
-            position="-bottom-3 left-0 right-0"
+            size="h-[290px]"
+            position="-bottom-4 -left-4 -right-4"
           />
 
           {Array.from({

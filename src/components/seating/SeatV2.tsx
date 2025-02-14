@@ -15,19 +15,18 @@ export default function SeatV2({
   const [showTooltip, setshowTooltip] = useState(false);
   const seatNumberClassName =
     "absolute text-sm top-0 right-0 px-2 py-1 font-extralight";
-  const disabled = (onHold || (!isYours && occupant !== "") || isDisabled);
+  const disabled = onHold || (!isYours && occupant !== "") || isDisabled;
 
   return isHidden ? (
     <div />
   ) : (
-    <div className="relative">
+    <div className="relative h-12">
       <button
         onMouseEnter={() => setshowTooltip(true)}
         onMouseLeave={() => setshowTooltip(false)}
         onClick={() => {
           if (!disabled) selectSeat(id);
         }}
-          
         className={`h-[48px] w-[120px] select-none relative capitalize truncate whitespace-nowrap px-4 text-sm rounded-lg
       ${
         onHold &&
