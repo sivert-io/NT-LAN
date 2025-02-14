@@ -165,6 +165,8 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     color = "red",
     dashArray = "8",
     rounded = "14px",
+    debug = false,
+    padding = 32,
   }: {
     name: string;
     position?: string;
@@ -172,12 +174,20 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     color?: string;
     dashArray?: string;
     rounded?: string;
+    debug?: boolean;
+    padding?: number;
   }) {
     return (
       <div
-        className={`opacity-75 absolute flex items-center justify-center ${position} ${size} rounded-2xl`}
+        className={`opacity-75 absolute flex items-center justify-center ${position} ${size} ${
+          debug ? "bg-red-500" : ""
+        }`}
       >
-        <svg width="100%" height="100%">
+        <svg
+          className="absolute"
+          width={`calc(100% + ${padding}px)`}
+          height={`calc(100% + ${padding}px)`}
+        >
           <rect
             width="100%"
             height="100%"
@@ -191,11 +201,13 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         <p
           // Gradient background - transparent color transparent
           style={{
+            top: `-${padding}px`,
+            height: `${padding}px`,
             color,
             background:
               "linear-gradient(90deg, transparent 0%, #1A171F 10%, #1A171F 90%, transparent 100%)",
           }}
-          className="absolute -top-2 h-4 flex items-center justify-center font-bold text-lg px-8 whitespace-nowrap"
+          className="absolute flex items-center justify-center font-bold text-lg px-8 whitespace-nowrap"
         >
           {name}
         </p>
@@ -253,15 +265,16 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           <Area
             name="Støy-sone"
             color="#57a5ff"
-            size="h-[140px] w-[280px]"
-            position="-top-4 -right-4"
+            size="h-[108px] w-[252px]"
+            position="top-0 right-0"
+            padding={24}
           />
 
           <Area
             name="Kidz zone"
             color="#57ffcd"
-            size="h-[290px]"
-            position="-bottom-4 -left-4 -right-4"
+            size="h-[256px]"
+            position="-bottom-0 left-0 right-0"
           />
 
           {Array.from({
