@@ -8,7 +8,7 @@ const inter = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "N T L A N",
+  title: "NTLAN Seating App",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html className="text-white bg-[#1A171F]">
       <head>
-        <link rel="icon" href="NT.svg" />
+        <link rel="icon" href="/NTLAN/logo_regular.svg" />
       </head>
       <body className={`py-12 2xl:py-0 ${inter.className}`}>{children}</body>
     </html>

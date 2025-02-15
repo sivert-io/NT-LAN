@@ -15,8 +15,13 @@ export default function Title() {
         setIsExploding(false);
       }}
     >
-      <Image src="/NT.svg" width={32} height={32} alt="NT Logo" />
-      NTLAN
+      <Image
+        className="w-auto h-[36px]"
+        src="/NTLAN/horizontal_regular.svg"
+        width={214}
+        height={64}
+        alt="NT Logo"
+      />
       {isExploding && <ConfettiExplosion {...confettiProps} />}
     </button>
   );

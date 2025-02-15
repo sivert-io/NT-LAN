@@ -1,4 +1,3 @@
-import { RegisterFieldsType } from "@/components/register/types";
 import { SeatType } from "@/components/seating/types";
 
 export function generateSeats(numCols: number, numTotalSeats: number) {
@@ -15,9 +14,8 @@ export function generateSeats(numCols: number, numTotalSeats: number) {
 
     // const isDisabled = (col === 0 || col === 1) && (row === 0 || row === 1);
     const isDisabled = false;
-    
-    if (!isDisabled)
-      count += 1;
+
+    if (!isDisabled) count += 1;
 
     seatsList.push({
       id: count,

@@ -27,7 +27,7 @@ export default function SeatV2({
         onClick={() => {
           if (!disabled) selectSeat(id);
         }}
-        className={`h-[48px] w-[120px] select-none relative capitalize truncate whitespace-nowrap px-4 text-sm rounded-lg
+        className={`h-[48px] w-[120px] select-none relative capitalize truncate whitespace-nowrap px-4 text-sm rounded-lg hover:scale-[1.025] active:scale-[.975] transition-all duration-100
       ${
         onHold &&
         "border-2 border-[#FF5797] text-[#FF5797] hover:cursor-not-allowed"

@@ -5,16 +5,15 @@ import Title from "../title/Title";
 import { RegisterFieldsType, mappedSeats } from "../register/types";
 import DaySelector from "../daySelector/DaySelector";
 import Legend from "../legend/Legend";
-import SeatV2 from "./SeatV2";
 import { days, daysAttending } from "../sidebar/props";
 import {
   LAN_DATES,
   numberOfColumns,
-  numberOfColumnsClass,
   totalNumberOfSeats,
 } from "@/server/config";
 import Sidebarv4 from "../sidebar/SidebarV4";
 import { ReserveSeat } from "@/server/api-client";
+import { SeatGroup } from "./SeatGroup";
 
 export default function SeatingV3({ aNumber }: { aNumber: string }) {
   // Which seat have we currently selected?
@@ -239,6 +238,43 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     return s.length;
   }
 
+  function saveSeat(shouldUpdateYou: boolean) {
+    if (seatSelected !== undefined) {
+      const dates: typeof LAN_DATES = [];
+      Object.keys(sidebar_daysAttending).forEach((d, index) => {
+        if (sidebar_daysAttending[d as days] && LAN_DATES[index])
+          dates.push(LAN_DATES[index]);
+      });
+
+      const personName = {
+        firstName: sidebar_firstName,
+        lastName: sidebar_lastName,
+      };
+
+      const newSeat: ReserveSeat = {
+        id: seatSelected,
+        personName,
+        reservationDates: dates,
+      };
+
+      socket.emit(
+        "iHaveUpdatedASeat",
+        newSeat,
+        {
+          employeeId: aNumber,
+          personName:
+            myRegisteredSeats.length !== 0
+              ? {
+                  firstName: myRegisteredSeats[0].firstName,
+                  lastName: myRegisteredSeats[0].lastName,
+                }
+              : personName,
+        },
+        shouldUpdateYou
+      );
+    }
+  }
+
   return (
     <div className="flex flex-col gap-12">
       <div className="flex items-end gap-32 w-[50vw] max-w-[890px] min-w-[634px]">
@@ -251,7 +287,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           updateFilteredDay={updateFilteredDay}
         />
       </div>
-      <div className="flex gap-12">
+      <div className="flex items-start justify-center gap-12 relative">
         <div className="flex flex-col gap-10 overflow-visible relative">
           <div className="absolute top-0 -left-24 grid items-center justify-center select-none">
             <p className="uppercase text-xl font-bold text-[#D8D6DB]">Scene</p>
@@ -271,67 +307,49 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           />
 
           <Area
-            name="Kidz zone"
+            name="Younglings only (kids zone)"
             color="#57ffcd"
             size="h-[256px]"
             position="-bottom-0 left-0 right-0"
           />
 
+          {/* Main area */}
           {Array.from({
-            length: Math.ceil(seatsToDisplay.length / (numberOfColumns * 2)),
+            length: 6,
           }).map((_, groupIndex) => (
-            <div
+            <SeatGroup
               key={groupIndex}
-              className={`grid gap-3 ${numberOfColumnsClass}`}
-            >
-              {seatsToDisplay
-                .filter((seat) => Math.floor(seat.row / 2) === groupIndex)
-                .map((seat, index) => {
-                  return (
-                    <SeatV2
-                      isHidden={seat.disabled}
-                      isDisabled={
-                        (seat.isYours &&
-                          !!sidebar_seatBeingEdited &&
-                          seat.id !== sidebar_seatBeingEdited) ||
-                        (seat.isYours &&
-                          !!sidebar_seatBeingEdited &&
-                          myRegisteredSeats.length === 1)
-                      }
-                      onHold={
-                        seatsThatAreHeld?.findIndex((s) => s === seat.id) !==
-                          -1 && seat.id !== seatSelected
-                      }
-                      occupant={
-                        seatSelected === seat.id
-                          ? sidebar_firstName
-                          : seat.firstName || ""
-                      }
-                      isYours={seat.isYours}
-                      id={seat.id}
-                      toolTip={
-                        seat.firstName && seat.lastName
-                          ? seat.firstName === "Flere personer"
-                            ? seat.firstName
-                            : `${seat.firstName} ${seat.lastName}`
-                          : undefined
-                      }
-                      selectSeat={() => {
-                        return setSeatSelected(
-                          seatSelected === seat.id && !sidebar_seatBeingEdited
-                            ? undefined
-                            : seat.id
-                        );
-                      }}
-                      key={index}
-                      isSelected={seatSelected === seat.id}
-                    />
-                  );
-                })}
-            </div>
+              seatsData={seatsToDisplay}
+              className="grid gap-3 grid-cols-7"
+              StartSeatNumber={groupIndex * 14 + 15}
+              numberOfSeats={14}
+              myRegisteredSeats={myRegisteredSeats}
+              seatSelected={seatSelected}
+              seatsThatAreHeld={seatsThatAreHeld}
+              setSeatSelected={setSeatSelected}
+              sidebar_firstName={sidebar_firstName}
+              sidebar_seatBeingEdited={sidebar_seatBeingEdited}
+            />
           ))}
         </div>
-        <div className="flex flex-col gap-12">
+        <div className="w-[108px]" />
+
+        {/* Sideways seats */}
+        <div className={`-rotate-90 absolute right-2.5 top-[336px] h-fit`}>
+          <SeatGroup
+            seatsData={seatsToDisplay}
+            className="grid gap-3 grid-cols-6"
+            StartSeatNumber={99}
+            numberOfSeats={12}
+            myRegisteredSeats={myRegisteredSeats}
+            seatSelected={seatSelected}
+            seatsThatAreHeld={seatsThatAreHeld}
+            setSeatSelected={setSeatSelected}
+            sidebar_firstName={sidebar_firstName}
+            sidebar_seatBeingEdited={sidebar_seatBeingEdited}
+          />
+        </div>
+        <div className="flex h-full flex-col gap-12">
           <Legend seatAmnt={getSidebarAmount()} />
           <Sidebarv4
             isYou={sidebar_isYou}
@@ -351,42 +369,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
               socket.emit("iHaveDeletedASeat", seatNumber, firstName);
             }}
             myRegisteredSeats={myRegisteredSeats}
-            saveSeat={(shouldUpdateYou: boolean) => {
-              if (seatSelected !== undefined) {
-                const dates: typeof LAN_DATES = [];
-                Object.keys(sidebar_daysAttending).forEach((d, index) => {
-                  if (sidebar_daysAttending[d as days] && LAN_DATES[index])
-                    dates.push(LAN_DATES[index]);
-                });
-
-                const personName = {
-                  firstName: sidebar_firstName,
-                  lastName: sidebar_lastName,
-                };
-
-                const newSeat: ReserveSeat = {
-                  id: seatSelected,
-                  personName,
-                  reservationDates: dates,
-                };
-
-                socket.emit(
-                  "iHaveUpdatedASeat",
-                  newSeat,
-                  {
-                    employeeId: aNumber,
-                    personName:
-                      myRegisteredSeats.length !== 0
-                        ? {
-                            firstName: myRegisteredSeats[0].firstName,
-                            lastName: myRegisteredSeats[0].lastName,
-                          }
-                        : personName,
-                  },
-                  shouldUpdateYou
-                );
-              }
-            }}
+            saveSeat={saveSeat}
             seatSelected={seatSelected}
             sidebar_firstName={sidebar_firstName}
             sidebar_lastName={sidebar_lastName}
