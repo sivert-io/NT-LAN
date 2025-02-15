@@ -178,7 +178,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   }) {
     return (
       <div
-        className={`opacity-75 absolute flex items-center justify-center ${position} ${size} ${
+        className={`opacity-50 absolute flex items-center justify-center ${position} ${size} ${
           debug ? "bg-red-500" : ""
         }`}
       >
@@ -276,7 +276,10 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-12 relative">
+      <div className="absolute -bottom-20 -left-32 select-none">
+        <p className="uppercase text-xl font-bold text-[#D8D6DB]">Kantine</p>
+      </div>
       <div className="flex items-end gap-32 w-[50vw] max-w-[890px] min-w-[634px]">
         <Title />
         <DaySelector
@@ -287,25 +290,33 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
           updateFilteredDay={updateFilteredDay}
         />
       </div>
+      {/* Top seats */}
+      <div className="relative flex w-fit pl-[132px]">
+        <div className="absolute h-full -left-24 grid place-items-center select-none">
+          <p className="uppercase text-xl font-bold text-[#D8D6DB]">Scene</p>
+        </div>
+        <Area
+          name="Støy-sone"
+          color="#57a5ff"
+          size="h-[108px] w-[378px]"
+          position="top-0 right-0"
+          padding={32}
+        />
+        <SeatGroup
+          seatsData={seatsToDisplay}
+          className="grid gap-3 grid-cols-7 w-fit"
+          StartSeatNumber={1}
+          numberOfSeats={14}
+          myRegisteredSeats={myRegisteredSeats}
+          seatSelected={seatSelected}
+          seatsThatAreHeld={seatsThatAreHeld}
+          setSeatSelected={setSeatSelected}
+          sidebar_firstName={sidebar_firstName}
+          sidebar_seatBeingEdited={sidebar_seatBeingEdited}
+        />
+      </div>
       <div className="flex items-start justify-center gap-12 relative">
         <div className="flex flex-col gap-10 overflow-visible relative">
-          <div className="absolute top-0 -left-24 grid items-center justify-center select-none">
-            <p className="uppercase text-xl font-bold text-[#D8D6DB]">Scene</p>
-          </div>
-          <div className="absolute -bottom-12 -left-24 grid items-center justify-center select-none">
-            <p className="uppercase text-xl font-bold text-[#D8D6DB]">
-              Kantine
-            </p>
-          </div>
-
-          <Area
-            name="Støy-sone"
-            color="#57a5ff"
-            size="h-[108px] w-[252px]"
-            position="top-0 right-0"
-            padding={24}
-          />
-
           <Area
             name="Younglings only (kids zone)"
             color="#57ffcd"
@@ -332,15 +343,13 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
             />
           ))}
         </div>
-        <div className="w-[108px]" />
-
-        {/* Sideways seats */}
-        <div className={`-rotate-90 absolute right-2.5 top-[336px] h-fit`}>
+        <div className="w-[108px] h-[848px] grid place-items-center">
+          {/* Sideways seats */}
           <SeatGroup
             seatsData={seatsToDisplay}
-            className="grid gap-3 grid-cols-6"
+            className="grid gap-3 grid-cols-4 -rotate-90 absolute top-[204px] h-fit"
             StartSeatNumber={99}
-            numberOfSeats={12}
+            numberOfSeats={8}
             myRegisteredSeats={myRegisteredSeats}
             seatSelected={seatSelected}
             seatsThatAreHeld={seatsThatAreHeld}

@@ -24,7 +24,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen py-32 w-full flex-col items-center justify-center">
+    <main className="fixed inset-0 flex overflow-auto justify-center items-start py-24">
       {connectionError !== "" && (
         <ConnecitonError connectionError={connectionError} />
       )}
