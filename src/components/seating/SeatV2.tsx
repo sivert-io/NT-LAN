@@ -11,6 +11,8 @@ export default function SeatV2({
   toolTip,
   onHold,
   isHidden,
+  seatWidth,
+  seatHeight,
 }: SeatProps) {
   const [showTooltip, setshowTooltip] = useState(false);
   const seatNumberClassName =
@@ -20,14 +22,16 @@ export default function SeatV2({
   return isHidden ? (
     <div />
   ) : (
-    <div className="relative h-12">
+    <div className={`relative ${seatHeight ? seatHeight : "h-[48px]"}`}>
       <button
         onMouseEnter={() => setshowTooltip(true)}
         onMouseLeave={() => setshowTooltip(false)}
         onClick={() => {
           if (!disabled) selectSeat(id);
         }}
-        className={`h-[48px] w-[120px] select-none relative capitalize truncate whitespace-nowrap px-4 text-sm rounded-lg hover:scale-[1.025] active:scale-[.975] transition-all duration-100
+        className={`h-full ${
+          seatWidth ? seatWidth : "w-[104px]"
+        } select-none relative capitalize truncate whitespace-nowrap px-4 text-sm rounded-lg hover:scale-[1.025] active:scale-[.975] transition-all duration-100
       ${
         onHold &&
         "border-2 border-ntlan_red text-ntlan_red hover:cursor-not-allowed"
@@ -60,7 +64,7 @@ export default function SeatV2({
             showTooltip ? "opacity-1" : "opacity-0 translate-y-2"
           }`}
         >
-          <span className="rounded-lg bg-ntlan_red capitalize text-black whitespace-nowrap text-center py-1 px-2">
+          <span className="rounded-lg bg-ntlan_red capitalize text-white whitespace-nowrap text-center py-1 px-2">
             {toolTip}
           </span>
         </p>

@@ -8,4 +8,6 @@ export type SeatProps = {
   toolTip?: string;
   onHold: boolean;
   isHidden: boolean;
+  seatWidth?: string;
+  seatHeight?: string;
 };

@@ -14,6 +14,7 @@ import {
 import Sidebarv4 from "../sidebar/SidebarV4";
 import { ReserveSeat } from "@/server/api-client";
 import { SeatGroup } from "./SeatGroup";
+import { Area } from "./Area";
 
 export default function SeatingV3({ aNumber }: { aNumber: string }) {
   // Which seat have we currently selected?
@@ -157,63 +158,6 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     mapSeatsFromDay();
   }, [daySelected, myRegisteredSeats, seatsMappedByDay]);
 
-  function Area({
-    name,
-    position,
-    size,
-    color = "red",
-    dashArray = "8",
-    rounded = "14px",
-    debug = false,
-    padding = 20,
-  }: {
-    name: string;
-    position?: string;
-    size?: string;
-    color?: string;
-    dashArray?: string;
-    rounded?: string;
-    debug?: boolean;
-    padding?: number;
-  }) {
-    return (
-      <div
-        className={`absolute flex items-center justify-center ${position} ${size} ${
-          debug ? "bg-red-500" : ""
-        }`}
-      >
-        <svg
-          className="absolute"
-          width={`calc(100% + ${padding}px)`}
-          height={`calc(100% + ${padding}px)`}
-        >
-          <rect
-            width="100%"
-            height="100%"
-            fill="transparent"
-            strokeWidth="2px"
-            stroke={color}
-            strokeDasharray={dashArray}
-            rx={rounded}
-          />
-        </svg>
-        <p
-          // Gradient background - transparent color transparent
-          style={{
-            top: `-${padding + 4}px`,
-            height: `${padding}px`,
-            color,
-            background:
-              "linear-gradient(90deg, transparent 0%, #1A171F 10%, #1A171F 90%, transparent 100%)",
-          }}
-          className="absolute flex items-center justify-center font-bold text-lg px-8 whitespace-nowrap"
-        >
-          {name}
-        </p>
-      </div>
-    );
-  }
-
   function updateFilteredDay(day: number) {
     const lanDate: string = LAN_DATES[day];
     if (daySelected.length === 1 && daySelected.includes(lanDate)) {
@@ -280,7 +224,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
       <div className="absolute -bottom-20 -left-32 select-none">
         <p className="uppercase text-xl font-bold text-[#D8D6DB]">Kantine</p>
       </div>
-      <div className="flex items-end gap-32 w-[50vw] max-w-[890px] min-w-[634px]">
+      <div className="flex items-end gap-12">
         <Title />
         <DaySelector
           enableAll={() => {
@@ -291,14 +235,15 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         />
       </div>
       {/* Top seats */}
-      <div className="relative flex w-fit pl-[132px]">
-        <div className="absolute h-full -left-24 grid place-items-center select-none">
+      <div className="relative flex w-fit pl-[240px] pb-8">
+        <div className="absolute h-full left-12 grid place-items-center select-none">
           <p className="uppercase text-xl font-bold text-[#D8D6DB]">Scene</p>
         </div>
         <Area
+          tooltip="Disse plassene er utsatt støy fra AC (av og til)"
           name="Støy-sone"
-          color="#57a5ff"
-          size="h-[108px] w-[382px]"
+          color="#A5EAFF"
+          size="h-[108px] w-[332px]"
           position="top-0 right-0"
         />
         <SeatGroup
@@ -315,17 +260,18 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         />
       </div>
       <div className="flex items-start justify-center gap-12 relative">
-        <div className="flex flex-col gap-10 overflow-visible relative">
+        <div className="flex flex-col gap-16 overflow-visible relative">
           <Area
-            name="Younglings only (kids zone)"
-            color="#57ffcd"
-            size="h-[256px]"
+            tooltip="Kids zone"
+            name="Younglings"
+            color="#91FFC3"
+            size="h-[280px]"
             position="-bottom-0 left-0 right-0"
           />
 
           {/* Main area */}
           {Array.from({
-            length: 6,
+            length: 7,
           }).map((_, groupIndex) => (
             <SeatGroup
               key={groupIndex}
@@ -342,13 +288,14 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
             />
           ))}
         </div>
-        <div className="w-[108px] h-[848px] grid place-items-center">
+
+        <div className="w-[240px] flex justify-center">
           {/* Sideways seats */}
           <SeatGroup
             seatsData={seatsToDisplay}
-            className="grid gap-3 grid-cols-4 -rotate-90 absolute top-[204px] h-fit"
-            StartSeatNumber={99}
-            numberOfSeats={8}
+            className="grid gap-3 grid-cols-7 rotate-90 absolute top-[346px] h-fit"
+            StartSeatNumber={113}
+            numberOfSeats={14}
             myRegisteredSeats={myRegisteredSeats}
             seatSelected={seatSelected}
             seatsThatAreHeld={seatsThatAreHeld}

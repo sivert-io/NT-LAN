@@ -1,7 +1,6 @@
 import React from "react";
 import { SeatType } from "./types";
 import SeatV2 from "./SeatV2";
-import { SeatProps } from "./props";
 import { RegisterFieldsType } from "../register/types";
 
 type SeatGroupProps = {
@@ -15,6 +14,7 @@ type SeatGroupProps = {
   seatsThatAreHeld: number[];
   seatSelected?: number;
   setSeatSelected: React.Dispatch<React.SetStateAction<number | undefined>>;
+  seatWidth?: string;
 };
 
 export function SeatGroup({
@@ -25,6 +25,7 @@ export function SeatGroup({
   myRegisteredSeats,
   seatSelected,
   seatsThatAreHeld,
+  seatWidth,
   setSeatSelected,
   sidebar_firstName,
   sidebar_seatBeingEdited,
@@ -38,6 +39,7 @@ export function SeatGroup({
         if (!seat) return null;
         return (
           <SeatV2
+            seatWidth={seatWidth}
             isHidden={seat.disabled}
             isDisabled={
               (seat.isYours &&
