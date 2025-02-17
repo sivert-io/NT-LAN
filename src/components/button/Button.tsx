@@ -21,10 +21,10 @@ export default function Button({
     ? isActive
       ? activeClass
         ? activeClass
-        : "bg-[#91FFC3] text-[#1A171F]"
+        : "bg-ntlan_blue text-ntlan_background"
       : inActiveClass
       ? inActiveClass
-      : "bg-[#423E49] text-[#D7D3DE]"
+      : "bg-ntlan_gray text-[#D7D3DE]"
     : "bg-transparent";
 
   return (

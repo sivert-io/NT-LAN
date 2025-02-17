@@ -165,7 +165,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
     dashArray = "8",
     rounded = "14px",
     debug = false,
-    padding = 32,
+    padding = 20,
   }: {
     name: string;
     position?: string;
@@ -178,7 +178,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
   }) {
     return (
       <div
-        className={`opacity-50 absolute flex items-center justify-center ${position} ${size} ${
+        className={`absolute flex items-center justify-center ${position} ${size} ${
           debug ? "bg-red-500" : ""
         }`}
       >
@@ -200,7 +200,7 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         <p
           // Gradient background - transparent color transparent
           style={{
-            top: `-${padding}px`,
+            top: `-${padding + 4}px`,
             height: `${padding}px`,
             color,
             background:
@@ -298,9 +298,8 @@ export default function SeatingV3({ aNumber }: { aNumber: string }) {
         <Area
           name="Støy-sone"
           color="#57a5ff"
-          size="h-[108px] w-[378px]"
+          size="h-[108px] w-[382px]"
           position="top-0 right-0"
-          padding={32}
         />
         <SeatGroup
           seatsData={seatsToDisplay}

@@ -8,7 +8,9 @@ export function Card({
   className?: string;
 }) {
   return (
-    <div className={`bg-[#423E49] p-6 rounded-2xl text-[#E8E6EB] ${className}`}>
+    <div
+      className={`bg-ntlan_gray p-6 rounded-2xl text-ntlan_white ${className}`}
+    >
       {children}
     </div>
   );

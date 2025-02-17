@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html className="text-white bg-[#1A171F]">
+    <html className="text-white bg-ntlan_background">
       <head>
         <link rel="icon" href="/NTLAN/logo_regular.svg" />
       </head>

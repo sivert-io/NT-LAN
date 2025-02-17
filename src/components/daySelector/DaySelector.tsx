@@ -55,7 +55,7 @@ export default function DaySelector({
         </Button>
         <Button
           isActive
-          activeClass="text-right px-4 text-[#C7D7FF] text-xs font-medium"
+          activeClass="text-right px-4 text-ntlan_yellow text-xs font-medium"
           onClick={() => {
             enableAll();
           }}

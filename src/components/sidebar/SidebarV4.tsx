@@ -126,7 +126,7 @@ export default function Sidebarv4({
   useEffect(() => {
     if (sidebarPeople.length > 0 && !feedbackGiven) setshowFeedback(true);
     else setshowFeedback(false);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sidebarPeople]);
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export default function Sidebarv4({
       if (daysAttending[day as days]) days.push(LAN_DATES[index]);
     });
     if (days.length > 0) setFilteredDays(days);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daysAttending, selectedSeat]);
 
   useEffect(() => {
@@ -188,7 +188,7 @@ export default function Sidebarv4({
     }
 
     if (!selectedSeat) resetSidebar();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registeredPeople, selectedSeat, setFirstName, setLastName]);
 
   useEffect(() => {
@@ -211,8 +211,15 @@ export default function Sidebarv4({
         setTimer(null);
       };
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSeat, setTimer, firstName, lastName, daysAttending, registeredPeople]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedSeat,
+    setTimer,
+    firstName,
+    lastName,
+    daysAttending,
+    registeredPeople,
+  ]);
 
   useEffect(() => {
     // When the timer goes off, set selectedSeat to undefined
@@ -241,7 +248,7 @@ export default function Sidebarv4({
               <h2 className="font-bold flex justify-between items-center">
                 Hvem skal sitte her?
               </h2>
-              <p className="px-2 py-1 text-xs flex items-center justify-center h-6 whitespace-nowrap font-bold rounded-sm bg-[#91FFC3] text-black">
+              <p className="px-2 py-1 text-xs flex items-center justify-center h-6 whitespace-nowrap font-bold rounded-sm bg-ntlan_green text-black">
                 Plass {selectedSeat}
               </p>
             </div>
@@ -366,7 +373,7 @@ export default function Sidebarv4({
                   }
                   isActive
                   customDisabled
-                  activeClass="text-right w-fit px-4 text-[#C7D7FF] text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  activeClass="text-right w-fit px-4 text-ntlan_yellow text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={() => {
                     setDaysAttending({
                       fredag: true,
@@ -383,15 +390,9 @@ export default function Sidebarv4({
               registeredPeople.findIndex((p) => p.seatNumber === selectedSeat)
             ]?.isYou && (
               <div className="flex gap-2 w-full cursor-pointer">
-                <Toggle
-                onClick={() => setIsYou(!isYou)}
-                checked={isYou} />
-              <button
-                onClick={() => setIsYou(!isYou)}
-                >
-                Dette er meg
-              </button>
-                </div>
+                <Toggle onClick={() => setIsYou(!isYou)} checked={isYou} />
+                <button onClick={() => setIsYou(!isYou)}>Dette er meg</button>
+              </div>
             )}
           </div>
           <div className="flex flex-col gap-6">
@@ -425,7 +426,7 @@ export default function Sidebarv4({
                   resetSidebar();
                   setSelectedSeat(undefined);
                 }}
-                className="underline text-[#FF5797] decoration-[#FF5797] decoration-2 underline-offset-4"
+                className="underline text-ntlan_red decoration-ntlan_red decoration-2 underline-offset-4"
               >
                 Slett person
               </button>

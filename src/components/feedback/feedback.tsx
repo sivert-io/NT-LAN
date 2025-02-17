@@ -61,7 +61,7 @@ export function Feedback({
   useEffect(() => {
     setTimeout(() => {
       setisVisible(true);
-    }, 1000);
+    }, 200);
   }, []);
 
   return (
@@ -130,7 +130,7 @@ export function Feedback({
                 onChange={(event) => {
                   setfeedbackText(event.target.value);
                 }}
-                className="h-[112px] resize-none w-full px-3 py-2 text-xs bg-[#57535F] rounded-lg border-2 border-[#423E49]"
+                className="h-[112px] resize-none w-full px-3 py-2 text-xs bg-[#57535F] rounded-lg border-2 border-ntlan_gray"
               />
               <div className="flex w-full justify-end gap-2">
                 <Button
@@ -145,7 +145,7 @@ export function Feedback({
                     }, 5000);
                   }}
                   isActive
-                  activeClass="text-[#C7D7FF] bg-[#423E49]"
+                  activeClass="text-ntlan_yellow bg-ntlan_gray"
                 >
                   Hopp over
                 </Button>
@@ -161,7 +161,7 @@ export function Feedback({
                     }, 5000);
                   }}
                   isActive
-                  activeClass="text-[#00309F] bg-[#C7D7FF]"
+                  activeClass="text-[#00309F] bg-ntlan_yellow"
                 >
                   Send
                 </Button>

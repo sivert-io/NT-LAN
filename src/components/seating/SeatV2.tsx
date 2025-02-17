@@ -30,18 +30,18 @@ export default function SeatV2({
         className={`h-[48px] w-[120px] select-none relative capitalize truncate whitespace-nowrap px-4 text-sm rounded-lg hover:scale-[1.025] active:scale-[.975] transition-all duration-100
       ${
         onHold &&
-        "border-2 border-[#FF5797] text-[#FF5797] hover:cursor-not-allowed"
+        "border-2 border-ntlan_red text-ntlan_red hover:cursor-not-allowed"
       } 
       ${disabled && "cursor-default"}
       ${
         !onHold &&
         (isSelected
-          ? "bg-[#91FFC3] text-gray-900"
+          ? "bg-ntlan_green text-gray-900"
           : isYours
-          ? "bg-[#D7AAFF] text-gray-900"
+          ? "bg-ntlan_purple text-gray-900"
           : occupant.length > 0
-          ? "border-2 border-[#FF5797] text-[#FF5797]"
-          : "border-[#E7E4ED] border")
+          ? "border-2 border-ntlan_red text-ntlan_red"
+          : "border-ntlan_white border")
       }
           `}
       >
@@ -60,7 +60,7 @@ export default function SeatV2({
             showTooltip ? "opacity-1" : "opacity-0 translate-y-2"
           }`}
         >
-          <span className="rounded-lg bg-[#FF5797] capitalize text-black whitespace-nowrap text-center py-1 px-2">
+          <span className="rounded-lg bg-ntlan_red capitalize text-black whitespace-nowrap text-center py-1 px-2">
             {toolTip}
           </span>
         </p>

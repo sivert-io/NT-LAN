@@ -122,7 +122,6 @@ export default function Home() {
             color="bg-[#E9FCD8]"
           />
         );
-        return null;
     }
   };
 
